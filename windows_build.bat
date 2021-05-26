@@ -1,9 +1,13 @@
-rm -f bomberman.exe
-rm -rf _build/Debug
+del bomberman.exe
+rmdir "_build/Debug"
 mkdir _build
 cmake -H. -B_build
 cd _build
 cmake --build .
 cd ..
-mv Debug _build
-cp _build/Debug/bomberman.exe .
+copy "Debug\bomberman.exe" "_build\Debug\bomberman.exe"
+copy "Debug\bomberman.pdb" "_build\Debug\bomberman.pdb"
+del "Debug\bomberman.exe"
+del "Debug\bomberman.pdb"
+rmdir "Debug"
+copy "_build\Debug\bomberman.exe" "."
