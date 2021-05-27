@@ -13,10 +13,6 @@
 #include <physac.h>
 #include <iostream>
 
-#include "include/window.hpp"
-#include "include/text.hpp"
-#include "include/gamepad.hpp"
-
 #define color std::tuple<int,int,int,int>
 
 #endif /* !RAYLIB_ENCAPSULATION_HPP_ */

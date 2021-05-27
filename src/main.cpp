@@ -6,7 +6,8 @@
 */
 
 // #include <iostream>
-#include "encapsulation/raylib_encapsulation.hpp"
+
+#include "encapsulation.hpp"
 
 int main(void)
 {

@@ -7,12 +7,14 @@ find_package(raylib 3.7 QUIET)
 
 set(CMAKE_C_STANDARD 11)
 include_directories(include)
+include_directories(encapsulation/include)
 
 file(
     GLOB
     SRCS
     src/*.cpp
     src/*/*.cpp
+    encapsulation/*/*.cpp
 )
 
 if (NOT raylib_FOUND) # If there's none, fetch and build raylib
