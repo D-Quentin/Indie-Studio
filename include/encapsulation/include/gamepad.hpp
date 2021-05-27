@@ -9,6 +9,8 @@
 #define GAMEPAD_HPP_
 
 #include <raylib.h>
+#include <list>
+#include <vector>
 
 class Gamepad
 {
@@ -16,7 +18,7 @@ class Gamepad
         Gamepad(int id) : _id(id) {};
         ~Gamepad() = default;
 
-        int getButtonPressed();
+        std::list<int> getButtonPressed();
 
         float getAxisLeftX() {return GetGamepadAxisMovement(this->_id, GAMEPAD_AXIS_LEFT_X);};
         float getAxisLeftY() {return GetGamepadAxisMovement(this->_id, GAMEPAD_AXIS_LEFT_Y);};
@@ -29,52 +31,14 @@ class Gamepad
         int _id;
 };
 
-int Gamepad::getButtonPressed()
+std::list<int> Gamepad::getButtonPressed()
 {
-    // arrow key
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_LEFT_FACE_UP))
-        return GAMEPAD_BUTTON_LEFT_FACE_UP;
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_LEFT_FACE_RIGHT))
-        return GAMEPAD_BUTTON_LEFT_FACE_RIGHT;
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_LEFT_FACE_DOWN))
-        return GAMEPAD_BUTTON_LEFT_FACE_DOWN;
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_LEFT_FACE_LEFT))
-        return GAMEPAD_BUTTON_LEFT_FACE_LEFT;
+    std::list<int> to_ret;
 
-    // XBOX: [Y,X,A,B] PS3: [Triangle,Square,Cross,Circle]
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_RIGHT_FACE_UP))
-        return GAMEPAD_BUTTON_RIGHT_FACE_UP;
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
-        return GAMEPAD_BUTTON_RIGHT_FACE_RIGHT;
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_RIGHT_FACE_DOWN))
-        return GAMEPAD_BUTTON_RIGHT_FACE_DOWN;
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_RIGHT_FACE_LEFT))
-        return GAMEPAD_BUTTON_RIGHT_FACE_LEFT;
-
-    //triggers
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_LEFT_TRIGGER_1)) // lb
-        return GAMEPAD_BUTTON_LEFT_TRIGGER_1;
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_LEFT_TRIGGER_2)) //lt
-        return GAMEPAD_BUTTON_LEFT_TRIGGER_2;
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_RIGHT_TRIGGER_1)) //rb
-        return GAMEPAD_BUTTON_RIGHT_TRIGGER_1;
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_RIGHT_TRIGGER_2)) // rt
-        return GAMEPAD_BUTTON_RIGHT_TRIGGER_2;
-    
-    //mid button
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_MIDDLE_LEFT))// LEFT MID BUTTON
-        return GAMEPAD_BUTTON_MIDDLE_LEFT;
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_MIDDLE))   // PS Button/XBOX Button
-        return GAMEPAD_BUTTON_MIDDLE;
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_MIDDLE_RIGHT))   // RIGHT MID BUTTON
-        return GAMEPAD_BUTTON_MIDDLE_RIGHT;
-
-    // These are the joystick press in buttons
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_LEFT_THUMB))
-        return GAMEPAD_BUTTON_LEFT_THUMB;
-    if (IsGamepadButtonDown(this->_id, GAMEPAD_BUTTON_RIGHT_THUMB))
-        return GAMEPAD_BUTTON_RIGHT_THUMB;
-    return 0;
+    for (int i = 1; i <= 17; i++)
+        if (IsGamepadButtonDown(this->_id, i))
+            to_ret.push_back(i);
+    return to_ret;
 }
 
 #endif /* !GAMEPAD_HPP_ */
