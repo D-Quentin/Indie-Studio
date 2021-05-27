@@ -11,12 +11,12 @@
 
 int main(void)
 {
-    window win("fps boum boum");
+    rl::Window win("fps boum boum");
     Gamepad gmp(0);
 
     while(win.loop()) {
         win.clear();
-        Text("salopars").draw();
+        rl::Text("salopars").draw();
     }
     win.destroy();
     return 0;
