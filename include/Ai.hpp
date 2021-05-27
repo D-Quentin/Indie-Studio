@@ -3,7 +3,7 @@
 
 #include "EntityObjects.hpp"
 
-namespace ai {
+namespace game_object {
     class AiGeneral : public EntityObjects {
     public:
         AiGeneral() = default;

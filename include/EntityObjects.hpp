@@ -2,6 +2,7 @@
 #define BOMBERMAN_ENTITYOBJECTS_HPP
 
 #include "GameObject.hpp"
+#include "misc.hpp"
 
 namespace game_object {
     class EntityObjects : public GameObject {
@@ -16,6 +17,8 @@ namespace game_object {
 
     protected:
         unsigned int _health;
+        unsigned int _speed;
+        Direction _direction;
         // current weapon
         // view range
     };
