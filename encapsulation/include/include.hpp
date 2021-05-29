@@ -8,10 +8,10 @@
 #ifndef RAYLIB_ENCAPSULATION_HPP_
 #define RAYLIB_ENCAPSULATION_HPP_
 
-#include <bits/stdc++.h>
 #include <raylib.h>
 #include <physac.h>
 #include <iostream>
+#include <tuple>
 
 using color = std::tuple<int,int,int,int>;
 

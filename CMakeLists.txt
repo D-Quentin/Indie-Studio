@@ -5,9 +5,11 @@ project(${PROJ})
 
 find_package(raylib 3.7 QUIET)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 14)
+include_directories(boost_1_76_0)
 include_directories(include)
 include_directories(encapsulation/include)
+LINK_DIRECTORIES(boost_1_76_0/stage/lib)
 
 file(
     GLOB

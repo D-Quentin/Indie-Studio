@@ -55,7 +55,12 @@ std::pair<int, int> rl::Text::getPos()
 void rl::Text::draw(color col)
 {
     int r = 0, g = 0, b = 0, a = 0;
+    Color c;
 
-    std::tie(r,g,b,a) = col;
-    DrawText(this->_text.c_str(), _posx, _posy, _font_size, (Color) {(unsigned char)r, (unsigned char)g, (unsigned char)b, (unsigned char)a});
+    std::tie(r, g, b, a) = col;
+    c.r = (unsigned char)r;
+    c.g = (unsigned char)g;
+    c.b = (unsigned char)b;
+    c.a = (unsigned char)a;
+    DrawText(this->_text.c_str(), _posx, _posy, _font_size, c);
 }

@@ -9,6 +9,7 @@
 #define GAMEPAD_HPP_
 
 #include "include.hpp"
+#include <list>
 
 class Gamepad
 {
