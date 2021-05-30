@@ -28,12 +28,12 @@ std::pair<float, float> Gamepad::getAxisLeft()
 
 float Gamepad::getAxisRightX()
 {
-    return GetGamepadAxisMovement(this->_id, GAMEPAD_AXIS_RIGHT_X);
+    return (GetGamepadAxisMovement(this->_id, GAMEPAD_AXIS_RIGHT_X));
 }
 
 float Gamepad::getAxisRightY()
 {
-    return GetGamepadAxisMovement(this->_id, GAMEPAD_AXIS_RIGHT_Y);
+    return (GetGamepadAxisMovement(this->_id, GAMEPAD_AXIS_RIGHT_Y));
 }
 
 std::pair<float, float> Gamepad::getAxisRight()

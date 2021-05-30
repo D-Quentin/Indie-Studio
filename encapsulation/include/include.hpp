@@ -13,6 +13,6 @@
 #include <physac.h>
 #include <iostream>
 
-#define color std::tuple<int,int,int,int>
+using color = std::tuple<int,int,int,int>;
 
 #endif /* !RAYLIB_ENCAPSULATION_HPP_ */

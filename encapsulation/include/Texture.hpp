@@ -8,11 +8,11 @@
 #ifndef TEXTURE_HPP_
 #define TEXTURE_HPP_
 
-class texture2d
+class Texture2D
 {
     public:
-        texture2d() = default;
-        ~texture2d() = default;
+        Texture2D() = default;
+        ~Texture2D() = default;
     private:
         /* data */
 };
