@@ -8,8 +8,6 @@ namespace game_object {
     public:
         AiGeneral() = default;
         ~AiGeneral() = default;
-
-
     };
 }
 

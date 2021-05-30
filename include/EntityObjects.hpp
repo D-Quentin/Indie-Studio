@@ -10,14 +10,13 @@ namespace game_object {
         EntityObjects() = default;
         ~EntityObjects() = default;
 
-        void attack();
-        void move();
-        void pickObject();
+        //void attack();
+        //void pickObject();
         void setPosition(std::vector<double>newPosition);
 
     protected:
         unsigned int _health;
-        unsigned int _speed;
+        //unsigned int _speed;
         Direction _direction;
         // current weapon
         // view range

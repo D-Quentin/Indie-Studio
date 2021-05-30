@@ -3,3 +3,4 @@ _build
 bomberman.exe
 build
 .idea
+cmake-build-debug

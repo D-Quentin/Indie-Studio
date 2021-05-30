@@ -12,7 +12,7 @@ namespace game_object {
         std::vector<double> getPosition();
 
     protected:
-        std::vector<double>_CurrentPosition;
+        std::vector<double>_currentPosition;
         // texture
     };
 }
