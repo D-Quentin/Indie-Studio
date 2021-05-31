@@ -11,19 +11,20 @@
 #include "encapsulation.hpp"
 
 class Button {
-   public:
-      Button(std::string, int, int, int, int);
-      ~Button();
-      bool isHover();
-      bool isPressed();
+    public:
+        Button(int = 0, int = 0, int = 0, int = 0);
+        ~Button();
+        bool isHover();
+        bool isPressed();
+        bool isCliqued();
+        void draw();
 
-   protected:
-   private:
-      std::string _name;
-      int _posx = 0;
-      int _posy = 0;
-      int _height = 50;
-      int _width = 100;
+    protected:
+    private:
+        int _posx;
+        int _posy;
+        int _height;
+        int _width;
 };
 
 #endif /* !BUTTON_HPP_ */

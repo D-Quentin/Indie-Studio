@@ -64,3 +64,8 @@ void rl::Text::draw(color col)
     c.a = (unsigned char)a;
     DrawText(this->_text.c_str(), _posx, _posy, _font_size, c);
 }
+
+void rl::Text::draw(Color col)
+{
+    DrawText(this->_text.c_str(), _posx, _posy, _font_size, col);
+}
