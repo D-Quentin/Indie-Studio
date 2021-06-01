@@ -7,6 +7,7 @@
 
 #include "Game.hpp"
 #include "Menu.hpp"
+#include "Lobby.hpp"
 
 Game::Game()
 {
@@ -20,6 +21,7 @@ void Game::launch(rl::Window win)
 {
     GamePhase statut = MenuPhase;
     std::pair<bool, Menu> menu = {false, Menu()};
+    std::pair<bool, Lobby> lobby = {false, Lobby()};
 
     while (statut != QuitPhase && win.loop()) {
         switch (statut) {
@@ -31,7 +33,15 @@ void Game::launch(rl::Window win)
                 menu.first = true;
             }
             break;
-        
+        case LobbyPhase:
+            if (lobby.first)
+                statut = lobby.second.restart();
+            else {
+                statut = lobby.second.launch();
+                lobby.first = true;
+            }
+            break;
+
         default:
             break;
         }

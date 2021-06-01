@@ -8,6 +8,8 @@
 #ifndef LOBBY_HPP_
 #define LOBBY_HPP_
 
+#include "Button.hpp"
+#include "InputButton.hpp"
 #include "IGamePhase.hpp"
 #include "encapsulation.hpp"
 #include "Player.hpp"
@@ -30,7 +32,12 @@ class Lobby : public IGamePhase {
     protected:
     private:
         Phase _phase;
-        std::map<int, std::unique_ptr<GameObject>> _obj;
+        std::map<int, GameObject *> _obj;
+        int _player;
+        int _readyPlayer;
+
+        Button _bReady;
+        rl::Text _tReady;
 };
 
 #endif /* !LOBBY_HPP_ */
