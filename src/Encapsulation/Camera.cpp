@@ -41,8 +41,8 @@ Vector2 axToMouse(std::pair<float, float> ax)
 
     x += ax.first;
     y += ax.second;
-
-    return (Vector2) {x, y};
+    Vector2 vec = {x, y};
+    return (vec);
 }
 
 void rl::Camera::updateCamera(std::pair<float, float> gmpAxisLeft, std::pair<float, float> gmpAxisRight)
@@ -94,7 +94,9 @@ void rl::Camera::updateCamera(std::pair<float, float> gmpAxisLeft, std::pair<flo
             angle.y = minimumY * DEG2RAD;
         else if (angle.y > maximumY * DEG2RAD)
             angle.y = maximumY * DEG2RAD;
-        Vector3 target = Vector3Transform((Vector3) {0, 0, 1}, MatrixRotateXYZ( (Vector3){-angle.y, -angle.x, 0} ));
+        Vector3 vec = {0, 0, 1};
+        Vector3 vec2 = {-angle.y, -angle.x, 0};
+        Vector3 target = Vector3Transform(vec, MatrixRotateXYZ( vec2 ));
         this->setTarget(Vector3Add(this->getPosition(), target));
     //end sett camera target
 }

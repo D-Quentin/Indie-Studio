@@ -1,4 +1,5 @@
 #include "Ai.hpp"
+#include <string>
 
 std::string Ai::serialize()
 {

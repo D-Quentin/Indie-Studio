@@ -6,6 +6,7 @@
 */
 
 #include "Player.hpp"
+#include <string>
 
 Player::Player(Vector2 pos, int id, bool me) : _me(me)
 {

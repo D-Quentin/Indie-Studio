@@ -6,6 +6,7 @@
 */
 
 #include "Lobby.hpp"
+#include <string>
 
 Lobby::Lobby()
 {
