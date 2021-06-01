@@ -68,9 +68,14 @@ bool rl::Window::loop()
 void rl::Window::clear(color col)
 {
     int r = 0, g = 0, b = 0, a = 0;
+    Color c;
 
     std::tie(r, g, b, a) = col;
-    ClearBackground((Color) {(unsigned char)r, (unsigned char)g, (unsigned char)b, (unsigned char)a});
+    c.r = (unsigned char)r;
+    c.g = (unsigned char)g;
+    c.b = (unsigned char)b;
+    c.a = (unsigned char)a;
+    ClearBackground(c);
 }
 
 void rl::Window::destroy()

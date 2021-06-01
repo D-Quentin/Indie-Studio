@@ -8,16 +8,15 @@
 // #include <iostream>
 
 #include "encapsulation.hpp"
+#include "Game.hpp"
 
 int main(void)
 {
-    rl::Window win("fps boum boum");
-    Gamepad gmp(0);
+    rl::Window win(WIN_WIDTH, WIN_HEIGHT, "Indie Studio");
+    Game game;
 
-    while(win.loop()) {
-        win.clear();
-        rl::Text("salopars").draw();
-    }
+    win.fullscreen();
+    game.launch(win);
     win.destroy();
     return 0;
 }
