@@ -43,8 +43,7 @@ namespace rl {
     // };
     class Camera {
         public:
-            Camera();
-            Camera(Vector3 pos, CameraMode mode = CAMERA_FREE);
+            Camera(Vector3 pos = {0, 0, 0}, CameraMode mode = CAMERA_FREE);
             ~Camera() = default;
 
             void setPosition(Vector3 value) {_camera.position = value;};
@@ -60,7 +59,7 @@ namespace rl {
             Camera3D getCamera() const {return _camera;};
             int getSpeed() const {return _speed;};
 
-            void updateCamera(std::pair<float, float> gmpAxisLeft = {0.0f, 0.0f}, std::pair<float, float> gmpAxisRight = {0.0f, 0.0f});
+            void updateCamera(std::pair<float, float> gmpAxisLeft = {IsKeyDown(KEY_Z) - IsKeyDown(KEY_S), IsKeyDown(KEY_Q) - IsKeyDown(KEY_D)}, std::pair<float, float> gmpAxisRight = {0.0f, 0.0f});
 
         private:
             Camera3D _camera = {0};
