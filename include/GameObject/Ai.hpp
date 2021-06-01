@@ -3,12 +3,14 @@
 
 #include "EntityObjects.hpp"
 
-namespace game_object {
-    class AiGeneral : public EntityObjects {
+class Ai : public EntityObjects {
     public:
-        AiGeneral() = default;
-        ~AiGeneral() = default;
+        Ai() = default;
+        ~Ai() = default;
+
+        std::string serialize();
+        void deserialize(std::string str);
     };
-}
+
 
 #endif //BOMBERMAN_AI_HPP

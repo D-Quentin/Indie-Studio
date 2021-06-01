@@ -1,7 +1,7 @@
 #ifndef BOMBERMAN_ENTITYOBJECTS_HPP
 #define BOMBERMAN_ENTITYOBJECTS_HPP
 
-#include "GameObject/GameObject.hpp"
+#include "GameObject.hpp"
 
 class EntityObjects : public GameObject {
     public:
