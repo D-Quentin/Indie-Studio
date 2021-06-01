@@ -23,14 +23,10 @@ typedef std::deque<chat_message> chat_message_queue;
 class chat_client
 {
 public:
-    chat_client(boost::asio::io_context& io_context,
-            const tcp::resolver::results_type& endpoints)
-        : io_context_(io_context),
-            socket_(io_context)
+    chat_client(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoints) : io_context_(io_context), socket_(io_context)
     {
         boost::asio::async_connect(socket_, endpoints,
-                boost::bind(&chat_client::handle_connect, this,
-                    boost::asio::placeholders::error));
+        boost::bind(&chat_client::handle_connect, this, boost::asio::placeholders::error));
     }
 
     void write(const chat_message& msg)

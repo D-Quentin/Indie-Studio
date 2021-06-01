@@ -17,7 +17,7 @@ InputButton::InputButton(int posx, int posy, int width, int height, int maxLen)
     this->_selected = false;
     this->_button = Button(posx, posy, width, height);
     this->_color = Fade(ORANGE, 0.6);
-    this->_printText = rl::Text("", this->_posx + this->_height * 0.05, this->_posy + this->_height * 0.05, this->_height - this->_height * 0.05 );
+    this->_printText = rl::Text("", this->_posx + this->_height * 0.2, this->_posy + this->_height * 0.05, this->_height - this->_height * 0.2);
 }
 
 InputButton::~InputButton()
@@ -54,7 +54,7 @@ void InputButton::writeChar()
 void InputButton::draw()
 {
     DrawRectangle(this->_posx, this->_posy, this->_width, this->_height, this->_color);
-    DrawRectangle(this->_posx + this->_height * 0.05, this->_posy + this->_height * 0.05, this->_width - this->_height * 0.05, this->_height - this->_height * 0.05, DARKGRAY);
+    DrawRectangle(this->_posx + this->_height * 0.05, this->_posy + this->_height * 0.05, this->_width - this->_height * 0.1, this->_height - this->_height * 0.1, DARKGRAY);
     this->_printText.draw(LIGHTGRAY);
 }
 
