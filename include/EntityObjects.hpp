@@ -13,11 +13,13 @@ namespace game_object {
         //void attack();
         //void pickObject();
         void setPosition(std::vector<double>newPosition);
+        unsigned int getHealth();
+        misc::Direction getDirection();
 
     protected:
         unsigned int _health;
         //unsigned int _speed;
-        Direction _direction;
+        misc::Direction _direction;
         // current weapon
         // view range
     };
