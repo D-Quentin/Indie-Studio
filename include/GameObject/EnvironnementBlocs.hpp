@@ -3,12 +3,11 @@
 
 #include "GameObject.hpp"
 
-namespace game_object {
-    class EnvironmentBloc : public GameObject {
+class EnvironmentBloc : public GameObject {
     public:
         EnvironmentBloc();
         ~EnvironmentBloc();
     };
-}
+
 
 #endif //BOMBERMAN_ENVIRONNEMENTBLOCS_HPP

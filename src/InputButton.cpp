@@ -26,7 +26,7 @@ InputButton::~InputButton()
 
 bool InputButton::isSelected()
 {
-    if (this->_button.isCliqued()) {
+    if (this->_button.isClicked()) {
         this->_selected = true;
         this->_color = Fade(ORANGE, 1);
     }

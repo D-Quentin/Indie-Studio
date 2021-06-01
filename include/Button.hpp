@@ -16,7 +16,7 @@ class Button {
         ~Button();
         bool isHover();
         bool isPressed();
-        bool isCliqued();
+        bool isClicked();
         void draw();
 
     protected:

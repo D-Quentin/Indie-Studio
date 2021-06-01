@@ -13,10 +13,11 @@
 class GameObject : public IGameObject {
     public:
         GameObject(Vector2 = {0, 0}, int = -1);
-        ~GameObject();
+        ~GameObject() = default;
+
         Vector2 getPos();
         int getId();
-        void setPos(Vector2);
+        void setPosition(Vector2 newPosition);
         void setId(int);
 
     protected:

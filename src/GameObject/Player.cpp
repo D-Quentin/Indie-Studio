@@ -11,10 +11,6 @@ Player::Player(Vector2 pos, int id, bool me) : _me(me)
 {
 }
 
-Player::~Player()
-{
-}
-
 void Player::draw()
 {
     if (this->_me)

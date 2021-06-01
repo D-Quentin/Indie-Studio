@@ -8,12 +8,12 @@
 #ifndef PLAYER_HPP_
 #define PLAYER_HPP_
 
-#include "GameObject.hpp"
+#include "EntityObjects.hpp"
 
-class Player : public GameObject {
+class Player : public EntityObjects {
     public:
         Player(Vector2 = {0, 0}, int = -1, bool = false);
-        ~Player();
+        ~Player() = default;
         void draw();
         void move();
         std::string serialize();

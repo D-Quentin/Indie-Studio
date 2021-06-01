@@ -80,9 +80,9 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
     this->_bQuit.draw();
     this->_tPlay.draw(LIGHTGRAY);
     this->_tQuit.draw(LIGHTGRAY);
-    if (this->_bQuit.isCliqued())
+    if (this->_bQuit.isClicked())
         return (QuitPhase);
-    if (this->_bPlay.isCliqued()) {
+    if (this->_bPlay.isClicked()) {
         this->_phase = Menu::PlayPhase;
     }
     return (gamePhase);
@@ -94,9 +94,9 @@ GamePhase Menu::playPhase(GamePhase gamePhase)
     this->_bCreateGame.draw();
     this->_tCreateGame.draw(LIGHTGRAY);
     this->_tJoinGame.draw(LIGHTGRAY);
-    if (this->_bCreateGame.isCliqued())
+    if (this->_bCreateGame.isClicked())
         this->_phase = CreatePhase;
-    if (this->_bJoinGame.isCliqued())
+    if (this->_bJoinGame.isClicked())
         this->_phase = JoinPhase;
     return (gamePhase);
 }

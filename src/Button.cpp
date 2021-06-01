@@ -36,7 +36,7 @@ bool Button::isPressed()
     return (false);
 }
 
-bool Button::isCliqued()
+bool Button::isClicked()
 {
     if (this->isHover() && IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
         return (true);

@@ -11,24 +11,19 @@ GameObject::GameObject(Vector2 pos, int id) : _pos(pos), _id(id)
 {
 }
 
-GameObject::~GameObject()
-{
-}
-
 Vector2 GameObject::getPos()
 {
     return (this->_pos);
 }
 
+void GameObject::setPosition(Vector2 pos)
+{
+    this->_pos = pos;
+}
 
 int GameObject::getId()
 {
     return (this->_id);
-}
-
-void GameObject::setPos(Vector2 pos)
-{
-    this->_pos = pos;
 }
 
 void GameObject::setId(int id)
