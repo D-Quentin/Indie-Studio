@@ -11,7 +11,8 @@
 enum GamePhase {
     QuitPhase,
     MenuPhase,
-    SettingsPhase
+    SettingsPhase,
+    LobbyPhase
 };
 
 class IGamePhase {

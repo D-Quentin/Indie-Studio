@@ -29,21 +29,41 @@ class Menu : public IGamePhase {
         GamePhase playPhase(GamePhase);
         GamePhase createPhase(GamePhase);
         GamePhase joinPhase(GamePhase);
+        std::string getIp();
+        std::string getPort();
+        std::string getYourName();
 
     protected:
     private:
         Phase _phase;
+
+        // MainPhase
         Button _bPlay;
         Button _bQuit;
-        Button _bJoinGame;
-        Button _bCreateGame;
         rl::Text _tPlay;
         rl::Text _tQuit;
+
+        // PlayPhase
+        Button _bJoinGame;
+        Button _bCreateGame;
         rl::Text _tJoinGame;
         rl::Text _tCreateGame;
+
+        // JoinPhase
         InputButton _iIp;
         InputButton _iPort;
         InputButton _iYourName;
+        rl::Text _tYourName;
+        rl::Text _tIp;
+        rl::Text _tPort;
+        Button _bJoin;
+        rl::Text _tJoin;
+
+        // CreatePhase
+        InputButton _iServPort;
+        rl::Text _tServPort;
+        rl::Text _tCreate;
+        Button _bCreate;
 };
 
 #endif /* !MENU_HPP_ */

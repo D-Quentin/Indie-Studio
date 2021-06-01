@@ -5,10 +5,12 @@ project(${PROJ})
 
 find_package(raylib 3.7 QUIET)
 
-set(CMAKE_C_STANDARD 14)
+set(CMAKE_C_STANDARD 20)
 include_directories(boost_1_76_0)
 include_directories(include)
-include_directories(encapsulation/include)
+include_directories(include/Encapsulation)
+include_directories(include/GameObject)
+include_directories(include/Server)
 LINK_DIRECTORIES(boost_1_76_0/stage/lib)
 
 file(
@@ -16,7 +18,6 @@ file(
     SRCS
     src/*.cpp
     src/*/*.cpp
-    encapsulation/*/*.cpp
 )
 
 if (NOT raylib_FOUND) # If there's none, fetch and build raylib
