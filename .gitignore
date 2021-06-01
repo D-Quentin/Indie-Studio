@@ -4,3 +4,5 @@ bomberman.exe
 build
 .idea
 cmake-build-debug
+boost_1_76_0
+.vscode

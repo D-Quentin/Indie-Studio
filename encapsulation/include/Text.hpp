@@ -29,6 +29,7 @@ namespace rl {
 
             // Méthodes
             void draw(color = {0, 0, 0, 255});
+            void draw(Color);
 
         private :
             std::string _text;
