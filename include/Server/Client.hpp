@@ -20,6 +20,7 @@ using namespace boost::asio::ip;
 
 class Client {
     public:
+        Client() = default;
         Client(boost::asio::io_service &io_service, std::string host, int port);
         ~Client() = default;
 
