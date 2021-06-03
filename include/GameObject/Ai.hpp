@@ -3,13 +3,26 @@
 
 #include "EntityObjects.hpp"
 
-class Ai : public EntityObjects {
-    public:
-        Ai() = default;
-        ~Ai() = default;
+enum Target {IN_RANGE, TOO_FAR, ABSENT, UNDEFINED};
 
-        std::string serialize();
-        void deserialize(std::string str);
+class Ai : public EntityObjects {
+public:
+    Ai();
+    ~Ai() = default;
+
+
+    Target checkEnemy();
+    void getPriority();
+    void moveToEnemy();
+    Vector2 getEnemyPosition();
+    void attackEnemy();
+    void setRandomTarget();
+    std::string serialize();
+    void deserialize(std::string str);
+
+protected:
+    Vector2 targetPosition;
+    Target targetStatus;
     };
 
 
