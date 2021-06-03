@@ -9,6 +9,7 @@
 
 Client::Client(boost::asio::io_service &io_service, std::string host, int port) : _socket(io_service, udp::endpoint(udp::v4(), 0))
 {
+    this->_str_received = "";
     this->_uuid = boost::lexical_cast<std::string>(this->uuid_generator());
     this->_remote_endpoint = boost::asio::ip::udp::endpoint(address::from_string(host), port);
     this->send("CONNECTED");
@@ -52,23 +53,19 @@ void Client::send(std::string str)
     this->_socket.send_to(boost::asio::buffer(*message), this->_remote_endpoint);
 }
 
-// int main(int ac, char* av[])
-// {
-//     try
-//     {
-//         int port = -1;
+void Client::launch(boost::asio::io_service &io_service)
+{
+    boost::thread run_thread(boost::bind(&boost::asio::io_service::run, boost::ref(io_service)));
+}
 
-//         if (ac != 3 || (port = atoi(av[2])) <= 0)
-//             return 1;
-//         boost::asio::io_service io_service;
-//         Client client(io_service, av[1], port);
-//         boost::thread run_thread(boost::bind(&boost::asio::io_service::run, boost::ref(io_service)));
-//         while (1) {
-//             std::cout << client.read() << std::endl;
-//         }
-//     }
-//     catch (std::exception& e) {
-//         std::cerr << e.what() << std::endl;
-//     }
-//     return 0;
+// int main(int ac, char **av)
+// {
+//     int port = -1;
+
+//     if (ac != 3 || (port = atoi(av[2])) <= 0)
+//         return 1;
+
+//     boost::asio::io_service io_service;
+//     Client client(io_service, av[1], port);
+//     client.launch(io_service);
 // }

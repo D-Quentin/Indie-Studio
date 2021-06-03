@@ -21,14 +21,18 @@ using namespace boost::asio;
 
 class Server
 {
+    enum SEND {
+        ALL,
+        SENDER,
+    };
+
     public:
+        // Spéciales
         Server(boost::asio::io_service& io_service, int port);
         ~Server() = default;
 
-        enum SEND {
-            ALL,
-            SENDER,
-        };
+        // Méthodes
+        bool Server::launchServer(boost::asio::io_service& io_service);
 
     private:
         // Méthodes

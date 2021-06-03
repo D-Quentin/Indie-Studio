@@ -85,20 +85,26 @@ void Server::handleReceive(const boost::system::error_code& error, std::size_t b
     this->startReceive();
 }
 
-void Server::handleSend(boost::shared_ptr<std::string> message, const boost::system::error_code& error, std::size_t bytes)
+bool Server::launchServer(boost::asio::io_service& io_service)
 {
-
+    switch (fork()) {
+        case (-1):
+            return (false);
+        case (0):
+            return (true);
+        default:
+            io_service.run();
+            return (true);
+    }
 }
 
 // int main(int ac, char **av)
 // {
-//     try {
-//         boost::asio::io_service io_service;
-//         Server server(io_service, atoi(av[1]));
-//         io_service.run();
+//     boost::asio::io_service io_service;
+//     Server server(io_service, atoi(av[1]));
+
+//     server.launchServer(io_service);
+//     while (true) { // TEST -- Occupe le prog pendant que le serv tourne
+//         std::cout << "je tourne dans le vide" << std::endl;
 //     }
-//     catch (std::exception& e) { 
-//         std::cerr << e.what() << std::endl;
-//     }
-//     return 0;
 // }

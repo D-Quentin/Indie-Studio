@@ -29,8 +29,9 @@ class Client {
         ~Client() = default;
 
         // Méthodes
-        void send(std::string str);
         std::string read(void);
+        void send(std::string str);
+        void launch(boost::asio::io_service &io_service);
 
     private:
         // Méthodes
