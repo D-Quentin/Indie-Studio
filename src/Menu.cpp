@@ -6,6 +6,7 @@
 */
 
 #include "Menu.hpp"
+#include "Server.hpp"
 
 Menu::Menu()
 {
@@ -76,51 +77,61 @@ GamePhase Menu::restart()
 
 GamePhase Menu::mainPhase(GamePhase gamePhase)
 {
-    this->_bPlay.draw();
-    this->_bQuit.draw();
-    this->_tPlay.draw(LIGHTGRAY);
-    this->_tQuit.draw(LIGHTGRAY);
     if (this->_bQuit.isClicked())
         return (QuitPhase);
     if (this->_bPlay.isClicked()) {
         this->_phase = Menu::PlayPhase;
     }
+
+    this->_bPlay.draw();
+    this->_bQuit.draw();
+    this->_tPlay.draw(LIGHTGRAY);
+    this->_tQuit.draw(LIGHTGRAY);
     return (gamePhase);
 }
 
 GamePhase Menu::playPhase(GamePhase gamePhase)
 {
-    this->_bJoinGame.draw();
-    this->_bCreateGame.draw();
-    this->_tCreateGame.draw(LIGHTGRAY);
-    this->_tJoinGame.draw(LIGHTGRAY);
     if (this->_bCreateGame.isClicked())
         this->_phase = CreatePhase;
     if (this->_bJoinGame.isClicked())
         this->_phase = JoinPhase;
+
+    this->_bJoinGame.draw();
+    this->_bCreateGame.draw();
+    this->_tCreateGame.draw(LIGHTGRAY);
+    this->_tJoinGame.draw(LIGHTGRAY);
     return (gamePhase);
 }
 
 GamePhase Menu::createPhase(GamePhase gamePhase)
 {
     if (this->_iServPort.isSelected())
-        this->_iServPort.writeChar();
+        this->_iServPort.writeChar(); // GESTION ERREUR
+    if (this->_bCreate.isClicked()) {
+        boost::asio::io_service io_service;
+        Server server(io_service, std::atoi(this->_iServPort.getText().c_str()));
+        server.launchServer(io_service);
+        return (LobbyPhase);
+    }
     this->_iServPort.draw();
     this->_bCreate.draw();
     this->_tServPort.draw(LIGHTGRAY);
     this->_tCreate.draw(LIGHTGRAY);
-
     return (gamePhase);
 }
 
 GamePhase Menu::joinPhase(GamePhase gamePhase)
 {
     if (this->_iIp.isSelected())
-        this->_iIp.writeChar();
+        this->_iIp.writeChar(); // GESTION ERREUR
     if (this->_iPort.isSelected())
-        this->_iPort.writeChar();
+        this->_iPort.writeChar(); // GESTION ERREUR
     if (this->_iYourName.isSelected())
-        this->_iYourName.writeChar();
+        this->_iYourName.writeChar(); // GESTION ERREUR
+    if (this->_bJoin.isClicked()) {
+        return (LobbyPhase);
+    }
     this->_iIp.draw();
     this->_iPort.draw();
     this->_iYourName.draw();
@@ -129,17 +140,22 @@ GamePhase Menu::joinPhase(GamePhase gamePhase)
     this->_tPort.draw(LIGHTGRAY);
     this->_tYourName.draw(LIGHTGRAY);
     this->_tJoin.draw(LIGHTGRAY);
+
     return (gamePhase);
 }
 
 std::string Menu::getIp()
 {
+    if (this->_iIp.getText() == "")
+        return ("127.0.0.1");
     return (this->_iIp.getText());
 }
 
 std::string Menu::getPort()
 {
-    return (this->_iPort.getText());
+    if (this->_phase == JoinPhase)
+        return (this->_iPort.getText());
+    return (this->_iServPort.getText());
 }
 
 std::string Menu::getYourName()

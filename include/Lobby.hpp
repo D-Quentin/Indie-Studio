@@ -10,13 +10,14 @@
 
 #include "Button.hpp"
 #include "InputButton.hpp"
-#include "IGamePhase.hpp"
+#include "Game.hpp"
 #include "encapsulation.hpp"
 #include "Player.hpp"
+#include "Client.hpp"
 #include <map>
 #include <memory>
 
-class Lobby : public IGamePhase {
+class Lobby {
     enum Phase {
         MainPhase,
         JoinPhase
@@ -24,10 +25,10 @@ class Lobby : public IGamePhase {
     public:
         Lobby();
         ~Lobby();
-        GamePhase launch();
-        GamePhase restart();
+        GamePhase launch(Client *, std::string, std::string);
+        GamePhase restart(Client *, std::string, std::string);
         GamePhase mainPhase(GamePhase);
-        GamePhase joinPhase(GamePhase);
+        GamePhase joinPhase(GamePhase, Client *, std::string, std::string);
 
     protected:
     private:
@@ -35,9 +36,12 @@ class Lobby : public IGamePhase {
         std::map<int, GameObject *> _obj;
         int _player;
         int _readyPlayer;
+        Client *_client;
+        size_t _me;
 
         Button _bReady;
         rl::Text _tReady;
+        rl::Text _tLoading;
 };
 
 #endif /* !LOBBY_HPP_ */

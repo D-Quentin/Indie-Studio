@@ -20,6 +20,10 @@
 using namespace boost::asio::ip;
 using namespace boost::asio;
 
+static const std::string INCOMMING_CONNECTION = "##100##";
+static const std::string ACCEPTED_CONNECTION = "##201##";
+static const std::string TIMEOUT_CONNECTION = "##408##";
+
 class Server
 {
     enum SEND {
@@ -47,10 +51,11 @@ class Server
         void handleSend(boost::shared_ptr<std::string> message, const boost::system::error_code& error, std::size_t bytes);
 
         // Attributs
+        int _port;
         udp::socket _socket;
         udp::endpoint _new_endpoint;
         std::map<int, GameObject *> _obj;
-        boost::array<char, 1> _recv_buffer;
+        boost::array<char, STR_MAX_LEN> _recv_buffer;
         std::map<std::string, udp::endpoint> _connection_pool;
 };
 

@@ -35,9 +35,9 @@ void Game::launch(rl::Window win)
             break;
         case LobbyPhase:
             if (lobby.first)
-                statut = lobby.second.restart();
+                statut = lobby.second.restart(this->_client, menu.second.getIp(), menu.second.getPort());
             else {
-                statut = lobby.second.launch();
+                statut = lobby.second.launch(this->_client, menu.second.getIp(), menu.second.getPort());
                 lobby.first = true;
             }
             break;

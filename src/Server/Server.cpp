@@ -7,7 +7,7 @@
 
 #include "Server.hpp"
 
-Server::Server(boost::asio::io_service& io_service, int port) : _socket(io_service, udp::endpoint(udp::v4(), port))
+Server::Server(boost::asio::io_service& io_service, int port) : _socket(io_service, udp::endpoint(udp::v4(), port)), _port(port)
 {
     startReceive();
 }
@@ -42,26 +42,31 @@ std::string Server::getUUIDFromString(std::string line)
     if (pos == std::string::npos)
         return ("");
     pos += 5;
-    for (size_t i = pos, j = 0; line[i] != '\0' && line[i] != ';'; i += 1, j += 1)
-        uuid[j] = line[i];
+    for (size_t i = pos; line[i] != '\0' && line[i] != ';'; i += 1)
+        uuid += line[i];
     return uuid;
 }
 
-void Server::sendToAll(std::string message)
+void Server::sendToAll(std::string str)
 {
+    boost::shared_ptr<std::string> message(new std::string(str));
+
     for (auto it : this->_connection_pool)
-        this->_socket.send_to(boost::asio::buffer(message), it.second);
+        this->_socket.send_to(boost::asio::buffer(*message), it.second);
 }
 
-void Server::sendToSender(std::string message)
+void Server::sendToSender(std::string str)
 {
-    this->_socket.send_to(boost::asio::buffer(message), this->_new_endpoint);
+    boost::shared_ptr<std::string> message(new std::string(str));
+
+    this->_socket.send_to(boost::asio::buffer(*message), this->_new_endpoint);
 }
 
 void Server::sendTo(SEND send, std::string message)
 {
     if (send == ALL) {
         this->sendToAll(message);
+        std::cout << "Send to all : " << message << std::endl;
         // std::thread{Server::sendToAll, std::ref(message)}.detach();
     }
     else if (send == SENDER) {
@@ -75,14 +80,20 @@ void Server::handleReceive(const boost::system::error_code& error, std::size_t b
 {
     if (!error || error == boost::asio::error::message_size) {
         std::string line(this->_recv_buffer.begin(), this->_recv_buffer.end());
+        std::cout << "JHGFDFGHJ" << std::endl;
+        std::cout << "Server recieve: " << line << std::endl;
         std::string uuid = getUUIDFromString(line);
         if (this->_connection_pool.find(uuid) == this->_connection_pool.end()) // If client uuid doesn't exist in connectio pool yet, add it.
             this->_connection_pool[uuid] = this->_new_endpoint;
-        if (line.find("200 CONNECTION") != std::string::npos)
-            sendTo(ALL, "201 NEW CONNECTION;");
+        if (line.find(INCOMMING_CONNECTION) != std::string::npos)
+            sendTo(ALL, ACCEPTED_CONNECTION);
         else {
+            // UUID:YUAZUIEIUHIOAEHOIEH;truc a ecrire
             size_t pos = line.find_first_of(";");
-            sendTo(ALL, line.substr(pos, line.length() - pos));
+            if (pos == std::string::npos)
+                std::cout << "What the hell is that: \"" << line << "\"" << std::endl;
+            else
+                sendTo(ALL, line.substr(pos + 1));
         }
     }
     this->startReceive();
@@ -94,9 +105,11 @@ bool Server::launchServer(boost::asio::io_service& io_service)
         case (-1):
             return (false);
         case (0):
-            return (true);
-        default:
+            std::cout << "Server Start at port: " << std::to_string(this->_port) << std::endl;
             io_service.run();
+            std::cout << "Stoping server ?!?!? tu fait quoi la????" << std::endl;
+            exit(0);
+        default:
             return (true);
     }
 }

@@ -9,6 +9,8 @@
 #define GAMEOBJECT_HPP_
 
 #include "IGameObject.hpp"
+#include "Client.hpp"
+#include <map>
 
 class GameObject : public IGameObject {
     public:
@@ -17,8 +19,9 @@ class GameObject : public IGameObject {
 
         Vector2 getPos();
         int getId();
-        void setPosition(Vector2 newPosition);
+        void setPos(Vector2);
         void setId(int);
+        static void gestData(std::map<int, GameObject *> *, std::string, Client *);
 
     protected:
         Vector2 _pos;

@@ -6,13 +6,15 @@
 */
 
 #include "Client.hpp"
+#include "Server.hpp";
+#include "Game.hpp"
 
 Client::Client(boost::asio::io_service &io_service, std::string host, int port) : _socket(io_service, udp::endpoint(udp::v4(), 0))
 {
     this->_str_received = "";
     this->_uuid = boost::lexical_cast<std::string>(this->uuid_generator());
     this->_remote_endpoint = boost::asio::ip::udp::endpoint(address::from_string(host), port);
-    this->send("200 CONNECTION");
+    this->send(INCOMMING_CONNECTION);
     this->startReceive();
 }
 
@@ -48,14 +50,28 @@ std::string Client::read(void)
 void Client::send(std::string str)
 {
     std::string new_str = "UUID:" + this->_uuid + ";" + str;
-    boost::shared_ptr<std::string> message(new std::string(str));
+    boost::shared_ptr<std::string> message(new std::string(new_str));
 
+    std::cout << "Sending to server: " << new_str << std::endl;
     this->_socket.send_to(boost::asio::buffer(*message), this->_remote_endpoint);
 }
 
 void Client::launch(boost::asio::io_service &io_service)
 {
     boost::thread run_thread(boost::bind(&boost::asio::io_service::run, boost::ref(io_service)));
+}
+
+std::string Client::getReponse(void)
+{
+    auto time = timeNow;
+    std::string str;
+
+    while(Chrono(time) <= 5000) {
+        str = this->read();
+        if (str.empty() == false)
+            return (str);
+    }
+    return (TIMEOUT_CONNECTION);
 }
 
 // int main(int ac, char **av)

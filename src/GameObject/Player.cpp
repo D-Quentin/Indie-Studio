@@ -40,7 +40,7 @@ std::string Player::serialize()
     str += ";X:" + std::to_string(this->_pos.x);
     str += ";Y:" + std::to_string(this->_pos.y);
 
-    return (str += "\n");
+    return (str += ";\n");
 }
 
 void Player::deserialize(std::string str)
@@ -51,4 +51,9 @@ void Player::deserialize(std::string str)
     this->_pos.x = std::atoi(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
     pos = str.find("Y:");
     this->_pos.y = std::atoi(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
+}
+
+void Player::gest()
+{
+    this->move();
 }

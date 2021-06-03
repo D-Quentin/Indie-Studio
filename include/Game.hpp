@@ -8,8 +8,13 @@
 #ifndef GAME_HPP_
 #define GAME_HPP_
 
+#define timeNow std::chrono::high_resolution_clock::now()
+#define Chrono(x) std::chrono::duration_cast<std::chrono::milliseconds>(timeNow - x).count()
+
+#include "GamePhase.hpp"
 #include "Menu.hpp"
 #include "encapsulation.hpp"
+#include "Client.hpp"
 
 class Game {
     public:
@@ -19,6 +24,7 @@ class Game {
 
     protected:
     private:
+        Client *_client;
 };
 
 #endif /* !GAME_HPP_ */
