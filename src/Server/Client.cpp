@@ -9,8 +9,9 @@
 
 Client::Client(boost::asio::io_service &io_service, std::string host, int port) : _socket(io_service, udp::endpoint(udp::v4(), 0))
 {
+    this->_uuid = boost::lexical_cast<std::string>(this->uuid_generator());
     this->_remote_endpoint = boost::asio::ip::udp::endpoint(address::from_string(host), port);
-    // this->_socket.send_to(boost::asio::buffer("Connect"), this->_remote_endpoint);
+    this->send("CONNECTED");
     this->startReceive();
 }
 
@@ -30,15 +31,24 @@ void Client::startReceive(void)
 
 void Client::handleReceive(const boost::system::error_code& error, std::size_t bytes_transferred)
 {;
-    if (!error || error == boost::asio::error::message_size || bytes_transferred > 0) {
-        std::cout << std::string(reinterpret_cast<const char*>(this->_recv_buffer.data()), bytes_transferred) << std::endl;
-    }
+    if (!error || error == boost::asio::error::message_size || bytes_transferred > 0)
+        this->_str_received = std::string(reinterpret_cast<const char*>(this->_recv_buffer.data()), bytes_transferred);
     this->startReceive();
+}
+
+std::string Client::read(void)
+{
+    std::string rd = this->_str_received;
+
+    this->_str_received = "";
+    return (rd);
 }
 
 void Client::send(std::string str)
 {
+    std::string new_str = "UUID:" + this->_uuid + ";" + str + ";";
     boost::shared_ptr<std::string> message(new std::string(str));
+
     this->_socket.send_to(boost::asio::buffer(*message), this->_remote_endpoint);
 }
 
@@ -47,11 +57,15 @@ void Client::send(std::string str)
 //     try
 //     {
 //         int port = -1;
+
 //         if (ac != 3 || (port = atoi(av[2])) <= 0)
 //             return 1;
 //         boost::asio::io_service io_service;
 //         Client client(io_service, av[1], port);
-//         io_service.run();
+//         boost::thread run_thread(boost::bind(&boost::asio::io_service::run, boost::ref(io_service)));
+//         while (1) {
+//             std::cout << client.read() << std::endl;
+//         }
 //     }
 //     catch (std::exception& e) {
 //         std::cerr << e.what() << std::endl;
