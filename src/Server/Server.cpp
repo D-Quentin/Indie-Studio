@@ -71,15 +71,18 @@ void Server::sendTo(SEND send, std::string message)
     return;
 }
 
-
 void Server::handleReceive(const boost::system::error_code& error, std::size_t bytes_transferred)
 {
     if (!error || error == boost::asio::error::message_size) {
         std::string line(this->_recv_buffer.begin(), this->_recv_buffer.end());
-        if (this->_connection_pool.find(getUUIDFromString(line)) == this->_connection_pool.end()) // If client uuid doesn't exist in connectio pool yet, add it.
-            this->_connection_pool[getUUIDFromString(line)] = this->_new_endpoint;
-        if (line.find("CONNECTED") != std::string::npos) {
-            sendTo(ALL, "New user connected.");
+        std::string uuid = getUUIDFromString(line);
+        if (this->_connection_pool.find(uuid) == this->_connection_pool.end()) // If client uuid doesn't exist in connectio pool yet, add it.
+            this->_connection_pool[uuid] = this->_new_endpoint;
+        if (line.find("200 CONNECTION") != std::string::npos)
+            sendTo(ALL, "201 NEW CONNECTION;");
+        else {
+            size_t pos = line.find_first_of(";");
+            sendTo(ALL, line.substr(pos, line.length() - pos));
         }
     }
     this->startReceive();

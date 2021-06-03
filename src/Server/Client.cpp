@@ -12,7 +12,7 @@ Client::Client(boost::asio::io_service &io_service, std::string host, int port) 
     this->_str_received = "";
     this->_uuid = boost::lexical_cast<std::string>(this->uuid_generator());
     this->_remote_endpoint = boost::asio::ip::udp::endpoint(address::from_string(host), port);
-    this->send("CONNECTED");
+    this->send("200 CONNECTION");
     this->startReceive();
 }
 
@@ -47,7 +47,7 @@ std::string Client::read(void)
 
 void Client::send(std::string str)
 {
-    std::string new_str = "UUID:" + this->_uuid + ";" + str + ";";
+    std::string new_str = "UUID:" + this->_uuid + ";" + str;
     boost::shared_ptr<std::string> message(new std::string(str));
 
     this->_socket.send_to(boost::asio::buffer(*message), this->_remote_endpoint);

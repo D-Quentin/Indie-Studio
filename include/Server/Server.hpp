@@ -15,6 +15,7 @@
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 #include <boost/bind/bind.hpp>
+#include "GameObject.hpp"
 
 using namespace boost::asio::ip;
 using namespace boost::asio;
@@ -32,7 +33,7 @@ class Server
         ~Server() = default;
 
         // Méthodes
-        bool Server::launchServer(boost::asio::io_service& io_service);
+        bool launchServer(boost::asio::io_service& io_service);
 
     private:
         // Méthodes
@@ -48,6 +49,7 @@ class Server
         // Attributs
         udp::socket _socket;
         udp::endpoint _new_endpoint;
+        std::map<int, GameObject *> _obj;
         boost::array<char, 1> _recv_buffer;
         std::map<std::string, udp::endpoint> _connection_pool;
 };
