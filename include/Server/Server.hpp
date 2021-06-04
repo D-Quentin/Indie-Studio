@@ -43,6 +43,7 @@ class Server {
         // std::string _recv;
         udp::socket _socket;
         udp::endpoint _last_endpoint;
+        std::thread _thread;
         boost::array<char, MSG_MAX_LEN> _recv_buf;
         std::vector<udp::endpoint> _connection_pool;
 

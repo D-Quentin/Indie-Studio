@@ -89,7 +89,7 @@ bool Server::launch(int port)
         udp::resolver resolver(io_service);
         Server server(io_service, port);
         #if defined(_WIN32)
-            std::thread thr([&io_service](){ io_service.run(); });
+            this->_thread = std::thread([&io_service](){ io_service.run(); });
             thr.detach();
         #else
             switch (fork()) {
