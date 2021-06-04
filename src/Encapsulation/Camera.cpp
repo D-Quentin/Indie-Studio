@@ -7,6 +7,8 @@
 
 #include "Camera.hpp"
 #include <iostream>
+#include <raylib.h>
+#include <MyRayMath.hpp>
 
 std::pair<float, float> rl::Camera::getpr(float x, float z)
 {
@@ -44,7 +46,7 @@ RAYLIB::Vector2 axToMouse(std::pair<float, float> ax)
     return (vec);
 }
 
-/* RAYMATH
+// RAYMATH
 void rl::Camera::updateCamera(std::pair<float, float> gmpAxisLeft, std::pair<float, float> gmpAxisRight)
 {
     //udate pos cam from left axis gamepad
@@ -70,7 +72,7 @@ void rl::Camera::updateCamera(std::pair<float, float> gmpAxisLeft, std::pair<flo
         static const int mouseSensivity = 600;
         static const float minimumY = -65.0f;
         static const float maximumY = 89.0f;
-        static RAYLIB::Vector2 previousMousePosition = GetMousePosition();
+        static RAYLIB::Vector2 previousMousePosition = RAYLIB::GetMousePosition();
         static RAYLIB::Vector2 angle = {0, 0};
         RAYLIB::Vector2 mouseRealPos = Vector2Subtract(previousMousePosition, RAYLIB::GetMousePosition());
         mouseRealPos.x *= -1;
@@ -100,4 +102,3 @@ void rl::Camera::updateCamera(std::pair<float, float> gmpAxisLeft, std::pair<flo
         this->setTarget(Vector3Add(this->getPosition(), target));
     //end sett camera target
 }
-*/
