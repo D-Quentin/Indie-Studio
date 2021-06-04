@@ -60,12 +60,12 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase)
 
 GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *client, std::string ip, std::string port)
 {
-    // boost::asio::io_service io_service;
+    boost::asio::io_service io_service;
 
     std::cout << "Connecting to Ip: " << ip << " / Port: " << port << " ..." << std::endl;
-    client = new Client(/*io_service, */ip, std::atoi(port.c_str()));
+    client = new Client(io_service, ip, std::atoi(port.c_str()));
+    // client->launch(io_service);
     this->_client = client;
-    // this->_client->launch(io_service);
     this->_tLoading.draw();
 
     auto time = timeNow;

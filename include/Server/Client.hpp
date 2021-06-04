@@ -25,15 +25,14 @@ using namespace boost::asio::ip;
 
 class Client {
     public:
-        Client(std::string host, int port);
+        Client(boost::asio::io_service &io_service, std::string host, int port);
         ~Client() = default;
 
         // Méthodes
-        void launch();
         std::string getReponse(void);
         std::string read(void);
         void send(std::string str);
-        void launchClient();
+        void launch(boost::asio::io_service &io_service);
 
     private:
         // Méthodes
@@ -42,10 +41,9 @@ class Client {
 
         // Attributs
         std::string _uuid;
-        udp::socket *_socket;
+        udp::socket _socket;
         std::string _str_received;
         udp::endpoint _remote_endpoint;
-        boost::asio::io_service *_io_service;
         boost::array<char, STR_MAX_LEN> _recv_buffer;
         boost::uuids::random_generator uuid_generator;
 };
