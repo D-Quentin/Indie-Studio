@@ -109,9 +109,7 @@ GamePhase Menu::createPhase(GamePhase gamePhase)
     if (this->_iServPort.isSelected())
         this->_iServPort.writeChar(); // GESTION ERREUR
     if (this->_bCreate.isClicked()) {
-        boost::asio::io_service io_service;
-        Server server(io_service, std::atoi(this->_iServPort.getText().c_str()));
-        server.launchServer(io_service);
+        Server::launch(std::atoi(this->_iServPort.getText().c_str()));
         return (LobbyPhase);
     }
     this->_iServPort.draw();

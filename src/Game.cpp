@@ -9,6 +9,7 @@
 #include "Menu.hpp"
 #include "Lobby.hpp"
 
+
 Game::Game()
 {
 }
@@ -47,5 +48,5 @@ void Game::launch(rl::Window win)
         }
         win.clear();
     }
-    
+    std::cout << "Quiting" << std::endl;
 }
