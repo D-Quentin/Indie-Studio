@@ -6,6 +6,9 @@
 */
 
 #include "Server.hpp"
+#if defined(_WIN32)
+    #include <windows.h>
+#endif
 
 Server::Server(boost::asio::io_service& io_service, int port) : _socket(io_service, udp::endpoint(udp::v4(), port)), _port(port)
 {
@@ -99,20 +102,34 @@ void Server::handleReceive(const boost::system::error_code& error, std::size_t b
     this->startReceive();
 }
 
+#if defined(_WIN32)
+    DWORD WINAPI mythread(LPVOID lpParameter)
+    {
+        boost::asio::io_service& io_service = *((boost::asio::io_service*)lpParameter);
+        io_service.run();
+        return 0;
+    }
+#endif
+
 bool Server::launchServer(boost::asio::io_service& io_service)
 {
-    // switch (fork()) {
-    //     case (-1):
-    //         return (false);
-    //     case (0):
-    //         std::cout << "Server Start at port: " << std::to_string(this->_port) << std::endl;
-    //         io_service.run();
-    //         std::cout << "Stoping server ?!?!? tu fait quoi la????" << std::endl;
-    //         exit(0);
-    //     default:
-    //         return (true);
-    // }
-    return (true);
+    #if defined(_WIN32)
+        DWORD myThreadID;
+        HANDLE myHandle = CreateThread(0, 0, mythread, &io_service, 0, &myThreadID);
+        return (true);
+    #else
+        switch (fork()) {
+            case (-1):
+                return (false);
+            case (0):
+                std::cout << "Server Start at port: " << std::to_string(this->_port) << std::endl;
+                io_service.run();
+                std::cout << "Stoping server ?!?!? tu fait quoi la????" << std::endl;
+                exit(0);
+            default:
+                return (true);
+        }
+    #endif
 }
 
 // int main(int ac, char **av)
