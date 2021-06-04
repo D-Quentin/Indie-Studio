@@ -8,12 +8,15 @@
 #ifndef RAYLIB_ENCAPSULATION_HPP_
 #define RAYLIB_ENCAPSULATION_HPP_
 
-#include <raylib.h>
+#include <stdarg.h>
+namespace RAYLIB {
+    #include <raylib.h>
+}
 // #include <physac.h>
 #include <iostream>
 #include <tuple>
 
-using color = std::tuple<int,int,int,int>;
+// using color = std::tuple<int,int,int,int>;
 
 #define WIN_HEIGHT 1080
 #define WIN_WIDTH 1920

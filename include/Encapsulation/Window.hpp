@@ -25,7 +25,7 @@ namespace rl {
             // Méthodes
             void fullscreen(void);
             bool loop(void);
-            void clear(color = {0, 0, 0, 255});
+            void clear(RAYLIB::Color = RAYLIB::BLACK);
             void destroy(void);
 
             // Getters & setters

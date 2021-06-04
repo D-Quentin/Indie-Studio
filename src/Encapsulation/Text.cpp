@@ -7,7 +7,7 @@
 
 #include "Text.hpp"
 
-rl::Text::Text(std::string str, int posx, int posy, int font_size) : _text(str), _posx(posx), _posy(posy), _font_size(font_size)
+rl::Text::Text(std::string str, int posx, int posy, int font_size, RAYLIB::Color color) : _text(str), _posx(posx), _posy(posy), _font_size(font_size), _color(color)
 {
 }
 
@@ -52,20 +52,7 @@ std::pair<int, int> rl::Text::getPos()
     return {getPosX(), getPosY()};
 }
 
-void rl::Text::draw(color col)
+void rl::Text::draw()
 {
-    int r = 0, g = 0, b = 0, a = 0;
-    Color c;
-
-    std::tie(r, g, b, a) = col;
-    c.r = (unsigned char)r;
-    c.g = (unsigned char)g;
-    c.b = (unsigned char)b;
-    c.a = (unsigned char)a;
-    DrawText(this->_text.c_str(), _posx, _posy, _font_size, c);
-}
-
-void rl::Text::draw(Color col)
-{
-    DrawText(this->_text.c_str(), _posx, _posy, _font_size, col);
+    RAYLIB::DrawText(this->_text.c_str(), this->_posx, this->_posy, this->_font_size, this->_color);
 }

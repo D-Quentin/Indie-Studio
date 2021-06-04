@@ -14,17 +14,17 @@
 
 class GameObject : public IGameObject {
     public:
-        GameObject(Vector2 = {0, 0}, int = -1);
+        GameObject(RAYLIB::Vector2 = {0, 0}, int = -1);
         ~GameObject() = default;
 
-        Vector2 getPos();
+        RAYLIB::Vector2 getPos();
         int getId();
-        void setPos(Vector2);
+        void setPos(RAYLIB::Vector2);
         void setId(int);
         static void gestData(std::map<int, GameObject *> *, std::string, Client *);
 
     protected:
-        Vector2 _pos;
+        RAYLIB::Vector2 _pos;
         int _id;
     private:
 };

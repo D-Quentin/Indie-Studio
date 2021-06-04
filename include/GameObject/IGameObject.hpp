@@ -9,13 +9,13 @@
 #define IGAMEOBJECT_HPP_
 
 #include <iostream>
-#include "raylib.h"
+#include "include.hpp"
 
 class IGameObject {
     public:
         ~IGameObject() = default;
         virtual int getId() = 0;
-        virtual void setPos(Vector2) = 0;
+        virtual void setPos(RAYLIB::Vector2) = 0;
         virtual void setId(int) = 0;
         virtual void draw() = 0;
         virtual std::string serialize() = 0;

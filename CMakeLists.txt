@@ -44,11 +44,11 @@ endif()
 
 add_executable(${PROJ} ${SRCS})
 target_link_libraries(${PROJ} raylib)
-target_link_libraries(${PROJ} pthread)
-target_link_libraries(${PROJ} boost_thread)
-target_link_libraries(${PROJ} boost_system)
 
 if (UNIX)
+    target_link_libraries(${PROJ} pthread)
+    target_link_libraries(${PROJ} boost_thread)
+    target_link_libraries(${PROJ} boost_system)
     target_compile_options(${PROJ} PRIVATE -Wall -Wextra -g3)
 
 elseif (WIN32)

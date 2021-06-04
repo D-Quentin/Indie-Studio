@@ -23,30 +23,30 @@ GamePhase Menu::launch()
     // MainPhase
     this->_bPlay = Button(WIN_WIDTH / 2 - 300, 150, 600, 200);
     this->_bQuit = Button(WIN_WIDTH / 2 - 300, 550, 600, 200);
-    this->_tPlay = rl::Text("Play", WIN_WIDTH / 2 - 150, 170, 150);
-    this->_tQuit = rl::Text("Quit", WIN_WIDTH / 2 - 150, 570, 150);
+    this->_tPlay = rl::Text("Play", WIN_WIDTH / 2 - 150, 170, 150, RAYLIB::LIGHTGRAY);
+    this->_tQuit = rl::Text("Quit", WIN_WIDTH / 2 - 150, 570, 150, RAYLIB::LIGHTGRAY);
 
     // PlayPhase
     this->_bJoinGame = Button(WIN_WIDTH / 2 - 450, 150, 900, 200);
     this->_bCreateGame = Button(WIN_WIDTH / 2 - 450, 550, 900, 200);
-    this->_tJoinGame = rl::Text("JoinGame", WIN_WIDTH / 2 - 350, 170, 150);
-    this->_tCreateGame = rl::Text("CreateGame", WIN_WIDTH / 2 - 350, 570, 150);
+    this->_tJoinGame = rl::Text("JoinGame", WIN_WIDTH / 2 - 350, 170, 150, RAYLIB::LIGHTGRAY);
+    this->_tCreateGame = rl::Text("CreateGame", WIN_WIDTH / 2 - 350, 570, 150, RAYLIB::LIGHTGRAY);
 
     // JoinPhase
     this->_iIp = InputButton(150, 650, 950, 120, 16);
     this->_iPort = InputButton(1400, 650, 300, 120, 5);
     this->_iYourName = InputButton(WIN_WIDTH / 2 - 475, 200, 950, 120, 16);
-    this->_tYourName = rl::Text("YourName", WIN_WIDTH / 2 - 350, 50, 150);
-    this->_tIp = rl::Text("Ip", 600, 500, 150);
-    this->_tPort = rl::Text("Port", 1450, 500, 150);
+    this->_tYourName = rl::Text("YourName", WIN_WIDTH / 2 - 350, 50, 150, RAYLIB::LIGHTGRAY);
+    this->_tIp = rl::Text("Ip", 600, 500, 150, RAYLIB::LIGHTGRAY);
+    this->_tPort = rl::Text("Port", 1450, 500, 150, RAYLIB::LIGHTGRAY);
     this->_bJoin = Button(WIN_WIDTH / 2 - 300, 850, 600, 200);
-    this->_tJoin = rl::Text("Join", WIN_WIDTH / 2 - 150, 870, 150);
+    this->_tJoin = rl::Text("Join", WIN_WIDTH / 2 - 150, 870, 150, RAYLIB::LIGHTGRAY);
 
     // CreatePhase
     this->_iServPort = InputButton(WIN_WIDTH / 2 - 150, 400, 300, 120, 5);
-    this->_tServPort = rl::Text("Port of your server", WIN_WIDTH / 2 - 500, 280, 100);
+    this->_tServPort = rl::Text("Port of your server", WIN_WIDTH / 2 - 500, 280, 100, RAYLIB::LIGHTGRAY);
     this->_bCreate = Button(WIN_WIDTH / 2 - 300, 850, 600, 200);
-    this->_tCreate = rl::Text("Create", WIN_WIDTH / 2 - 300, 870, 150);
+    this->_tCreate = rl::Text("Create", WIN_WIDTH / 2 - 300, 870, 150, RAYLIB::LIGHTGRAY);
 
     return (this->restart());
 }
@@ -85,8 +85,8 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
 
     this->_bPlay.draw();
     this->_bQuit.draw();
-    this->_tPlay.draw(LIGHTGRAY);
-    this->_tQuit.draw(LIGHTGRAY);
+    this->_tPlay.draw();
+    this->_tQuit.draw();
     return (gamePhase);
 }
 
@@ -99,8 +99,8 @@ GamePhase Menu::playPhase(GamePhase gamePhase)
 
     this->_bJoinGame.draw();
     this->_bCreateGame.draw();
-    this->_tCreateGame.draw(LIGHTGRAY);
-    this->_tJoinGame.draw(LIGHTGRAY);
+    this->_tCreateGame.draw();
+    this->_tJoinGame.draw();
     return (gamePhase);
 }
 
@@ -116,8 +116,8 @@ GamePhase Menu::createPhase(GamePhase gamePhase)
     }
     this->_iServPort.draw();
     this->_bCreate.draw();
-    this->_tServPort.draw(LIGHTGRAY);
-    this->_tCreate.draw(LIGHTGRAY);
+    this->_tServPort.draw();
+    this->_tCreate.draw();
     return (gamePhase);
 }
 
@@ -136,10 +136,10 @@ GamePhase Menu::joinPhase(GamePhase gamePhase)
     this->_iPort.draw();
     this->_iYourName.draw();
     this->_bJoin.draw();
-    this->_tIp.draw(LIGHTGRAY);
-    this->_tPort.draw(LIGHTGRAY);
-    this->_tYourName.draw(LIGHTGRAY);
-    this->_tJoin.draw(LIGHTGRAY);
+    this->_tIp.draw();
+    this->_tPort.draw();
+    this->_tYourName.draw();
+    this->_tJoin.draw();
 
     return (gamePhase);
 }

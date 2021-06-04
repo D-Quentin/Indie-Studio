@@ -101,17 +101,18 @@ void Server::handleReceive(const boost::system::error_code& error, std::size_t b
 
 bool Server::launchServer(boost::asio::io_service& io_service)
 {
-    switch (fork()) {
-        case (-1):
-            return (false);
-        case (0):
-            std::cout << "Server Start at port: " << std::to_string(this->_port) << std::endl;
-            io_service.run();
-            std::cout << "Stoping server ?!?!? tu fait quoi la????" << std::endl;
-            exit(0);
-        default:
-            return (true);
-    }
+    // switch (fork()) {
+    //     case (-1):
+    //         return (false);
+    //     case (0):
+    //         std::cout << "Server Start at port: " << std::to_string(this->_port) << std::endl;
+    //         io_service.run();
+    //         std::cout << "Stoping server ?!?!? tu fait quoi la????" << std::endl;
+    //         exit(0);
+    //     default:
+    //         return (true);
+    // }
+    return (true);
 }
 
 // int main(int ac, char **av)

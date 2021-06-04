@@ -23,8 +23,8 @@ GamePhase Lobby::launch(Client *client, std::string ip, std::string port)
     this->_phase = JoinPhase;
 
     this->_bReady = Button(WIN_WIDTH / 2 - 300, 550, 600, 200);
-    this->_tReady = rl::Text(""/*"Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player))*/, WIN_WIDTH / 2 - 150, 170, 150);
-    this->_tLoading = rl::Text("Loading ...", 50, 1000, 60);
+    this->_tReady = rl::Text(""/*"Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player))*/, WIN_WIDTH / 2 - 150, 170, 150, RAYLIB::LIGHTGRAY);
+    this->_tLoading = rl::Text("Loading ...", 50, 1000, 60, RAYLIB::LIGHTGRAY);
 
     return (this->restart(client, ip, port));
 }
@@ -51,7 +51,7 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase)
 {
     ((Player *)this->_obj[this->_me])->gest();
     GameObject::gestData(&this->_obj, this->_client->read(), this->_client);
-    DrawRectangle(0, 0, WIN_WIDTH, WIN_HEIGHT, GRAY);
+    RAYLIB::DrawRectangle(0, 0, WIN_WIDTH, WIN_HEIGHT, RAYLIB::GRAY);
     for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
         it->second->draw();
     }
@@ -66,7 +66,7 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *client, std::string ip, 
     client = new Client(io_service, ip, std::atoi(port.c_str()));
     this->_client = client;
     this->_client->launch(io_service);
-    this->_tLoading.draw(LIGHTGRAY);
+    this->_tLoading.draw();
 
     auto time = timeNow;
     std::string str = this->_client->getReponse();

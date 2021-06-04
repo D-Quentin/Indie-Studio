@@ -10,16 +10,16 @@
 #include <boost/algorithm/string.hpp>
 #include "Player.hpp"
 
-GameObject::GameObject(Vector2 pos, int id) : _pos(pos), _id(id)
+GameObject::GameObject(RAYLIB::Vector2 pos, int id) : _pos(pos), _id(id)
 {
 }
 
-Vector2 GameObject::getPos()
+RAYLIB::Vector2 GameObject::getPos()
 {
     return (this->_pos);
 }
 
-void GameObject::setPos(Vector2 pos)
+void GameObject::setPos(RAYLIB::Vector2 pos)
 {
     this->_pos = pos;
 }
