@@ -16,6 +16,7 @@ Client::Client(boost::asio::io_service &io_service, std::string host, int port) 
     this->_remote_endpoint = boost::asio::ip::udp::endpoint(address::from_string(host), port);
     this->send(INCOMMING_CONNECTION);
     this->startReceive();
+    io_service.poll();
 }
 
 void Client::startReceive(void)
@@ -70,7 +71,9 @@ std::string Client::getReponse(void)
 
 void Client::launch(boost::asio::io_service &io_service)
 {
+    std::shared_ptr<boost::asio::io_service::work> work(new boost::asio::io_service::work(io_service));
     boost::thread run_thread(boost::bind(&boost::asio::io_service::run, boost::ref(io_service)));
+    // boost::thread t(&boost::asio::io_service::run, &io_service);
 }
 
 // int main(int ac, char **av)
