@@ -82,7 +82,7 @@ void Server::sendTo(SEND send, std::string message)
 void Server::handleReceive(const boost::system::error_code& error, std::size_t bytes_transferred)
 {
     if (!error || error == boost::asio::error::message_size) {
-        std::string line(this->_recv_buffer.begin(), this->_recv_buffer.end());
+        std::string line(this->_recv_buffer.begin(), bytes_transferred);
         std::cout << "JHGFDFGHJ" << std::endl;
         std::cout << "Server recieve: " << line << std::endl;
         std::string uuid = getUUIDFromString(line);
