@@ -7,6 +7,7 @@
 
 #include "Menu.hpp"
 #include "Server.hpp"
+#include "Game.hpp"
 
 Menu::Menu()
 {
@@ -110,6 +111,7 @@ GamePhase Menu::createPhase(GamePhase gamePhase)
         this->_iServPort.writeChar(); // GESTION ERREUR
     if (this->_bCreate.isClicked()) {
         Server::launch(std::atoi(this->_iServPort.getText().c_str()));
+        for (auto time = timeNow ; Chrono(time) <= 2000;);
         return (LobbyPhase);
     }
     this->_iServPort.draw();

@@ -84,14 +84,13 @@ void Server::handleCommand(std::string line)
 bool Server::launch(int port)
 {
     try {
-        boost::asio::io_service io_service;
-
-        udp::resolver resolver(io_service);
-        Server server(io_service, port);
         #if defined(_WIN32)
-            this->_thread = std::thread([&io_service](){ io_service.run(); });
-            thr.detach();
+            system((std::string("start cmd /c bomberman --server ") + std::to_string(port)).c_str());
         #else
+            boost::asio::io_service io_service;
+            udp::resolver resolver(io_service);
+            Server server(io_service, port);
+
             switch (fork()) {
                 case (-1):
                     return (false);
