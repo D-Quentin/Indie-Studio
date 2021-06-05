@@ -13,12 +13,12 @@ Gamepad::Gamepad(int id) : _id(id)
 
 float Gamepad::getAxisLeftX()
 {
-    return (GetGamepadAxisMovement(this->_id, GAMEPAD_AXIS_LEFT_X));
+    return (GetGamepadAxisMovement(this->_id, RAYLIB::GAMEPAD_AXIS_LEFT_X));
 }
 
 float Gamepad::getAxisLeftY()
 {
-    return (GetGamepadAxisMovement(this->_id, GAMEPAD_AXIS_LEFT_Y));
+    return (GetGamepadAxisMovement(this->_id, RAYLIB::GAMEPAD_AXIS_LEFT_Y));
 }
 
 std::pair<float, float> Gamepad::getAxisLeft()
@@ -28,12 +28,12 @@ std::pair<float, float> Gamepad::getAxisLeft()
 
 float Gamepad::getAxisRightX()
 {
-    return (GetGamepadAxisMovement(this->_id, GAMEPAD_AXIS_RIGHT_X));
+    return (GetGamepadAxisMovement(this->_id, RAYLIB::GAMEPAD_AXIS_RIGHT_X));
 }
 
 float Gamepad::getAxisRightY()
 {
-    return (GetGamepadAxisMovement(this->_id, GAMEPAD_AXIS_RIGHT_Y));
+    return (GetGamepadAxisMovement(this->_id, RAYLIB::GAMEPAD_AXIS_RIGHT_Y));
 }
 
 std::pair<float, float> Gamepad::getAxisRight()
@@ -46,7 +46,7 @@ std::list<int> Gamepad::getButtonPressed()
     std::list<int> to_ret;
 
     for (int i = 1; i <= 17; i++)
-        if (IsGamepadButtonDown(this->_id, i))
+        if (RAYLIB::IsGamepadButtonDown(this->_id, i))
             to_ret.push_back(i);
     return to_ret;
 }

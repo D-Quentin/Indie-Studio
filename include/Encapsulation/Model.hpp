@@ -14,12 +14,12 @@ namespace rl {
     class Models
     {
         public:
-            Models(Mesh, Texture2D);
+            Models(RAYLIB::Mesh, RAYLIB::Texture2D);
             ~Models() = default;
 
         private:
             void draw();
-            Model _model;
+            RAYLIB::Model _model;
             int _height;
             int _width;
     };

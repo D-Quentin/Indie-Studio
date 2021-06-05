@@ -12,10 +12,11 @@
 
 class Player : public EntityObjects {
     public:
-        Player(Vector2 = {0, 0}, int = -1, bool = false);
+        Player(RAYLIB::Vector2 = {0, 0}, int = -1, bool = false);
         ~Player() = default;
         void draw();
         void move();
+        void gest();
         std::string serialize();
         void deserialize(std::string);
 

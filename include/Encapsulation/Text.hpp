@@ -14,7 +14,7 @@ namespace rl {
     class Text
     {
         public:
-            Text(std::string = "", int = 0, int = 0, int = 15);
+            Text(std::string = "", int = 0, int = 0, int = 15, RAYLIB::Color = RAYLIB::WHITE);
             ~Text() = default;
 
             // Getters & setters
@@ -28,14 +28,14 @@ namespace rl {
             std::pair<int, int> getPos();
 
             // Méthodes
-            void draw(color = {0, 0, 0, 255});
-            void draw(Color);
+            void draw();
 
         private :
             std::string _text;
             int _posx = 0;
             int _posy = 0;
             int _font_size = 15;
+            RAYLIB::Color _color;
     };
 }
 

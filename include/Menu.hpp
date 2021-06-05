@@ -8,12 +8,12 @@
 #ifndef MENU_HPP_
 #define MENU_HPP_
 
-#include "IGamePhase.hpp"
+#include "Game.hpp"
 #include "Button.hpp"
 #include "encapsulation.hpp"
 #include "InputButton.hpp"
 
-class Menu : public IGamePhase {
+class Menu {
     enum Phase {
         MainPhase,
         PlayPhase,

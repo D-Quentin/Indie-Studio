@@ -25,7 +25,7 @@ rl::Window::Window(const int width, const int height)
 
 rl::Window::Window(const int width, const int height, const std::string msg)
 {
-    InitWindow(width, height, msg.c_str());
+    RAYLIB::InitWindow(width, height, msg.c_str());
     this->setFps();
 }
 
@@ -33,7 +33,7 @@ rl::Window::Window(const int width, const int height, const std::string msg)
 void rl::Window::setFps(const int fps)
 {
     this->_fps = fps;
-    SetTargetFPS(fps);
+    RAYLIB::SetTargetFPS(fps);
 }
 
 int rl::Window::getFps()
@@ -43,42 +43,34 @@ int rl::Window::getFps()
 
 int rl::Window::getWidth()
 {
-    return GetScreenWidth();
+    return RAYLIB::GetScreenWidth();
 }
 
 int rl::Window::getHeight()
 {
-    return GetScreenHeight();
+    return RAYLIB::GetScreenHeight();
 }
 
 
 // ------ Méthodes ------
 void rl::Window::fullscreen()
 {
-    ToggleFullscreen();
+    RAYLIB::ToggleFullscreen();
 }
 
 bool rl::Window::loop()
 {
-    BeginDrawing();
-    EndDrawing();
-    return (!WindowShouldClose());
+    RAYLIB::BeginDrawing();
+    RAYLIB::EndDrawing();
+    return (!RAYLIB::WindowShouldClose());
 }
 
-void rl::Window::clear(color col)
+void rl::Window::clear(RAYLIB::Color color)
 {
-    int r = 0, g = 0, b = 0, a = 0;
-    Color c;
-
-    std::tie(r, g, b, a) = col;
-    c.r = (unsigned char)r;
-    c.g = (unsigned char)g;
-    c.b = (unsigned char)b;
-    c.a = (unsigned char)a;
-    ClearBackground(c);
+    RAYLIB::ClearBackground(color);
 }
 
 void rl::Window::destroy()
 {
-    CloseWindow();
+    RAYLIB::CloseWindow();
 }

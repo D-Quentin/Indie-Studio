@@ -31,7 +31,7 @@ class InputButton {
         std::string _text;
         rl::Text _printText;
         Button _button;
-        Color _color;
+        RAYLIB::Color _color;
 };
 
 #endif /* !INPUTBUTTON_HPP_ */

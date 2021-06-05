@@ -9,19 +9,22 @@
 #define GAMEOBJECT_HPP_
 
 #include "IGameObject.hpp"
+#include "Client.hpp"
+#include <map>
 
 class GameObject : public IGameObject {
     public:
-        GameObject(Vector2 = {0, 0}, int = -1);
+        GameObject(RAYLIB::Vector2 = {0, 0}, int = -1);
         ~GameObject() = default;
 
-        Vector2 getPos();
+        RAYLIB::Vector2 getPos();
         int getId();
-        void setPosition(Vector2 newPosition);
+        void setPos(RAYLIB::Vector2);
         void setId(int);
+        static void gestData(std::map<int, GameObject *> *, std::string, Client *);
 
     protected:
-        Vector2 _pos;
+        RAYLIB::Vector2 _pos;
         int _id;
     private:
 };

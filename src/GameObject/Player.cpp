@@ -8,27 +8,27 @@
 #include "Player.hpp"
 #include <string>
 
-Player::Player(Vector2 pos, int id, bool me) : _me(me)
+Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
 {
 }
 
 void Player::draw()
 {
     if (this->_me)
-        DrawRectangle(this->_pos.x, this->_pos.y, 50, 50, ORANGE);
+        RAYLIB::DrawRectangle(this->_pos.x, this->_pos.y, 50, 50, RAYLIB::ORANGE);
     else
-        DrawRectangle(this->_pos.x, this->_pos.y, 50, 50, BLUE);
+        RAYLIB::DrawRectangle(this->_pos.x, this->_pos.y, 50, 50, RAYLIB::BLUE);
 }
 
 void Player::move()
 {
-    if (IsKeyDown(KEY_Z))
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_Z))
         this->_pos.y -= 1;
-    if (IsKeyDown(KEY_S))
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_S))
         this->_pos.y += 1;
-    if (IsKeyDown(KEY_Q))
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_Q))
         this->_pos.x -= 1;
-    if (IsKeyDown(KEY_D))
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_D))
         this->_pos.x += 1;
 }
 
@@ -40,7 +40,7 @@ std::string Player::serialize()
     str += ";X:" + std::to_string(this->_pos.x);
     str += ";Y:" + std::to_string(this->_pos.y);
 
-    return (str += "\n");
+    return (str += ";\n");
 }
 
 void Player::deserialize(std::string str)
@@ -51,4 +51,9 @@ void Player::deserialize(std::string str)
     this->_pos.x = std::atoi(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
     pos = str.find("Y:");
     this->_pos.y = std::atoi(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
+}
+
+void Player::gest()
+{
+    this->move();
 }
