@@ -7,6 +7,7 @@
 
 #include "Menu.hpp"
 #include "Server.hpp"
+#include "Game.hpp"
 
 Menu::Menu()
 {

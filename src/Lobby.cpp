@@ -11,7 +11,7 @@
 
 Lobby::Lobby()
 {
-    int _me = -1;
+    this->_me = -1;
 }
 
 Lobby::~Lobby()
@@ -60,7 +60,7 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase)
 
 GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *client, std::string ip, std::string port)
 {
-    std::cout << "Connecting to Ip: " << ip << " / Port: " << port << " ..." << std::endl;
+    std::cout << "Connecting to Ip: " << ip << " / Port: " << port << std::endl;
     client = Client::launch(ip, std::atoi(port.c_str()));
     this->_client = client;
     this->_tLoading.draw();
