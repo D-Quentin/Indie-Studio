@@ -20,6 +20,7 @@ GamePlay::GamePlay()
     _TopCamera = rl::Camera({0, 6, 0});
     _TopCamera.setTarget({0, 5.5,0});
     _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 0, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
+    RAYLIB::EnableCursor();
 }
 
 GamePhase GamePlay::launch()
@@ -43,6 +44,7 @@ GamePhase GamePlay::launch()
 
 GamePhase GamePlay::restart()
 {
+    RAYLIB::DisableCursor();
     while (!RAYLIB::WindowShouldClose()) {
     //updtae attrib from server
         this->handleCamera();
@@ -56,6 +58,7 @@ GamePhase GamePlay::restart()
         RAYLIB::EndDrawing();
         RAYLIB::ClearBackground({255, 255, 255});
     }
+    RAYLIB::EnableCursor();
     return QuitPhase;
 }
 
