@@ -13,6 +13,7 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
+#include <boost/thread.hpp>
 
 using namespace boost::asio::ip;
 
@@ -26,7 +27,7 @@ class Client {
         std::string read(void);
         void send(std::string str);
         std::string getReponse(void);
-        static Client* launch(std::string ip, int port);
+        static void launch(boost::asio::io_service &io_service);
 
     private:
         // Méthodes

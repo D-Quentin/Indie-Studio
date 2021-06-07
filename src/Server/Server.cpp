@@ -87,7 +87,7 @@ void Server::launch(int port)
         #if defined(_WIN32)
             system((std::string("start cmd /c bomberman --server ") + std::to_string(port)).c_str());
         #else
-            system((std::string("xfce4-terminal -e \"./bomberman --server ") + std::to_string(port) + std::string("\"")).c_str());
+            system((std::string("gnome-terminal --command \"./bomberman --server ") + std::to_string(port) + std::string("\"")).c_str());
         #endif
     }
     catch (std::exception &e) {

@@ -13,9 +13,7 @@ Client::Client(boost::asio::io_service &io_service, std::string host, int port) 
 {
     this->_remote_endpoint = boost::asio::ip::udp::endpoint(address::from_string(host), port);
     this->send(INCOMMING_CONNECTION);
-    this->_thread = std::thread([&io_service](){ io_service.run();});
     this->startReceive();
-    this->_thread.detach();
 }
 
 std::string Client::read(void)
@@ -67,12 +65,9 @@ std::string Client::getReponse(void)
     return (TIMEOUT_CONNECTION);
 }
 
-Client* Client::launch(std::string ip, int port)
+void Client::launch(boost::asio::io_service &io_service)
 {
-    boost::asio::io_service io_service;
-
-    Client *client = new Client(io_service, ip, port);
-    return (client);
+    boost::thread run_thread(boost::bind(&boost::asio::io_service::run, boost::ref(io_service)));
 }
 
 
