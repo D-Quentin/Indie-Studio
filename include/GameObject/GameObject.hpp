@@ -21,7 +21,7 @@ class GameObject : public IGameObject {
         int getId();
         void setPos(RAYLIB::Vector2);
         void setId(int);
-        static void gestData(std::map<int, GameObject *> *, std::string, Client *);
+        static void gestData(std::map<int, GameObject *> &, std::string, Client *);
 
     protected:
         RAYLIB::Vector2 _pos;

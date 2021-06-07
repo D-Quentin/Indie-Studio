@@ -53,6 +53,7 @@ void Server::sendToAll(std::string str)
 {
     boost::shared_ptr<std::string> message(new std::string(str));
 
+    std::cout << "Sending to all: " << str << std::endl;
     for (auto it : this->_connection_pool)
         this->_socket.send_to(boost::asio::buffer(*message), it);
 }
@@ -76,7 +77,7 @@ void Server::sendTo(SEND send, std::string message)
 void Server::handleCommand(std::string line)
 {
     // if (line.find(INCOMMING_CONNECTION) != std::string::npos)
-    sendTo(ALL, "coucou");
+    sendTo(ALL, line);
 }
 
 void Server::launch(int port)

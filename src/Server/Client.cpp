@@ -14,13 +14,12 @@ Client::Client(std::string host, int port) : _socket(this->_io_service, udp::end
     udp::resolver resolver(this->_io_service);
     udp::resolver::query query(udp::v4(), host, std::to_string(port));
     this->_remote_endpoint = *(resolver.resolve(query));
-    this->send(INCOMMING_CONNECTION);
     this->startReceive();
 }
 
 std::string Client::read(void)
 {
-    std::string str = this->_all_recv;
+    std::string str(this->_all_recv);
 
     this->_all_recv = "";
     return (str);
@@ -51,7 +50,6 @@ void Client::handleReceive(const boost::system::error_code& error, std::size_t b
         std::string str_received = std::string(reinterpret_cast<const char*>(this->_recv_buffer.data()), bytes_transferred);
         this->_all_recv.append(str_received);
         std::cout << "CLIENT -- Recu:" << this->_all_recv << std::endl;
-        std::cout << "test:" << str_received << std::endl;
     }
     this->startReceive();
 }
@@ -64,7 +62,7 @@ std::string Client::getReponse(void)
     std::cout << "CLIENT -- reading:" << this->_all_recv << std::endl;
     while(Chrono(time) <= 5000) {
         str = this->read();
-        if (str.empty() == false)
+        if (str == "")
             return (str);
     }
     return (TIMEOUT_CONNECTION);

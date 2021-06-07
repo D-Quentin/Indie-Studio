@@ -31,7 +31,7 @@ GamePhase Lobby::launch(Client *client, std::string ip, std::string port)
 
 GamePhase Lobby::restart(Client *client, std::string ip, std::string port)
 {
-    GamePhase gamePhase = MenuPhase;
+    GamePhase gamePhase = LobbyPhase;
 
     switch (this->_phase) {
     case Lobby::MainPhase:
@@ -49,8 +49,8 @@ GamePhase Lobby::restart(Client *client, std::string ip, std::string port)
 
 GamePhase Lobby::mainPhase(GamePhase gamePhase)
 {
+    GameObject::gestData(this->_obj, this->_client->read(), this->_client);
     ((Player *)this->_obj[this->_me])->gest();
-    GameObject::gestData(&this->_obj, this->_client->read(), this->_client);
     RAYLIB::DrawRectangle(0, 0, WIN_WIDTH, WIN_HEIGHT, RAYLIB::GRAY);
     for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
         it->second->draw();
@@ -64,6 +64,7 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *client, std::string ip, 
     client = new Client(ip, std::atoi(port.c_str()));
     this->_client = client;
     this->_client->launch();
+    this->_client->send(INCOMMING_CONNECTION);
     this->_tLoading.draw();
 
     auto time = timeNow;
@@ -72,12 +73,11 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *client, std::string ip, 
         std::cout << "First connexion time out" << std::endl;
         return (QuitPhase);
     }
-    std::cout << "lili" << std::endl;
     time = timeNow;
     while (Chrono(time) < 1000) {
         str = client->read();
         if (str.empty() == false)
-            GameObject::gestData(&this->_obj, str, client);
+            GameObject::gestData(this->_obj, str, client);
     }
     this->_me = this->_obj.size();
     client->send("PLAYER;ID:" + std::to_string(this->_me) + ";X:500;Y:500;\n");
