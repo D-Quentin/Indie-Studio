@@ -12,6 +12,7 @@
 
 GameObject::GameObject(RAYLIB::Vector2 pos, int id) : _pos(pos), _id(id)
 {
+    this->_change = false;
 }
 
 RAYLIB::Vector2 GameObject::getPos()
@@ -35,7 +36,7 @@ void GameObject::setId(int id)
 }
 
 // TYPE;ID:id;X:x;Y:y\n
-void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Client *client)
+void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Client *&client, int me)
 {
     int id = 0;
     int pos = 0;
@@ -43,18 +44,20 @@ void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Cli
 
     boost::split(strs, str, boost::is_any_of("\n"));
     for (int i = 0; i != strs.size(); i++) {
+        if (strs[i].find(INCOMMING_CONNECTION) != std::string::npos)
+            client->send(obj[me]->serialize());
         pos = strs[i].find("ID:");
         if (pos == std::string::npos)
             continue;
-        id = std::atoi(str.substr((pos + 3), str.find(";", pos) - pos).c_str());
+        id = std::atoi(strs[i].substr((pos + 3), strs[i].find(";", pos) - pos).c_str());
         std::cout << id << std::endl;
         std::cout << obj.size() << std::endl;
         if (id < obj.size())
-            obj.at(id)->deserialize(str);
+            obj.at(id)->deserialize(strs[i]);
         else {
-            if (str.find("PLAYER") != std::string::npos) {
+            if (strs[i].find("PLAYER") != std::string::npos) {
                 obj.insert(std::pair<int, GameObject *>(obj.size(), new Player()));
-                obj.at(obj.size() - 1)->deserialize(str);
+                obj.at(obj.size() - 1)->deserialize(strs[i]);
             }
         }
     }

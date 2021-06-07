@@ -16,7 +16,7 @@ class Player : public EntityObjects {
         ~Player() = default;
         void draw();
         void move();
-        void gest();
+        void gest(Client *&);
         std::string serialize();
         void deserialize(std::string);
 

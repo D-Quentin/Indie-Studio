@@ -22,14 +22,14 @@ void Player::draw()
 
 void Player::move()
 {
-    if (RAYLIB::IsKeyDown(RAYLIB::KEY_Z))
-        this->_pos.y -= 1;
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_W))
+        this->_pos.y -= 1, this->_change = true;
     if (RAYLIB::IsKeyDown(RAYLIB::KEY_S))
-        this->_pos.y += 1;
-    if (RAYLIB::IsKeyDown(RAYLIB::KEY_Q))
-        this->_pos.x -= 1;
+        this->_pos.y += 1, this->_change = true;
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_A))
+        this->_pos.x -= 1, this->_change = true;
     if (RAYLIB::IsKeyDown(RAYLIB::KEY_D))
-        this->_pos.x += 1;
+        this->_pos.x += 1, this->_change = true;
 }
 
 std::string Player::serialize()
@@ -53,7 +53,12 @@ void Player::deserialize(std::string str)
     this->_pos.y = std::atoi(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
 }
 
-void Player::gest()
+void Player::gest(Client *&client)
 {
     this->move();
+
+    if (this->_change) {
+        client->send(this->serialize());
+        this->_change = false;
+    }
 }
