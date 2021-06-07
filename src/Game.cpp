@@ -8,6 +8,7 @@
 #include "Game.hpp"
 #include "Menu.hpp"
 #include "Lobby.hpp"
+#include "GamePlay.hpp"
 
 
 Game::Game()
@@ -23,8 +24,11 @@ void Game::launch(rl::Window win)
     GamePhase statut = MenuPhase;
     std::pair<bool, Menu> menu = {false, Menu()};
     std::pair<bool, Lobby> lobby = {false, Lobby()};
+    std::pair<bool, GamePlay> gameplay = {false, GamePlay()};
 
     while (statut != QuitPhase && win.loop()) {
+        if (RAYLIB::IsKeyPressed(RAYLIB::KEY_F6))
+            statut = GamePlayPhase;
         switch (statut) {
         case MenuPhase:
             if (menu.first)
@@ -42,6 +46,13 @@ void Game::launch(rl::Window win)
                 lobby.first = true;
             }
             break;
+        case GamePlayPhase:
+            if (gameplay.first)
+                statut = gameplay.second.restart();
+            else {
+                statut = gameplay.second.launch();
+                gameplay.first = true;
+            }
 
         default:
             break;
