@@ -51,9 +51,8 @@ void rl::Camera::updateCamera(std::pair<float, float> gmpAxisLeft, std::pair<flo
 {
     //udate pos cam from left axis gamepad
         // add keyboard
-        gmpAxisLeft.second += RAYLIB::IsKeyDown(RAYLIB::KEY_S) - (RAYLIB::IsKeyDown(RAYLIB::KEY_W));
-        gmpAxisLeft.first += RAYLIB::IsKeyDown(RAYLIB::KEY_D) - (RAYLIB::IsKeyDown(RAYLIB::KEY_A));
-
+        if (gmpAxisLeft == std::make_pair(0.0f, 0.0f))
+            gmpAxisLeft = {RAYLIB::IsKeyDown(RAYLIB::KEY_D) - RAYLIB::IsKeyDown(RAYLIB::KEY_A), RAYLIB::IsKeyDown(RAYLIB::KEY_S) - RAYLIB::IsKeyDown(RAYLIB::KEY_W)};
         if (gmpAxisLeft != std::make_pair(0.0f, 0.0f)) {
             gmpAxisLeft.second *= (1 + RAYLIB::IsKeyDown(RAYLIB::KEY_LEFT_SHIFT));
             gmpAxisLeft.first *= (1 + RAYLIB::IsKeyDown(RAYLIB::KEY_LEFT_SHIFT));

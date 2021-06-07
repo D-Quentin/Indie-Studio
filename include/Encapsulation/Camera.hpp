@@ -59,7 +59,7 @@ namespace rl {
             RAYLIB::Camera3D getCamera() const {return _camera;};
             int getSpeed() const {return _speed;};
 
-            void updateCamera(std::pair<float, float> gmpAxisLeft = {RAYLIB::IsKeyDown(RAYLIB::KEY_Z) - RAYLIB::IsKeyDown(RAYLIB::KEY_S), RAYLIB::IsKeyDown(RAYLIB::KEY_Q) - RAYLIB::IsKeyDown(RAYLIB::KEY_D)}, std::pair<float, float> gmpAxisRight = {0.0f, 0.0f});
+            void updateCamera(std::pair<float, float> gmpAxisLeft = {0, 0}, std::pair<float, float> gmpAxisRight = {0.0f, 0.0f});
 
         private:
             RAYLIB::Camera3D _camera;
