@@ -27,7 +27,7 @@ class MapBlock : public BlockObject
         void setPos(RAYLIB::Vector2 newPosition) {_pos = {newPosition.x, 0, newPosition.y};};
         void setId(int id)  {_id = id;};
         void draw();
-        std::string serialize() {};
+        std::string serialize() {return ("");};
         void deserialize(std::string) {};
 
 

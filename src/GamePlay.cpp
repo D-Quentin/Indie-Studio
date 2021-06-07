@@ -19,7 +19,8 @@ GamePlay::GamePlay()
 {
     _TopCamera = rl::Camera({0, 6, 0});
     _TopCamera.setTarget({0, 5.5,0});
-    _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 0, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
+    RAYLIB::Vector3 tmp = { 0, 0, 0 };
+    _FPCamera =  rl::Camera(tmp ,(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
     RAYLIB::EnableCursor();
 }
 
@@ -97,6 +98,8 @@ void GamePlay::drawAll()
         it->draw();
     for (auto it : this->_items)
         it->draw();
-    RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, -0.5, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, RAYLIB::GRAY); //draw flor
+    RAYLIB::Vector3 tmp = { _mapSize.first / 2, -0.5, _mapSize.second / 2 };
+    RAYLIB::Vector2 tmp2 = { _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first};
+    RAYLIB::DrawPlane(tmp, tmp2, RAYLIB::GRAY); //draw flor
     RAYLIB::DrawGrid(100, 5);
 }

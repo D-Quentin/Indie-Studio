@@ -81,6 +81,12 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     }
     this->_me = this->_obj.size();
     client->send("PLAYER;ID:" + std::to_string(this->_me) + ";X:500;Y:500;\n");
+    str = this->_client->getReponse();
+    if (str == TIMEOUT_CONNECTION) { // GESTION ERREUR
+        std::cout << "Getting info time out" << std::endl;
+        return (QuitPhase);
+    }
+    GameObject::gestData(this->_obj, str, client, this->_me);
     this->_phase = MainPhase;
     return (gamePhase);
 }

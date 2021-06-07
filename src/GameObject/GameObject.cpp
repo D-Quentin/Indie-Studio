@@ -56,7 +56,7 @@ void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Cli
             obj.at(id)->deserialize(strs[i]);
         else {
             if (strs[i].find("PLAYER") != std::string::npos) {
-                obj.insert(std::pair<int, GameObject *>(obj.size(), new Player()));
+                obj.insert(std::pair<int, GameObject *>(obj.size(), new Player({0, 0}, -1, false)));
                 obj.at(obj.size() - 1)->deserialize(strs[i]);
             }
         }
