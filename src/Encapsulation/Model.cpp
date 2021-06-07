@@ -18,5 +18,5 @@ rl::Models::Models(RAYLIB::Mesh mesh, RAYLIB::Texture2D texture, RAYLIB::Vector3
 
 void rl::Models::draw()
 {
-    RAYLIB::DrawModel(_model, { 0.0f, 0.0f, 0.0f }, 1.0f, RAYLIB::WHITE);
+    RAYLIB::DrawModel(_model, _pos, 1.0f, RAYLIB::WHITE);
 }
