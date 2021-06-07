@@ -27,8 +27,8 @@ class Server {
 
     public:
         Server(boost::asio::io_service &io_service, int port);
-        static bool launch(int port);
-        ~Server() = default;
+        static Server *launch(int port);
+        ~Server() {};
 
     protected:
     private:
