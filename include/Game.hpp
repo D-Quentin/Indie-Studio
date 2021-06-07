@@ -15,6 +15,7 @@
 #include "Menu.hpp"
 #include "encapsulation.hpp"
 #include "Client.hpp"
+#include "Server.hpp"
 
 class Game {
     public:
@@ -25,6 +26,7 @@ class Game {
     protected:
     private:
         Client *_client;
+        Server *_server;
 };
 
 #endif /* !GAME_HPP_ */

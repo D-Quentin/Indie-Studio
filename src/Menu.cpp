@@ -17,7 +17,7 @@ Menu::~Menu()
 {
 }
 
-GamePhase Menu::launch()
+GamePhase Menu::launch(Server *server)
 {
     this->_phase = Menu::MainPhase;
 
@@ -49,10 +49,10 @@ GamePhase Menu::launch()
     this->_bCreate = Button(WIN_WIDTH / 2 - 300, 850, 600, 200);
     this->_tCreate = rl::Text("Create", WIN_WIDTH / 2 - 300, 870, 150, RAYLIB::LIGHTGRAY);
 
-    return (this->restart());
+    return (this->restart(server));
 }
 
-GamePhase Menu::restart()
+GamePhase Menu::restart(Server *server)
 {
     GamePhase gamePhase = MenuPhase;
 
@@ -64,7 +64,7 @@ GamePhase Menu::restart()
         gamePhase = this->playPhase(gamePhase);
         break;
     case Menu::CreatePhase:
-        gamePhase = this->createPhase(gamePhase);
+        gamePhase = this->createPhase(gamePhase, server);
         break;
     case Menu::JoinPhase:
         gamePhase = this->joinPhase(gamePhase);
@@ -105,13 +105,12 @@ GamePhase Menu::playPhase(GamePhase gamePhase)
     return (gamePhase);
 }
 
-GamePhase Menu::createPhase(GamePhase gamePhase)
+GamePhase Menu::createPhase(GamePhase gamePhase, Server *server)
 {
     if (this->_iServPort.isSelected())
         this->_iServPort.writeChar(); // GESTION ERREUR
     if (this->_bCreate.isClicked()) {
         Server::launch(std::atoi(this->_iServPort.getText().c_str()));
-        for (auto time = timeNow ; Chrono(time) <= 2000;);
         return (LobbyPhase);
     }
     this->_iServPort.draw();

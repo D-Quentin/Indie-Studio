@@ -12,6 +12,7 @@
 #include "Button.hpp"
 #include "encapsulation.hpp"
 #include "InputButton.hpp"
+#include "Server.hpp"
 
 class Menu {
     enum Phase {
@@ -23,11 +24,11 @@ class Menu {
     public:
         Menu();
         ~Menu();
-        GamePhase launch();
-        GamePhase restart();
+        GamePhase launch(Server *);
+        GamePhase restart(Server *);
         GamePhase mainPhase(GamePhase);
         GamePhase playPhase(GamePhase);
-        GamePhase createPhase(GamePhase);
+        GamePhase createPhase(GamePhase, Server *);
         GamePhase joinPhase(GamePhase);
         std::string getIp();
         std::string getPort();

@@ -81,31 +81,17 @@ void Server::handleCommand(std::string line)
     sendTo(ALL, "coucou");
 }
 
-bool Server::launch(int port)
+void Server::launch(int port)
 {
     try {
         #if defined(_WIN32)
             system((std::string("start cmd /c bomberman --server ") + std::to_string(port)).c_str());
         #else
-            boost::asio::io_service io_service;
-            udp::resolver resolver(io_service);
-            Server server(io_service, port);
-
-            switch (fork()) {
-                case (-1):
-                    return (false);
-                case (0):
-                    io_service.run();
-                    exit(0);
-                default:
-                    return (true);
-            }
+            system((std::string("xfce4-terminal -e \"./bomberman --server ") + std::to_string(port) + std::string("\"")).c_str());
         #endif
-        return (true);
     }
     catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
-        return (false);
     }
 }
 
