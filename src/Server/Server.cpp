@@ -12,15 +12,6 @@
 Server::Server(boost::asio::io_service &io_service, int port) : _socket(io_service, udp::endpoint(udp::v4(), port))
 {
     this->startReceive();
-    #if defined(_WIN32)
-    this->_thread = std::thread([&io_service](){ io_service.run(); });
-    this->_thread.detach();
-    #else
-        if (fork() == 0) {
-            io_service.run();
-            exit(0);
-        }
-    #endif
 }
 
 bool Server::isConnectionNew(udp::endpoint endpoint)
@@ -90,18 +81,17 @@ void Server::handleCommand(std::string line)
     sendTo(ALL, "coucou");
 }
 
-Server *Server::launch(int port)
+void Server::launch(int port)
 {
     try {
-        boost::asio::io_service io_service;
-
-        udp::resolver resolver(io_service);
-        Server *server = new Server(io_service, port);
-        return (server);
+        #if defined(_WIN32)
+            system((std::string("start cmd /c bomberman --server ") + std::to_string(port)).c_str());
+        #else
+            system((std::string("xfce4-terminal -e \"./bomberman --server ") + std::to_string(port) + std::string("\"")).c_str());
+        #endif
     }
     catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
-        return (NULL);
     }
 }
 

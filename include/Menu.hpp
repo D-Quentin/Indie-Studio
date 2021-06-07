@@ -37,7 +37,6 @@ class Menu {
     protected:
     private:
         Phase _phase;
-        Server *_server;
 
         // MainPhase
         Button _bPlay;

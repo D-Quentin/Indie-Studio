@@ -110,8 +110,7 @@ GamePhase Menu::createPhase(GamePhase gamePhase, Server *server)
     if (this->_iServPort.isSelected())
         this->_iServPort.writeChar(); // GESTION ERREUR
     if (this->_bCreate.isClicked()) {
-        server = Server::launch(std::atoi(this->_iServPort.getText().c_str()));
-        this->_server = server;
+        Server::launch(std::atoi(this->_iServPort.getText().c_str()));
         return (LobbyPhase);
     }
     this->_iServPort.draw();

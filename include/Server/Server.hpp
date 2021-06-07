@@ -27,7 +27,7 @@ class Server {
 
     public:
         Server(boost::asio::io_service &io_service, int port);
-        static Server *launch(int port);
+        static void launch(int port);
         ~Server() {};
 
     protected:
