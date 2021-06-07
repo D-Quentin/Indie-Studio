@@ -7,12 +7,13 @@
 
 #include "Model.hpp"
 
-rl::Models::Models(RAYLIB::Mesh mesh, RAYLIB::Texture2D texture)
+rl::Models::Models(RAYLIB::Mesh mesh, RAYLIB::Texture2D texture, RAYLIB::Vector3 pos)
 {
-    _model = RAYLIB::LoadModelFromMesh(mesh);
+    _model = LoadModelFromMesh(mesh);
     _model.materials[0].maps[RAYLIB::MATERIAL_MAP_DIFFUSE].texture = texture;
     _height = texture.height;
     _width = texture.width;
+    _pos = pos;
 }
 
 void rl::Models::draw()

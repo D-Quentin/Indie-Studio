@@ -11,7 +11,7 @@
 #include <list>
 #include <vector>
 
-#include "IGamePhase.hpp"
+#include "GamePhase.hpp"
 #include "BlockObject.hpp"
 #include "EntityObjects.hpp"
 #include "Item.hpp"
@@ -22,7 +22,7 @@
 #include "Encapsulation/Gamepad.hpp"
 #include "Encapsulation/Window.hpp"
 
-class GamePlay : public IGamePhase {
+class GamePlay{
     public:
         GamePlay();
         ~GamePlay() = default;

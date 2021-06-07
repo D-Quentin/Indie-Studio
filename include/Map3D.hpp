@@ -19,12 +19,12 @@ class MapBlock : public BlockObject
 {
     public:
         MapBlock() = default;
-        MapBlock(rl::Models model, Vector3 pos, float size = 1);// : _model(model), _pos(pos), _size(size) {};
+        MapBlock(rl::Models model, RAYLIB::Vector3 pos, float size = 1);// : _model(model), _pos(pos), _size(size) {};
         ~MapBlock() = default;
 
-        Vector2 getPos()  {return {_pos.x, _pos.z};};
+        RAYLIB::Vector2 getPos()  {return {_pos.x, _pos.z};};
         int getId()  {return _id;};
-        void setPos(Vector2 newPosition) {_pos = {newPosition.x, 0, newPosition.y};};
+        void setPos(RAYLIB::Vector2 newPosition) {_pos = {newPosition.x, 0, newPosition.y};};
         void setId(int id)  {_id = id;};
         void draw();
         std::string serialize() {};
@@ -33,7 +33,7 @@ class MapBlock : public BlockObject
 
     private:
         rl::Models _model;
-        Vector3 _pos;
+        RAYLIB::Vector3 _pos;
         float _size;
         int _id;
         bool _modelSet = false;

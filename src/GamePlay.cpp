@@ -6,7 +6,6 @@
 */
 
 #include "GamePlay.hpp"
-#include "unistd.h"
 
 #define ACTIVE_CAMERA ((this->_isFpCam) ? this->_FPCamera : this->_TopCamera)
 
@@ -20,7 +19,7 @@ GamePlay::GamePlay()
 {
     _TopCamera = rl::Camera({0, 6, 0});
     _TopCamera.setTarget({0, 5.5,0});
-    _FPCamera =  rl::Camera((Vector3) { 0, 0, 0 },(CameraMode) CAMERA_FIRST_PERSON);
+    _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 0, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
 }
 
 GamePhase GamePlay::launch()
@@ -28,9 +27,9 @@ GamePhase GamePlay::launch()
     //SET ALL
     std::string path("/home/THE/texture/");
     float size = 1;
-    auto mesh = GenMeshCube(size, size, size);
+    auto mesh = RAYLIB::GenMeshCube(size, size, size);
     auto charMap = main_create_map(2, 1);
-    auto texture = LoadTexture(std::string(path + "texture_minecraft_stone.png").c_str());
+    auto texture = RAYLIB::LoadTexture(std::string(path + "texture_minecraft_stone.png").c_str());
     auto model = rl::Models(mesh, texture);
     auto m = Map3D(charMap, model, size);
     _spawn = m._spawns.front();
@@ -44,27 +43,29 @@ GamePhase GamePlay::launch()
 
 GamePhase GamePlay::restart()
 {
-    while (!WindowShouldClose()) {
+    while (!RAYLIB::WindowShouldClose()) {
     //updtae attrib from server
         this->handleCamera();
-        BeginDrawing();
-        ACTIVE_CAMERA.begin3D();
+        RAYLIB::BeginDrawing();
+        // ACTIVE_CAMERA.begin3D();
+        RAYLIB::BeginMode3D(ACTIVE_CAMERA.getCamera());
         this->drawAll();
-        ACTIVE_CAMERA.end3D();
-        DrawFPS(10, 10);
-        EndDrawing();
-        ClearBackground({255, 255, 255});
+        // ACTIVE_CAMERA.end3D();
+        RAYLIB::EndMode3D();
+        RAYLIB::DrawFPS(10, 10);
+        RAYLIB::EndDrawing();
+        RAYLIB::ClearBackground({255, 255, 255});
     }
     return QuitPhase;
 }
 
 void GamePlay::handleCamera()
 {
-    if (IsKeyPressed(KEY_F5))
+    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_F5))
         this->_isFpCam = !this->_isFpCam;
     auto oldPos = ACTIVE_CAMERA.getPosition();
 
-    if (IsGamepadAvailable(0))
+    if (RAYLIB::IsGamepadAvailable(0))
         ACTIVE_CAMERA.updateCamera(_gmp.getAxisLeft(), _gmp.getAxisRight());
     else
         ACTIVE_CAMERA.updateCamera();
@@ -72,7 +73,7 @@ void GamePlay::handleCamera()
     auto campos = ACTIVE_CAMERA.getPosition();
     for (auto it : _blocks) {
         auto pos = it->getPos();
-        if (CheckCollisionCircleRec({campos.x, campos.z}, 0.5, Rectangle ({pos.x, pos.y, 0.5, 0.5}))) {
+        if (RAYLIB::CheckCollisionCircleRec({campos.x, campos.z}, 0.5, RAYLIB::Rectangle ({pos.x, pos.y, 0.5, 0.5}))) {
             ACTIVE_CAMERA.setPosition(oldPos);
             break;
         }
@@ -93,6 +94,6 @@ void GamePlay::drawAll()
         it->draw();
     for (auto it : this->_items)
         it->draw();
-    DrawPlane((Vector3){ _mapSize.first / 2, -0.5, _mapSize.second / 2 }, (Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, GRAY); //draw flor
-    DrawGrid(100, 5);
+    RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, -0.5, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, RAYLIB::GRAY); //draw flor
+    RAYLIB::DrawGrid(100, 5);
 }

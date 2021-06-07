@@ -14,14 +14,17 @@ namespace rl {
     class Models
     {
         public:
-            Models(RAYLIB::Mesh, RAYLIB::Texture2D);
+            Models() = default;
+            Models(RAYLIB::Mesh, RAYLIB::Texture2D, RAYLIB::Vector3 = {0, 0, 0});
             ~Models() = default;
+            void draw();
+            void setPos(RAYLIB::Vector3 pos) {_pos = pos;};
 
         private:
-            void draw();
             RAYLIB::Model _model;
             int _height;
             int _width;
+            RAYLIB::Vector3 _pos;
     };
 };
 
