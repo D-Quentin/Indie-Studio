@@ -61,8 +61,9 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase)
 GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *client, std::string ip, std::string port)
 {
     std::cout << "Connecting to Ip: " << ip << " / Port: " << port << std::endl;
-    client = Client::launch(ip, std::atoi(port.c_str()));
+    client = new Client(ip, std::atoi(port.c_str()));
     this->_client = client;
+    this->_client->launch();
     this->_tLoading.draw();
 
     auto time = timeNow;
@@ -71,6 +72,7 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *client, std::string ip, 
         std::cout << "First connexion time out" << std::endl;
         return (QuitPhase);
     }
+    std::cout << "lili" << std::endl;
     time = timeNow;
     while (Chrono(time) < 1000) {
         str = client->read();
