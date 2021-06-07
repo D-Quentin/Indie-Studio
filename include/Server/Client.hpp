@@ -14,20 +14,23 @@
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/thread.hpp>
+#include <boost/array.hpp>
+
+#include "Message.hpp"
 
 using namespace boost::asio::ip;
 
 class Client {
     public:
         // Spécial
-        Client(boost::asio::io_service &io_service, std::string host, int port);
+        Client(std::string host, int port);
         ~Client() {};
 
         // Méthodes
         std::string read(void);
         void send(std::string str);
         std::string getReponse(void);
-        static void launch(boost::asio::io_service &io_service);
+        void launch(void);
 
     private:
         // Méthodes
@@ -35,11 +38,11 @@ class Client {
         void handleReceive(const boost::system::error_code& error, std::size_t bytes_transferred);
 
         // Attributs
-        std::string _recv;
+        boost::asio::io_service _io_service;
         udp::socket _socket;
-        std::thread _thread;
         std::string _all_recv;
         udp::endpoint _remote_endpoint;
+        boost::array<char, MSG_MAX_LEN> _recv_buffer;
 };
 
 #endif

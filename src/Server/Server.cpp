@@ -42,7 +42,6 @@ void Server::handleReceive(const boost::system::error_code& error, std::size_t b
         if (this->isConnectionNew(this->_last_endpoint))
             this->_connection_pool.push_back(this->_last_endpoint);
         std::string line(this->_recv_buf.begin(), bytes_transferred);
-        std::cout << "Server get: " << line << std::endl;
         this->handleCommand(line);
         // std::thread thr(&Server::handleCommand, std::ref(line));
         // thr.detach();
@@ -52,7 +51,6 @@ void Server::handleReceive(const boost::system::error_code& error, std::size_t b
 
 void Server::sendToAll(std::string str)
 {
-    std::cout << "Server send to All: " << str << std::endl;
     boost::shared_ptr<std::string> message(new std::string(str));
 
     for (auto it : this->_connection_pool)

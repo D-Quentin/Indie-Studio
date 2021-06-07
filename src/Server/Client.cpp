@@ -9,31 +9,32 @@
 #include "Message.hpp"
 #include "Game.hpp"
 
-Client::Client(boost::asio::io_service &io_service, std::string host, int port) : _socket(io_service, udp::endpoint(udp::v4(), 0))
+Client::Client(std::string host, int port) : _socket(this->_io_service, udp::endpoint(udp::v4(), 0))
 {
-    this->_remote_endpoint = boost::asio::ip::udp::endpoint(address::from_string(host), port);
+    udp::resolver resolver(this->_io_service);
+    udp::resolver::query query(udp::v4(), host, std::to_string(port));
+    this->_remote_endpoint = *(resolver.resolve(query));
     this->send(INCOMMING_CONNECTION);
     this->startReceive();
 }
 
 std::string Client::read(void)
 {
-    std::string str = this->_recv;
+    std::string str = this->_all_recv;
 
-    this->_recv = "";
+    this->_all_recv = "";
     return (str);
 }
 
 void Client::send(std::string str)
 {
-    std::cout << "Send to server: " << str << std::endl;
     this->_socket.send_to(boost::asio::buffer(str), this->_remote_endpoint);
 }
 
 void Client::startReceive(void)
 {
     this->_socket.async_receive_from(
-        boost::asio::buffer(this->_recv),
+        boost::asio::buffer(this->_recv_buffer),
         this->_remote_endpoint,
         boost::bind(
             &Client::handleReceive,
@@ -47,7 +48,10 @@ void Client::startReceive(void)
 void Client::handleReceive(const boost::system::error_code& error, std::size_t bytes_transferred)
 {
     if (!error || error == boost::asio::error::message_size) {
-        this->_all_recv += this->_recv;
+        std::string str_received = std::string(reinterpret_cast<const char*>(this->_recv_buffer.data()), bytes_transferred);
+        this->_all_recv.append(str_received);
+        std::cout << "CLIENT -- Recu:" << this->_all_recv << std::endl;
+        std::cout << "test:" << str_received << std::endl;
     }
     this->startReceive();
 }
@@ -57,6 +61,7 @@ std::string Client::getReponse(void)
     std::string str;
     auto time = timeNow;
 
+    std::cout << "CLIENT -- reading:" << this->_all_recv << std::endl;
     while(Chrono(time) <= 5000) {
         str = this->read();
         if (str.empty() == false)
@@ -65,131 +70,10 @@ std::string Client::getReponse(void)
     return (TIMEOUT_CONNECTION);
 }
 
-void Client::launch(boost::asio::io_service &io_service)
+void Client::launch(void)
 {
-    boost::thread run_thread(boost::bind(&boost::asio::io_service::run, boost::ref(io_service)));
+    boost::thread run_thread(boost::bind(&boost::asio::io_service::run, boost::ref(this->_io_service)));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // #include "Client.hpp"
 // #include "Server.hpp"
