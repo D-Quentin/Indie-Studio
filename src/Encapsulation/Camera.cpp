@@ -51,9 +51,8 @@ void rl::Camera::updateCamera(std::pair<float, float> gmpAxisLeft, std::pair<flo
 {
     //udate pos cam from left axis gamepad
         // add keyboard
-        gmpAxisLeft.second += RAYLIB::IsKeyDown(RAYLIB::KEY_S) - (RAYLIB::IsKeyDown(RAYLIB::KEY_W));
-        gmpAxisLeft.first += RAYLIB::IsKeyDown(RAYLIB::KEY_D) - (RAYLIB::IsKeyDown(RAYLIB::KEY_A));
-
+        if (gmpAxisLeft == std::make_pair(0.0f, 0.0f))
+            gmpAxisLeft = {RAYLIB::IsKeyDown(RAYLIB::KEY_D) - RAYLIB::IsKeyDown(RAYLIB::KEY_A), RAYLIB::IsKeyDown(RAYLIB::KEY_S) - RAYLIB::IsKeyDown(RAYLIB::KEY_W)};
         if (gmpAxisLeft != std::make_pair(0.0f, 0.0f)) {
             gmpAxisLeft.second *= (1 + RAYLIB::IsKeyDown(RAYLIB::KEY_LEFT_SHIFT));
             gmpAxisLeft.first *= (1 + RAYLIB::IsKeyDown(RAYLIB::KEY_LEFT_SHIFT));
@@ -63,8 +62,8 @@ void rl::Camera::updateCamera(std::pair<float, float> gmpAxisLeft, std::pair<flo
             RAYLIB::Vector3 right = {forward.z * -1.0f, 0, forward.x};
             RAYLIB::Vector3 oldPosition = this->getPosition();
 
-            this->setPosition(Vector3Add(this->getPosition(), Vector3Scale(forward, gmpAxisLeft.second * -1 * 0.0075f))); // 0.0075f is the speed bride
-            this->setPosition(Vector3Add(this->getPosition(), Vector3Scale(right, gmpAxisLeft.first * 0.0075f)));
+            this->setPosition(Vector3Add(this->getPosition(), Vector3Scale(forward, gmpAxisLeft.second * -1 * RAYLIB::GetFrameTime() * 2))); // 0.0075f is the speed bride
+            this->setPosition(Vector3Add(this->getPosition(), Vector3Scale(right, gmpAxisLeft.first * RAYLIB::GetFrameTime() * 2)));
         }
 
     // set the camera target(view)

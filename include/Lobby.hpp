@@ -25,10 +25,10 @@ class Lobby {
     public:
         Lobby();
         ~Lobby();
-        GamePhase launch(Client *, std::string, std::string);
-        GamePhase restart(Client *, std::string, std::string);
-        GamePhase mainPhase(GamePhase);
-        GamePhase joinPhase(GamePhase, Client *, std::string, std::string);
+        GamePhase launch(Client *&, std::string, std::string);
+        GamePhase restart(Client *&, std::string, std::string);
+        GamePhase mainPhase(GamePhase, Client *&);
+        GamePhase joinPhase(GamePhase, Client *&, std::string, std::string);
 
     protected:
     private:
