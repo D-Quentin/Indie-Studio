@@ -88,11 +88,15 @@ void Player::deserialize(std::string str)
     this->_pos.y = std::atoi(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
 }
 
-void Player::gest()
+void Player::gest(Client *&client)
 {
     this->move();
-}
 
+    if (this->_change) {
+        client->send(this->serialize());
+        this->_change = false;
+    }
+}
 void Player::setPos(RAYLIB::Vector2 pos)
 {
     this->_pos = pos;

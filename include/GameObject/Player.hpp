@@ -20,7 +20,7 @@ class Player : public EntityObjects {
         void setPos(RAYLIB::Vector2 pos);
         void setPos(RAYLIB::Vector3 pos);
         void update(std::pair<float, float> gmpAxisLeft = {0, 0}, std::pair<float, float> gmpAxisRight = {0.0f, 0.0f});
-        void gest();
+        void gest(Client *&client);
         std::string serialize();
         void deserialize(std::string);
         RAYLIB::Vector2 getPos() {return _pos;};
