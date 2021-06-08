@@ -31,14 +31,14 @@ bool Button::isHover()
 
 bool Button::isPressed()
 {
-    if (this->isHover() && RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_BUTTON_LEFT))
+    if (this->isHover() && RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_LEFT_BUTTON))
         return (true);
     return (false);
 }
 
 bool Button::isClicked()
 {
-    if (this->isHover() && RAYLIB::IsMouseButtonReleased(RAYLIB::MOUSE_BUTTON_LEFT))
+    if (this->isHover() && RAYLIB::IsMouseButtonReleased(RAYLIB::MOUSE_LEFT_BUTTON))
         return (true);
     return (false);
 }
