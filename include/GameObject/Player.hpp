@@ -9,6 +9,7 @@
 #define PLAYER_HPP_
 
 #include "EntityObjects.hpp"
+#include "Model.hpp"
 
 class Player : public EntityObjects {
     public:
@@ -16,13 +17,21 @@ class Player : public EntityObjects {
         ~Player() = default;
         void draw();
         void move();
-        void gest(Client *&);
+        void setPos(RAYLIB::Vector2 pos);
+        void setPos(RAYLIB::Vector3 pos);
+        void update(std::pair<float, float> gmpAxisLeft = {0, 0}, std::pair<float, float> gmpAxisRight = {0.0f, 0.0f});
+        void gest();
         std::string serialize();
         void deserialize(std::string);
+        RAYLIB::Vector2 getPos() {return _pos;};
 
     protected:
     private:
         bool _me;
+        RAYLIB::Vector2 _pos;
+        float _ypos = 0;
+        rl::Models _model;
+        float _rota;
 };
 
 #endif /* !PLAYER_HPP_ */
