@@ -44,7 +44,7 @@ void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Cli
 
     boost::split(strs, str, boost::is_any_of("\n"));
     for (int i = 0; i != strs.size(); i++) {
-        if (strs[i].find(INCOMMING_CONNECTION) != std::string::npos)
+        if (strs[i].find(INCOMMING_CONNECTION) != std::string::npos && obj.size() != 0)
             client->send(obj[me]->serialize());
         pos = strs[i].find("ID:");
         if (pos == std::string::npos)

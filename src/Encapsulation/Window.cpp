@@ -60,8 +60,6 @@ void rl::Window::fullscreen()
 
 bool rl::Window::loop()
 {
-    RAYLIB::BeginDrawing();
-    RAYLIB::EndDrawing();
     return (!RAYLIB::WindowShouldClose());
 }
 

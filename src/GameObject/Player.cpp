@@ -16,6 +16,9 @@ Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
     auto texture = RAYLIB::LoadTexture(std::string(path + "texture_minecraft_stone.png").c_str());
     this->setPos(pos);
     _model = rl::Models(mesh, texture);
+    this->_rota = 0;
+    this->_change = false;
+    this->_id = id;
 }
 
 void Player::draw()
@@ -57,14 +60,14 @@ void Player::update(std::pair<float, float> move, std::pair<float, float> rota)
 
 void Player::move()
 {
-    if (RAYLIB::IsKeyDown(RAYLIB::KEY_Z))
-        this->_pos.y -= 1;
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_W))
+        this->_pos.y -= 1, this->_change = true;
     if (RAYLIB::IsKeyDown(RAYLIB::KEY_S))
-        this->_pos.y += 1;
-    if (RAYLIB::IsKeyDown(RAYLIB::KEY_Q))
-        this->_pos.x -= 1;
+        this->_pos.y += 1, this->_change = true;
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_A))
+        this->_pos.x -= 1, this->_change = true;
     if (RAYLIB::IsKeyDown(RAYLIB::KEY_D))
-        this->_pos.x += 1;
+        this->_pos.x += 1, this->_change = true;
 }
 
 std::string Player::serialize()
@@ -82,6 +85,8 @@ void Player::deserialize(std::string str)
 {
     int pos = 0;
 
+    pos = str.find("ID:");
+    this->_id = std::atoi(str.substr((pos + 3), str.find(";", pos) - pos).c_str());
     pos = str.find("X:");
     this->_pos.x = std::atoi(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
     pos = str.find("Y:");

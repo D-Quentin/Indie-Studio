@@ -38,6 +38,8 @@ class Lobby {
         int _readyPlayer;
         Client *_client;
         size_t _me;
+        rl::Camera _TopCamera;
+        int _renderDistance = 40;
 
         Button _bReady;
         rl::Text _tReady;

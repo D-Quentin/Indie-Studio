@@ -12,6 +12,7 @@
 Lobby::Lobby()
 {
     this->_me = -1;
+    this->_TopCamera = rl::Camera({0, 6, 0}, RAYLIB::CAMERA_FIRST_PERSON);
 }
 
 Lobby::~Lobby()
@@ -49,11 +50,22 @@ GamePhase Lobby::restart(Client *&client, std::string ip, std::string port)
 
 GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
 {
-    GameObject::gestData(this->_obj, this->_client->read(), this->_client, this->_me);
-    ((Player *)this->_obj[this->_me])->gest(client);
-    RAYLIB::DrawRectangle(0, 0, WIN_WIDTH, WIN_HEIGHT, RAYLIB::GRAY);
-    for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
-        it->second->draw();
+    while (!RAYLIB::WindowShouldClose()) {
+        GameObject::gestData(this->_obj, this->_client->read(), this->_client, this->_me);
+        RAYLIB::BeginDrawing();
+        // std::cout << "Me:" << std::to_string(this->_me) << std::endl;
+        ((Player *)this->_obj[this->_me])->gest(client);
+        // RAYLIB::DrawRectangle(0, 0, WIN_WIDTH, WIN_HEIGHT, RAYLIB::GRAY);
+        
+        RAYLIB::BeginMode3D(this->_TopCamera.getCamera());
+        for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
+            it->second->draw();
+        }
+        _TopCamera.updateCamera();
+        RAYLIB::DrawGrid(100, 5);
+        RAYLIB::EndMode3D();
+        RAYLIB::EndDrawing();
+        RAYLIB::ClearBackground(RAYLIB::WHITE);
     }
     return (gamePhase);
 }
@@ -74,12 +86,14 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
         return (QuitPhase);
     }
     time = timeNow;
+    str = "";
     while (Chrono(time) < 1000) {
         str = client->read();
         if (str.empty() == false)
             GameObject::gestData(this->_obj, str, client, this->_me);
     }
     this->_me = this->_obj.size();
+    // std::cout << "Me:" << std::to_string(this->_me) << std::endl;
     client->send("PLAYER;ID:" + std::to_string(this->_me) + ";X:500;Y:500;\n");
     str = this->_client->getReponse();
     if (str == TIMEOUT_CONNECTION) { // GESTION ERREUR
@@ -87,6 +101,8 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
         return (QuitPhase);
     }
     GameObject::gestData(this->_obj, str, client, this->_me);
+    std::cout << str << std::endl;
+    std::cout << this->_obj.size() << std::endl;
     this->_phase = MainPhase;
     return (gamePhase);
 }

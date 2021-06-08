@@ -5,7 +5,7 @@
 
 class EntityObjects : public GameObject {
     public:
-        EntityObjects() = default;
+        EntityObjects(RAYLIB::Vector2 = {0, 0}, int = -1) {};
         ~EntityObjects() = default;
 
         unsigned int getHealth();
