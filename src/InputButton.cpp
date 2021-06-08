@@ -30,7 +30,7 @@ bool InputButton::isSelected()
         this->_selected = true;
         this->_color = Fade(RAYLIB::ORANGE, 1);
     }
-    if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_BUTTON_LEFT) && !this->_button.isHover()) {
+    if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_LEFT_BUTTON) && !this->_button.isHover()) {
         this->_selected = false;
         this->_color = Fade(RAYLIB::ORANGE, 0.6);
     }
