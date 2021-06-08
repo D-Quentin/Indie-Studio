@@ -45,7 +45,8 @@ void Player::update(std::pair<float, float> move, std::pair<float, float> rota)
         move.first *= RAYLIB::GetFrameTime();
         move.second *= RAYLIB::GetFrameTime();
     }
-    this->setPos((RAYLIB::Vector2){pos.x + move.first * speed, pos.y + move.second * speed });
+    RAYLIB::Vector2 toSet = {pos.x + move.first * speed, pos.y + move.second * speed };
+    this->setPos(toSet);
     
     if (rota.second == 0)
         rota.second = oldMousePos - mousePos;;
