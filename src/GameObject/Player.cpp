@@ -35,26 +35,21 @@ void Player::update(std::pair<float, float> move, std::pair<float, float> rota)
     static float oldMousePos = RAYLIB::GetMousePosition().x;
     float mousePos = RAYLIB::GetMousePosition().x;
     float speed = 5;
+    auto pos = this->getPos();
 
     if (RAYLIB::IsKeyDown(RAYLIB::KEY_LEFT_SHIFT))
         speed += 1.5;
-    auto pos = this->getPos();
     if (move == std::make_pair(0.0f, 0.0f)) {
-        move.second += RAYLIB::IsKeyDown(RAYLIB::KEY_D) - RAYLIB::IsKeyDown(RAYLIB::KEY_A);
         move.first += RAYLIB::IsKeyDown(RAYLIB::KEY_W) - RAYLIB::IsKeyDown(RAYLIB::KEY_S);
+        move.second += RAYLIB::IsKeyDown(RAYLIB::KEY_D) - RAYLIB::IsKeyDown(RAYLIB::KEY_A);
         move.first *= RAYLIB::GetFrameTime();
         move.second *= RAYLIB::GetFrameTime();
-        move.first *= speed;
-        move.second *= speed;
-        move.first += pos.x;
-        move.second += pos.y;
     }
-    this->setPos((RAYLIB::Vector2){move.first, move.second});
+    this->setPos((RAYLIB::Vector2){pos.x + move.first * speed, pos.y + move.second * speed });
     
     if (rota.second == 0)
         rota.second = oldMousePos - mousePos;;
     _rota += rota.second;
-    // std::cout << "mouse :" << oldMousePos - mousePos << std::endl;
     oldMousePos = mousePos;
 }
 
@@ -95,7 +90,7 @@ void Player::deserialize(std::string str)
 
 void Player::gest(Client *&client)
 {
-    this->move();
+    this->update();
 
     if (this->_change) {
         client->send(this->serialize());

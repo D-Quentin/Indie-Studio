@@ -12,7 +12,7 @@
 Lobby::Lobby()
 {
     this->_me = -1;
-    this->_TopCamera = rl::Camera({0, 6, 0}, RAYLIB::CAMERA_FIRST_PERSON);
+    this->_TopCamera = rl::Camera({0, 6, 0});
 }
 
 Lobby::~Lobby()
@@ -54,11 +54,15 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
         ((Player *)this->_obj[this->_me])->gest(client);
         
         RAYLIB::BeginMode3D(this->_TopCamera.getCamera());
+        auto pos = ((Player *)this->_obj[this->_me])->getPos();
+
+        _TopCamera.updateCamera({pos.x, pos.y});
+
         for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
             it->second->draw();
         }
-        _TopCamera.updateCamera();
-        RAYLIB::DrawGrid(100, 5);
+        
+        RAYLIB::DrawGrid(1000, 10);
         RAYLIB::EndMode3D();
     return (gamePhase);
 }
