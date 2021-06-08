@@ -50,12 +50,8 @@ GamePhase Lobby::restart(Client *&client, std::string ip, std::string port)
 
 GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
 {
-    while (!RAYLIB::WindowShouldClose()) {
         GameObject::gestData(this->_obj, this->_client->read(), this->_client, this->_me);
-        RAYLIB::BeginDrawing();
-        // std::cout << "Me:" << std::to_string(this->_me) << std::endl;
         ((Player *)this->_obj[this->_me])->gest(client);
-        // RAYLIB::DrawRectangle(0, 0, WIN_WIDTH, WIN_HEIGHT, RAYLIB::GRAY);
         
         RAYLIB::BeginMode3D(this->_TopCamera.getCamera());
         for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
@@ -64,9 +60,6 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
         _TopCamera.updateCamera();
         RAYLIB::DrawGrid(100, 5);
         RAYLIB::EndMode3D();
-        RAYLIB::EndDrawing();
-        RAYLIB::ClearBackground(RAYLIB::WHITE);
-    }
     return (gamePhase);
 }
 

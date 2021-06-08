@@ -88,6 +88,7 @@ void GamePlay::handleCamera()
 
 void GamePlay::drawAll()
 {
+    auto oldpos = this->_player.getPos();
     this->_player.update();
     this->_player.draw(); // draw self
     // draw all lists
