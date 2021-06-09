@@ -76,30 +76,30 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     this->_client->send(INCOMMING_CONNECTION);
     this->_tLoading.draw();
 
-    auto time = timeNow;
-    std::string str = this->_client->getReponse();
-    if (str == TIMEOUT_CONNECTION) { // GESTION ERREUR
+    sleep(1);
+    std::string str = client->read();
+    if (str == "") { // GESTION ERREUR
         std::cout << "First connexion time out" << std::endl;
         return (QuitPhase);
     }
-    time = timeNow;
-    str = "";
-    while (Chrono(time) < 1000) {
-        str = client->read();
-        if (str.empty() == false)
-            GameObject::gestData(this->_obj, str, client, this->_me);
-    }
+    GameObject::gestData(this->_obj, str, client, this->_me);
+
+    std::cout << "Get Info Start" << std::endl;
+    sleep(1);
+    str = client->read();
+    GameObject::gestData(this->_obj, str, client, this->_me);
+    std::cout << "Get Info End" << std::endl;
     this->_me = this->_obj.size();
-    // std::cout << "Me:" << std::to_string(this->_me) << std::endl;
+
     client->send("PLAYER;ID:" + std::to_string(this->_me) + ";X:500;Y:500;\n");
-    str = this->_client->getReponse();
-    if (str == TIMEOUT_CONNECTION) { // GESTION ERREUR
+    sleep(1);
+    str = client->read();
+    if (str == "") { // GESTION ERREUR
         std::cout << "Getting info time out" << std::endl;
         return (QuitPhase);
     }
     GameObject::gestData(this->_obj, str, client, this->_me);
-    std::cout << str << std::endl;
-    std::cout << this->_obj.size() << std::endl;
+
     this->_phase = MainPhase;
     return (gamePhase);
 }

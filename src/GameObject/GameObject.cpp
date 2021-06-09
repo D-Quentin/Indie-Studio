@@ -38,14 +38,15 @@ void GameObject::setId(int id)
 // TYPE;ID:id;X:x;Y:y\n
 void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Client *&client, int me)
 {
-    int id = 0;
-    int pos = 0;
+    size_t id = 0;
+    size_t pos = 0;
     std::vector<std::string> strs;
 
     boost::split(strs, str, boost::is_any_of("\n"));
-    for (int i = 0; i != strs.size(); i++) {
-        if (strs[i].find(INCOMMING_CONNECTION) != std::string::npos && obj.size() != 0)
+    for (size_t i = 0; i != strs.size(); i++) {
+        if (strs[i].find(INCOMMING_CONNECTION) != std::string::npos && obj.size() != 0) {
             client->send(obj[me]->serialize());
+        }
         pos = strs[i].find("ID:");
         if (pos == std::string::npos)
             continue;
@@ -56,6 +57,7 @@ void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Cli
             obj.at(id)->deserialize(strs[i]);
         else {
             if (strs[i].find("PLAYER") != std::string::npos) {
+                std::cout << "Creating Player" << std::endl;
                 obj.insert(std::pair<int, GameObject *>(obj.size(), new Player({0, 0}, -1, false)));
                 obj.at(obj.size() - 1)->deserialize(strs[i]);
             }

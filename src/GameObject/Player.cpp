@@ -32,6 +32,9 @@ void Player::draw()
 
 void Player::update(std::pair<float, float> move, std::pair<float, float> rota)
 {
+    if (!RAYLIB::IsKeyDown(RAYLIB::KEY_W) && !RAYLIB::IsKeyDown(RAYLIB::KEY_S) &&
+    !RAYLIB::IsKeyDown(RAYLIB::KEY_D) && !RAYLIB::IsKeyDown(RAYLIB::KEY_A))
+        return;
     static float oldMousePos = RAYLIB::GetMousePosition().x;
     float mousePos = RAYLIB::GetMousePosition().x;
     float speed = 5;
@@ -46,12 +49,14 @@ void Player::update(std::pair<float, float> move, std::pair<float, float> rota)
         move.second *= RAYLIB::GetFrameTime();
     }
     RAYLIB::Vector2 toSet = {pos.x + move.first * speed, pos.y + move.second * speed };
-    this->setPos(toSet);
+    this->_pos = toSet;
+    std::cout << pos.y << std::endl;
     
     if (rota.second == 0)
         rota.second = oldMousePos - mousePos;;
     _rota += rota.second;
     oldMousePos = mousePos;
+    this->_change = true;
 }
 
 void Player::move()
@@ -82,11 +87,11 @@ void Player::deserialize(std::string str)
     int pos = 0;
 
     pos = str.find("ID:");
-    this->_id = std::atoi(str.substr((pos + 3), str.find(";", pos) - pos).c_str());
+    this->_id = std::atof(str.substr((pos + 3), str.find(";", pos) - pos).c_str());
     pos = str.find("X:");
-    this->_pos.x = std::atoi(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
+    this->_pos.x = std::atof(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
     pos = str.find("Y:");
-    this->_pos.y = std::atoi(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
+    this->_pos.y = std::atof(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
 }
 
 void Player::gest(Client *&client)
