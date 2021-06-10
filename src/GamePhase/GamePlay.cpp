@@ -7,7 +7,8 @@
 
 #include "GamePlay.hpp"
 
-#define ACTIVE_CAMERA ((this->_isFpCam) ? this->_FPCamera : this->_TopCamera)
+// #define ACTIVE_CAMERA ((this->_isFpCam) ? this->_FPCamera : this->_TopCamera)
+#define ACTIVE_CAMERA (this->_TopCamera)
 
 void GamePlay::nonToPoi(std::list<MapBlock> obj)
 {
@@ -17,11 +18,11 @@ void GamePlay::nonToPoi(std::list<MapBlock> obj)
 
 GamePlay::GamePlay()
 {
-    _TopCamera = rl::Camera({0, 6, 0});
-    _TopCamera.setTarget({0, 5.5,0});
-    RAYLIB::Vector3 tmp = { 0, 0, 0 };
-    _FPCamera =  rl::Camera(tmp ,(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
-    RAYLIB::EnableCursor();
+    // _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 0, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
+    _player = Player();
+    auto pos = _player.getPos();
+    _TopCamera = rl::Camera({pos.x, 6, pos.y});
+    RAYLIB::ShowCursor();
 }
 
 GamePhase GamePlay::launch()
@@ -45,7 +46,7 @@ GamePhase GamePlay::launch()
 
 GamePhase GamePlay::restart()
 {
-    RAYLIB::DisableCursor();
+    RAYLIB::HideCursor();
     while (!RAYLIB::WindowShouldClose()) {
     //updtae attrib from server
         this->handleCamera();
@@ -59,34 +60,37 @@ GamePhase GamePlay::restart()
         RAYLIB::EndDrawing();
         RAYLIB::ClearBackground({255, 255, 255});
     }
-    RAYLIB::EnableCursor();
-    return QuitPhase;
+    RAYLIB::ShowCursor();
+    return MenuPhase;
 }
 
 void GamePlay::handleCamera()
 {
+    //change pov
     if (RAYLIB::IsKeyPressed(RAYLIB::KEY_F5))
         this->_isFpCam = !this->_isFpCam;
     auto oldPos = ACTIVE_CAMERA.getPosition();
 
-    if (RAYLIB::IsGamepadAvailable(0))
-        ACTIVE_CAMERA.updateCamera(_gmp.getAxisLeft(), _gmp.getAxisRight());
-    else
-        ACTIVE_CAMERA.updateCamera();
+    //update camera
+        auto ppos = this->_player.getPos();
+        ACTIVE_CAMERA.updateCamera({ppos.x, ppos.y});
 
-    auto campos = ACTIVE_CAMERA.getPosition();
-    for (auto it : _blocks) {
-        auto pos = it->getPos();
-        if (RAYLIB::CheckCollisionCircleRec({campos.x, campos.z}, 0.5, RAYLIB::Rectangle ({pos.x, pos.y, 0.5, 0.5}))) {
-            ACTIVE_CAMERA.setPosition(oldPos);
-            break;
-        }
-    }
+    //colition player wall
+    // auto campos = ACTIVE_CAMERA.getPosition();
+    // for (auto it : _blocks) {
+    //     auto pos = it->getPos();
+    //     if (RAYLIB::CheckCollisionCircleRec({campos.x, campos.z}, 0.5, RAYLIB::Rectangle ({pos.x, pos.y, 0.5, 0.5}))) {
+    //         ACTIVE_CAMERA.setPosition(oldPos);
+    //         break;
+    //     }
+    // }
 }
 
 void GamePlay::drawAll()
 {
-    // this->_self.draw(); // draw self
+    auto oldpos = this->_player.getPos();
+    this->_player.update();
+    this->_player.draw(); // draw self
     // draw all lists
     auto campos = ACTIVE_CAMERA.getPosition();
     for (auto it : this->_blocks) {
@@ -94,12 +98,10 @@ void GamePlay::drawAll()
         if ((pos.y < campos.z + _renderDistance && pos.y > campos.z - _renderDistance) && (pos.x < campos.x + _renderDistance && pos.x > campos.x - _renderDistance))
             it->draw();
     }
-    for (auto it : this->_enemies)
-        it->draw();
-    for (auto it : this->_items)
-        it->draw();
-    RAYLIB::Vector3 tmp = { _mapSize.first / 2, -0.5, _mapSize.second / 2 };
-    RAYLIB::Vector2 tmp2 = { _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first};
-    RAYLIB::DrawPlane(tmp, tmp2, RAYLIB::GRAY); //draw flor
+//     for (auto it : this->_enemies)
+//         it->draw();
+//     for (auto it : this->_items)
+//         it->draw();
+    // RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, -0.5, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, RAYLIB::RED); //draw flor
     RAYLIB::DrawGrid(100, 5);
 }

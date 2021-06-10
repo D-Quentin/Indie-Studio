@@ -50,7 +50,7 @@ namespace rl {
             void setTarget(RAYLIB::Vector3 value) {_camera.target = value;};
             void setFOV(float value) {_camera.fovy = value;};
             void setProjection(RAYLIB::CameraProjection value) {_camera.projection = value;};
-            void setMode(RAYLIB::CameraMode mode) {SetCameraMode(_camera, mode);};
+            void setMode(RAYLIB::CameraMode mode) {SetCameraMode(_camera, mode); _mode = mode;};
             void setSpeed(int speed) {_speed = speed;};
             
             RAYLIB::Vector3 getPosition(void) const {return _camera.position;};
@@ -62,10 +62,14 @@ namespace rl {
             void updateCamera(std::pair<float, float> gmpAxisLeft = {0, 0}, std::pair<float, float> gmpAxisRight = {0.0f, 0.0f});
 
         private:
+            void __fpUpdateCamera(std::pair<float, float> gmpAxisLeft = {0, 0}, std::pair<float, float> gmpAxisRight = {0.0f, 0.0f});
+            void __freeUpdateCamera(std::pair<float, float> gmpAxisLeft = {0, 0}, std::pair<float, float> gmpAxisRight = {0.0f, 0.0f});
+        private:
             RAYLIB::Camera3D _camera;
             std::pair<float, float> assignpr(float value, float x, float y);
             std::pair<float, float> getpr(float x, float y);
             int _speed = 90;
+            RAYLIB::CameraMode _mode;
     };
 };
 

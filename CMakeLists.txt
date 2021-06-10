@@ -11,6 +11,8 @@ include_directories(include)
 include_directories(include/Encapsulation)
 include_directories(include/GameObject)
 include_directories(include/Server)
+include_directories(include/GamePhase)
+include_directories(include/GameInterface)
 LINK_DIRECTORIES(boost_1_76_0/stage/lib)
 
 file(
@@ -25,7 +27,8 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
 
   FetchContent_Declare(
     raylib
-    URL https://github.com/raysan5/raylib/archive/master.tar.gz
+    URL https://github.com/raysan5/raylib/archive/refs/tags/3.7.0.tar.gz
+    # https://github.com/raysan5/raylib/archive/master.tar.gz
   )
 
   FetchContent_GetProperties(raylib)

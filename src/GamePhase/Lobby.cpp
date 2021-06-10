@@ -12,6 +12,7 @@
 Lobby::Lobby()
 {
     this->_me = -1;
+    this->_TopCamera = rl::Camera({0, 6, 0});
 }
 
 Lobby::~Lobby()
@@ -22,9 +23,9 @@ GamePhase Lobby::launch(Client *&client, std::string ip, std::string port)
 {
     this->_phase = JoinPhase;
 
-    this->_bReady = Button(WIN_WIDTH / 2 - 300, 550, 600, 200);
-    this->_tReady = rl::Text(""/*"Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player))*/, WIN_WIDTH / 2 - 150, 170, 150, RAYLIB::LIGHTGRAY);
-    this->_tLoading = rl::Text("Loading ...", 50, 1000, 60, RAYLIB::LIGHTGRAY);
+    this->_bReady = Button(35, 50, 31, 18);
+    this->_tReady = rl::Text(""/*"Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player))*/, 42, 9, 70, RAYLIB::LIGHTGRAY);
+    this->_tLoading = rl::Text("Loading ...", 5, 92, 40, RAYLIB::LIGHTGRAY);
 
     return (this->restart(client, ip, port));
 }
@@ -49,12 +50,20 @@ GamePhase Lobby::restart(Client *&client, std::string ip, std::string port)
 
 GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
 {
-    GameObject::gestData(this->_obj, this->_client->read(), this->_client, this->_me);
-    ((Player *)this->_obj[this->_me])->gest(client);
-    RAYLIB::DrawRectangle(0, 0, WIN_WIDTH, WIN_HEIGHT, RAYLIB::GRAY);
-    for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
-        it->second->draw();
-    }
+        GameObject::gestData(this->_obj, this->_client->read(), this->_client, this->_me);
+        ((Player *)this->_obj[this->_me])->gest(client);
+        
+        RAYLIB::BeginMode3D(this->_TopCamera.getCamera());
+        auto pos = ((Player *)this->_obj[this->_me])->getPos();
+
+        _TopCamera.updateCamera({pos.x, pos.y});
+
+        for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
+            it->second->draw();
+        }
+        
+        RAYLIB::DrawGrid(1000, 10);
+        RAYLIB::EndMode3D();
     return (gamePhase);
 }
 
@@ -67,26 +76,30 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     this->_client->send(INCOMMING_CONNECTION);
     this->_tLoading.draw();
 
-    auto time = timeNow;
-    std::string str = this->_client->getReponse();
-    if (str == TIMEOUT_CONNECTION) { // GESTION ERREUR
+    sleep(1);
+    std::string str = client->read();
+    if (str == "") { // GESTION ERREUR
         std::cout << "First connexion time out" << std::endl;
         return (QuitPhase);
     }
-    time = timeNow;
-    while (Chrono(time) < 1000) {
-        str = client->read();
-        if (str.empty() == false)
-            GameObject::gestData(this->_obj, str, client, this->_me);
-    }
+    GameObject::gestData(this->_obj, str, client, this->_me);
+
+    std::cout << "Get Info Start" << std::endl;
+    sleep(1);
+    str = client->read();
+    GameObject::gestData(this->_obj, str, client, this->_me);
+    std::cout << "Get Info End" << std::endl;
     this->_me = this->_obj.size();
+
     client->send("PLAYER;ID:" + std::to_string(this->_me) + ";X:500;Y:500;\n");
-    str = this->_client->getReponse();
-    if (str == TIMEOUT_CONNECTION) { // GESTION ERREUR
+    sleep(1);
+    str = client->read();
+    if (str == "") { // GESTION ERREUR
         std::cout << "Getting info time out" << std::endl;
         return (QuitPhase);
     }
     GameObject::gestData(this->_obj, str, client, this->_me);
+
     this->_phase = MainPhase;
     return (gamePhase);
 }

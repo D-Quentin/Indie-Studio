@@ -21,7 +21,11 @@ std::string Client::read(void)
 {
     std::string str(this->_all_recv);
 
-    this->_all_recv = "";
+    this->_all_recv.erase(0, str.size());
+    #if defined(DEBUG)
+    if (str != "")
+        std::cout << "Client: " << str << std::endl;
+    #endif
     return (str);
 }
 
@@ -49,7 +53,6 @@ void Client::handleReceive(const boost::system::error_code& error, std::size_t b
     if (!error || error == boost::asio::error::message_size) {
         std::string str_received = std::string(reinterpret_cast<const char*>(this->_recv_buffer.data()), bytes_transferred);
         this->_all_recv.append(str_received);
-        std::cout << "CLIENT -- Recu:" << this->_all_recv << std::endl;
     }
     this->startReceive();
 }
@@ -59,10 +62,9 @@ std::string Client::getReponse(void)
     std::string str;
     auto time = timeNow;
 
-    std::cout << "CLIENT -- reading:" << this->_all_recv << std::endl;
     while(Chrono(time) <= 5000) {
         str = this->read();
-        if (str == "")
+        if (str != "")
             return (str);
     }
     return (TIMEOUT_CONNECTION);

@@ -7,12 +7,15 @@
 
 #include "Button.hpp"
 
-Button::Button(int posx, int posy, int width, int height)
+Button::Button(float posx, float posy, float width, float height)
 {
-    this->_posx = posx;
-    this->_posy = posy;
-    this->_height = height;
-    this->_width = width;
+    int WIN_HEIGHT = RAYLIB::GetScreenHeight();
+    int WIN_WIDTH = RAYLIB::GetScreenWidth();
+
+    this->_posx = (int)(posx * WIN_WIDTH) / 100;
+    this->_posy = (int)(posy * WIN_HEIGHT) / 100;
+    this->_height = (int)(height * WIN_HEIGHT) / 100;
+    this->_width = (int)(width * WIN_WIDTH) / 100;
 }
 
 Button::~Button()
@@ -31,14 +34,14 @@ bool Button::isHover()
 
 bool Button::isPressed()
 {
-    if (this->isHover() && RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_BUTTON_LEFT))
+    if (this->isHover() && RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_LEFT_BUTTON))
         return (true);
     return (false);
 }
 
 bool Button::isClicked()
 {
-    if (this->isHover() && RAYLIB::IsMouseButtonReleased(RAYLIB::MOUSE_BUTTON_LEFT))
+    if (this->isHover() && RAYLIB::IsMouseButtonReleased(RAYLIB::MOUSE_LEFT_BUTTON))
         return (true);
     return (false);
 }

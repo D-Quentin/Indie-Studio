@@ -10,14 +10,52 @@
 
 Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
 {
+    std::string path("/home/THE/texture/");
+    float size = 0.25;
+    auto mesh = RAYLIB::GenMeshCube(size, size, size);
+    auto texture = RAYLIB::LoadTexture(std::string(path + "texture_minecraft_stone.png").c_str());
+    this->setPos(pos);
+    _model = rl::Models(mesh, texture);
+    this->_rota = 0;
+    this->_change = false;
+    this->_id = id;
 }
 
 void Player::draw()
 {
-    if (this->_me)
-        RAYLIB::DrawRectangle(this->_pos.x, this->_pos.y, 50, 50, RAYLIB::ORANGE);
-    else
-        RAYLIB::DrawRectangle(this->_pos.x, this->_pos.y, 50, 50, RAYLIB::BLUE);
+    RAYLIB::Vector3 vScale = { 1, 1, 1 };
+    RAYLIB::Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f };
+    auto pos = this->getPos();
+
+    RAYLIB::DrawModelEx(_model._model, {pos.x, 0, pos.y}, rotationAxis, _rota, vScale, RAYLIB::BLUE);
+}
+
+void Player::update(std::pair<float, float> move, std::pair<float, float> rota)
+{
+    if (!RAYLIB::IsKeyDown(RAYLIB::KEY_W) && !RAYLIB::IsKeyDown(RAYLIB::KEY_S) &&
+    !RAYLIB::IsKeyDown(RAYLIB::KEY_D) && !RAYLIB::IsKeyDown(RAYLIB::KEY_A))
+        return;
+    static float oldMousePos = RAYLIB::GetMousePosition().x;
+    float mousePos = RAYLIB::GetMousePosition().x;
+    float speed = 5;
+    auto pos = this->getPos();
+
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_LEFT_SHIFT))
+        speed += 1.5;
+    if (move == std::make_pair(0.0f, 0.0f)) {
+        move.first += RAYLIB::IsKeyDown(RAYLIB::KEY_W) - RAYLIB::IsKeyDown(RAYLIB::KEY_S);
+        move.second += RAYLIB::IsKeyDown(RAYLIB::KEY_D) - RAYLIB::IsKeyDown(RAYLIB::KEY_A);
+        move.first *= RAYLIB::GetFrameTime();
+        move.second *= RAYLIB::GetFrameTime();
+    }
+    RAYLIB::Vector2 toSet = {pos.x + move.first * speed, pos.y + move.second * speed };
+    this->_pos = toSet;
+
+    if (rota.second == 0)
+        rota.second = oldMousePos - mousePos;;
+    _rota += rota.second;
+    oldMousePos = mousePos;
+    this->_change = true;
 }
 
 void Player::move()
@@ -47,18 +85,30 @@ void Player::deserialize(std::string str)
 {
     int pos = 0;
 
+    pos = str.find("ID:");
+    this->_id = std::atof(str.substr((pos + 3), str.find(";", pos) - pos).c_str());
     pos = str.find("X:");
-    this->_pos.x = std::atoi(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
+    this->_pos.x = std::atof(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
     pos = str.find("Y:");
-    this->_pos.y = std::atoi(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
+    this->_pos.y = std::atof(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
 }
 
 void Player::gest(Client *&client)
 {
-    this->move();
+    this->update();
 
     if (this->_change) {
         client->send(this->serialize());
         this->_change = false;
     }
+}
+void Player::setPos(RAYLIB::Vector2 pos)
+{
+    this->_pos = pos;
+}
+
+void Player::setPos(RAYLIB::Vector3 pos)
+{
+    this->_pos = {pos.x, pos.z};
+    this->_ypos = pos.y;
 }

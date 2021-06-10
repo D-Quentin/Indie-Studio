@@ -43,6 +43,9 @@ void Server::handleReceive(const boost::system::error_code& error, std::size_t b
             this->_connection_pool.push_back(this->_last_endpoint);
         std::string line(this->_recv_buf.begin(), bytes_transferred);
         this->handleCommand(line);
+        // boost::thread run_thread(&Server::handleCommand, line);
+        // boost::thread thr(&Server::handleCommand, &line);
+        
         // std::thread thr(&Server::handleCommand, std::ref(line));
         // thr.detach();
     }
@@ -53,7 +56,9 @@ void Server::sendToAll(std::string str)
 {
     boost::shared_ptr<std::string> message(new std::string(str));
 
-    std::cout << "Sending to all: " << str << std::endl;
+    #if defined(DEBUG)
+        std::cout << "Sending to all: " << str << std::endl;
+    #endif
     for (auto it : this->_connection_pool)
         this->_socket.send_to(boost::asio::buffer(*message), it);
 }

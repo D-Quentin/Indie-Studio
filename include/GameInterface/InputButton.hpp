@@ -13,7 +13,7 @@
 
 class InputButton {
     public:
-        InputButton(int = 0, int = 0, int = 0, int = 0, int = 0);
+        InputButton(float = 0, float = 0, float = 0, float = 0, int = 0);
         ~InputButton();
         bool isSelected();
         void writeChar();

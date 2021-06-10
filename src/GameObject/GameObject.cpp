@@ -38,20 +38,19 @@ void GameObject::setId(int id)
 // TYPE;ID:id;X:x;Y:y\n
 void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Client *&client, int me)
 {
-    int id = 0;
-    int pos = 0;
+    size_t id = 0;
+    size_t pos = 0;
     std::vector<std::string> strs;
 
     boost::split(strs, str, boost::is_any_of("\n"));
-    for (int i = 0; i != strs.size(); i++) {
-        if (strs[i].find(INCOMMING_CONNECTION) != std::string::npos)
+    for (size_t i = 0; i != strs.size(); i++) {
+        if (strs[i].find(INCOMMING_CONNECTION) != std::string::npos && obj.size() != 0) {
             client->send(obj[me]->serialize());
+        }
         pos = strs[i].find("ID:");
         if (pos == std::string::npos)
             continue;
         id = std::atoi(strs[i].substr((pos + 3), strs[i].find(";", pos) - pos).c_str());
-        std::cout << id << std::endl;
-        std::cout << obj.size() << std::endl;
         if (id < obj.size())
             obj.at(id)->deserialize(strs[i]);
         else {

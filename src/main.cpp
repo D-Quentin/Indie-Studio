@@ -11,6 +11,9 @@
 #include "Game.hpp"
 #include "Server.hpp"
 
+static const int WIN_HEIGHT = RAYLIB::GetScreenHeight();
+static const int WIN_WIDTH = RAYLIB::GetScreenWidth();
+
 void launchServer(int port)
 {
     std::cout << "Launching server..." << std::endl;
@@ -26,6 +29,9 @@ void launchServer(int port)
 
 int main(int ac, char **av)
 {
+    int WIN_HEIGHT = RAYLIB::GetScreenHeight();
+    int WIN_WIDTH = RAYLIB::GetScreenWidth();
+
     if (ac == 3 && std::string(av[1]) == "--server") {
         launchServer(std::atoi(av[2]));
         return (0);

@@ -14,7 +14,7 @@ namespace rl {
     class Text
     {
         public:
-            Text(std::string = "", int = 0, int = 0, int = 15, RAYLIB::Color = RAYLIB::WHITE);
+            Text(std::string = "", float = 0, float = 0, float = 15, RAYLIB::Color = RAYLIB::WHITE);
             ~Text() = default;
 
             // Getters & setters

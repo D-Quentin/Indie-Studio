@@ -7,17 +7,20 @@
 
 #include "InputButton.hpp"
 
-InputButton::InputButton(int posx, int posy, int width, int height, int maxLen)
+InputButton::InputButton(float posx, float posy, float width, float height, int maxLen)
 {
-    this->_posx = posx;
-    this->_posy = posy;
-    this->_height = height;
-    this->_width = width;
+    int WIN_HEIGHT = RAYLIB::GetScreenHeight();
+    int WIN_WIDTH = RAYLIB::GetScreenWidth();
+
+    this->_posx = (int)(posx * WIN_WIDTH) / 100;
+    this->_posy = (int)(posy * WIN_HEIGHT) / 100;
+    this->_height = (int)(height * WIN_HEIGHT) / 100;
+    this->_width = (int)(width * WIN_WIDTH) / 100;
     this->_maxLen = maxLen;
     this->_selected = false;
     this->_button = Button(posx, posy, width, height);
     this->_color = Fade(RAYLIB::ORANGE, 0.6);
-    this->_printText = rl::Text("", this->_posx + this->_height * 0.2, this->_posy + this->_height * 0.05, this->_height - this->_height * 0.2, RAYLIB::LIGHTGRAY);
+    this->_printText = rl::Text("", posx + height * 0.2, posy + height * 0.08, (this->_height * 0.85) / 2, RAYLIB::LIGHTGRAY);
 }
 
 InputButton::~InputButton()
@@ -30,7 +33,7 @@ bool InputButton::isSelected()
         this->_selected = true;
         this->_color = Fade(RAYLIB::ORANGE, 1);
     }
-    if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_BUTTON_LEFT) && !this->_button.isHover()) {
+    if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_LEFT_BUTTON) && !this->_button.isHover()) {
         this->_selected = false;
         this->_color = Fade(RAYLIB::ORANGE, 0.6);
     }
@@ -54,7 +57,7 @@ void InputButton::writeChar()
 void InputButton::draw()
 {
     RAYLIB::DrawRectangle(this->_posx, this->_posy, this->_width, this->_height, this->_color);
-    RAYLIB::DrawRectangle(this->_posx + this->_height * 0.05, this->_posy + this->_height * 0.05, this->_width - this->_height * 0.1, this->_height - this->_height * 0.1, RAYLIB::DARKGRAY);
+    RAYLIB::DrawRectangle(this->_posx + this->_height * 0.08, this->_posy + this->_height * 0.08, this->_width - this->_height * 0.16, this->_height - this->_height * 0.16, RAYLIB::DARKGRAY);
     this->_printText.draw();
 }
 

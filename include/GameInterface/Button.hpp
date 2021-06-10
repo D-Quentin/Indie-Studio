@@ -12,7 +12,7 @@
 
 class Button {
     public:
-        Button(int = 0, int = 0, int = 0, int = 0);
+        Button(float = 0, float = 0, float = 0, float = 0);
         ~Button();
         bool isHover();
         bool isPressed();

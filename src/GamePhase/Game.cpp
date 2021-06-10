@@ -27,6 +27,8 @@ void Game::launch(rl::Window win)
     std::pair<bool, GamePlay> gameplay = {false, GamePlay()};
 
     while (statut != QuitPhase && win.loop()) {
+        RAYLIB::BeginDrawing();
+        win.clear({255, 255, 255, 255});
         if (RAYLIB::IsKeyPressed(RAYLIB::KEY_F6))
             statut = GamePlayPhase;
         switch (statut) {
@@ -53,11 +55,10 @@ void Game::launch(rl::Window win)
                 statut = gameplay.second.launch();
                 gameplay.first = true;
             }
-
         default:
             break;
         }
-        win.clear();
+        RAYLIB::EndDrawing();
     }
     std::cout << "Quiting" << std::endl;
 }
