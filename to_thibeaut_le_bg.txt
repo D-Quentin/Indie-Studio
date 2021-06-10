@@ -1,2 +1,4 @@
 ###########################
--1
+Jeu vue du dessus
+Local solo contre ia
+PVP en ligne

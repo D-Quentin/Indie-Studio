@@ -22,8 +22,10 @@ std::string Client::read(void)
     std::string str(this->_all_recv);
 
     this->_all_recv.erase(0, str.size());
+    #if defined(DEBUG)
     if (str != "")
         std::cout << "Client: " << str << std::endl;
+    #endif
     return (str);
 }
 
