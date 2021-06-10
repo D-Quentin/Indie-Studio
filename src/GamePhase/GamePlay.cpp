@@ -58,7 +58,7 @@ GamePhase GamePlay::restart()
         RAYLIB::EndMode3D();
         RAYLIB::DrawFPS(10, 10);
         RAYLIB::EndDrawing();
-        RAYLIB::ClearBackground({255, 255, 255});
+        RAYLIB::ClearBackground({255, 255, 255, 255});
     }
     RAYLIB::ShowCursor();
     return MenuPhase;
@@ -69,7 +69,7 @@ void GamePlay::handleCamera()
     //change pov
     if (RAYLIB::IsKeyPressed(RAYLIB::KEY_F5))
         this->_isFpCam = !this->_isFpCam;
-    auto oldPos = ACTIVE_CAMERA.getPosition();
+    // auto oldPos = ACTIVE_CAMERA.getPosition();
 
     //update camera
         auto ppos = this->_player.getPos();
@@ -88,7 +88,7 @@ void GamePlay::handleCamera()
 
 void GamePlay::drawAll()
 {
-    auto oldpos = this->_player.getPos();
+    // auto oldpos = this->_player.getPos();
     this->_player.update();
     this->_player.draw(); // draw self
     // draw all lists

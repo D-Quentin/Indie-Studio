@@ -45,7 +45,7 @@ void InputButton::writeChar()
     int key = RAYLIB::GetCharPressed();
 
     while (key > 0) {
-        if ((key >= 32) && (key <= 125) && (this->_text.size() < this->_maxLen))
+        if ((key >= 32) && (key <= 125) && ((int)this->_text.size() < this->_maxLen))
             this->_text += (char)key;
         key = RAYLIB::GetCharPressed();
     }

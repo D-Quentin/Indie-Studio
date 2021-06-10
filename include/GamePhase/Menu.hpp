@@ -24,11 +24,11 @@ class Menu {
     public:
         Menu();
         ~Menu();
-        GamePhase launch(Server *);
-        GamePhase restart(Server *);
+        GamePhase launch();
+        GamePhase restart();
         GamePhase mainPhase(GamePhase);
         GamePhase playPhase(GamePhase);
-        GamePhase createPhase(GamePhase, Server *);
+        GamePhase createPhase(GamePhase);
         GamePhase joinPhase(GamePhase);
         std::string getIp();
         std::string getPort();

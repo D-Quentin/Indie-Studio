@@ -17,7 +17,7 @@ Menu::~Menu()
 {
 }
 
-GamePhase Menu::launch(Server *server)
+GamePhase Menu::launch()
 {
     this->_phase = Menu::MainPhase;
 
@@ -49,10 +49,10 @@ GamePhase Menu::launch(Server *server)
     this->_bCreate = Button(35, 79, 31, 18);
     this->_tCreate = rl::Text("Create", 35, 80, 70, RAYLIB::LIGHTGRAY);
 
-    return (this->restart(server));
+    return (this->restart());
 }
 
-GamePhase Menu::restart(Server *server)
+GamePhase Menu::restart()
 {
     GamePhase gamePhase = MenuPhase;
 
@@ -64,7 +64,7 @@ GamePhase Menu::restart(Server *server)
         gamePhase = this->playPhase(gamePhase);
         break;
     case Menu::CreatePhase:
-        gamePhase = this->createPhase(gamePhase, server);
+        gamePhase = this->createPhase(gamePhase);
         break;
     case Menu::JoinPhase:
         gamePhase = this->joinPhase(gamePhase);
@@ -105,7 +105,7 @@ GamePhase Menu::playPhase(GamePhase gamePhase)
     return (gamePhase);
 }
 
-GamePhase Menu::createPhase(GamePhase gamePhase, Server *server)
+GamePhase Menu::createPhase(GamePhase gamePhase)
 {
     if (this->_iServPort.isSelected())
         this->_iServPort.writeChar(); // GESTION ERREUR

@@ -51,7 +51,7 @@ float Vector3Length(const RAYLIB::Vector3 v)
 
 RAYLIB::Vector3 Vector3Transform(RAYLIB::Vector3 v, RAYLIB::Matrix mat)
 {
-    RAYLIB::Vector3 result = { 0 };
+    RAYLIB::Vector3 result = {0, 0, 0};
     float x = v.x;
     float y = v.y;
     float z = v.z;

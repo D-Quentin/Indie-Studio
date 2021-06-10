@@ -18,8 +18,8 @@ map::~map()
 std::pair<int, int> find_sym(int c, std::vector<std::vector<int>> map)
 {
     std::pair<int, int> pai;
-    for(int i = 0; i != map.size(); i++) {
-        for(int b = 0; b != map[i].size(); b++) {
+    for(size_t i = 0; i != map.size(); i++) {
+        for(size_t b = 0; b != map[i].size(); b++) {
             if (map[i][b] == c) {
                 pai.first = i;
                 pai.second = b;
@@ -123,7 +123,7 @@ void map::create_rooms()
 
 int check_vec_spawn(std::vector<int> vec, int x)
 {
-    for(int i = 0; i != vec.size(); i++) {
+    for(size_t i = 0; i != vec.size(); i++) {
         if (vec[i] == x)
             return 1;
     }
@@ -137,25 +137,25 @@ void map::take_largest_value()
     this->cut_left = RAND_MAX;
     this->cut_right = 0;
 
-    for (int i = 0; i != this->plan_int.size(); i++)
-        for (int b = 0; b != this->plan_int[i].size(); b++)
+    for (size_t i = 0; i != this->plan_int.size(); i++)
+        for (size_t b = 0; b != this->plan_int[i].size(); b++)
             if (this->plan_int[i][b] != 0 && this->cut_high == 0)
                 this->cut_high = i;
-    for (int i = (this->cut_high + 1), c = 0; i != this->plan_int.size(); i++) {
-        for (int b = 0; b != this->plan_int[i].size(); b++) {
+    for (size_t i = (this->cut_high + 1), c = 0; i != this->plan_int.size(); i++) {
+        for (size_t b = 0; b != this->plan_int[i].size(); b++) {
             c = c + this->plan_int[i][b];
         }
         if (c == 0 && this->cut_down == 0)
             this->cut_down = i;
         c = 0;
     }
-    for (int i = 0; i != this->plan_int.size(); i++)
-        for (int b = 0; b != this->plan_int[i].size(); b++)
-            if (this->plan_int[i][b] != 0 && b < this->cut_left)
+    for (size_t i = 0; i != this->plan_int.size(); i++)
+        for (size_t b = 0; b != this->plan_int[i].size(); b++)
+            if (this->plan_int[i][b] != 0 && (int)b < this->cut_left)
                 this->cut_left = b;
-    for (int i = 0; i != this->plan_int.size(); i++)
-        for (int b = this->plan_int[i].size() - 1; b != 0; b--)
-            if (this->plan_int[i][b] != 0 && b > this->cut_right)
+    for (size_t i = 0; i != this->plan_int.size(); i++)
+        for (size_t b = this->plan_int[i].size() - 1; b != 0; b--)
+            if (this->plan_int[i][b] != 0 && (int)b > this->cut_right)
                 this->cut_right = b;
 }
 
@@ -277,7 +277,7 @@ void map::create_down_square_part(int i, int j)
 
 std::vector<char> map::remove_spawn_point(std::vector<char> str)
 {
-    for(int i = 0; i != str.size(); i++) {
+    for(size_t i = 0; i != str.size(); i++) {
         if (str[i] == 'S')
             str[i] = ' ';
     }
@@ -323,10 +323,10 @@ void map::create_spawn()
 {
     int ran1 = 0;
     int h = 0;
-    for (int i = 0; i != this->plan_int.size(); i++) {
-        for (int b = 0; b != this->plan_int[i].size(); b++) {
+    for (size_t i = 0; i != this->plan_int.size(); i++) {
+        for (size_t b = 0; b != this->plan_int[i].size(); b++) {
             if (this->plan_int[i][b] < 0) {
-                for (int j = 0; j != this->vec_spawn.size(); j++) {
+                for (size_t j = 0; j != this->vec_spawn.size(); j++) {
                     if (this->vec_spawn[j] == this->plan_int[i][b]) {
                         h++;
                     }
@@ -385,7 +385,6 @@ std::vector<std::vector<char>> setup2_door(std::vector<std::vector<char>> map, i
 {
     int o = 0;
     int p = 0;
-    int c = i;
 
     for (; i != 0 && map[nb][i-1] != 'X' && map[nb][i+4] != 'X'; nb--);
     p = nb;
@@ -402,7 +401,7 @@ std::vector<std::vector<char>> setup2_door(std::vector<std::vector<char>> map, i
 
 std::vector<std::vector<char>> check(std::vector<std::vector<char>> map, int nb, int size)
 {
-    for (int i = 0; i != map[nb].size(); i++) {
+    for (size_t i = 0; i != map[nb].size(); i++) {
         if (map[nb][i] == 'H' && map[nb][i-1] == 'X' && map[nb-1][i] == ' ')
             map = setup_door(map, nb, i, size);
         if (map[nb][i] == 'H' && map[nb-1][i] == 'X' && map[nb][i-1] == ' ')
@@ -413,13 +412,11 @@ std::vector<std::vector<char>> check(std::vector<std::vector<char>> map, int nb,
 
 std::vector<std::vector<char>> change_door(std::vector<std::vector<char>> map, int size)
 {
-    int a = 0;
-
-    for (int i = 0; i != map.size(); i++) {
+    for (size_t i = 0; i != map.size(); i++) {
         map = check(map, i, size);
     }
-    for (int i = 0; i != map.size(); i++)
-        for (int o = 0; o != map[i].size() != '\0'; o++)
+    for (size_t i = 0; i != map.size(); i++)
+        for (size_t o = 0; o != map[i].size() && o != '\0'; o++)
             if (map[i][o] == 'H')
                 map[i][o] = 'X';
     return (map);

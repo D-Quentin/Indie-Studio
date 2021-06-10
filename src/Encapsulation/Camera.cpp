@@ -37,8 +37,8 @@ rl::Camera::Camera(RAYLIB::Vector3 pos, RAYLIB::CameraMode mode)
 
 RAYLIB::Vector2 axToMouse(std::pair<float, float> ax)
 {
-    static double x = RAYLIB::GetMousePosition().x;
-    static double y = RAYLIB::GetMousePosition().y;
+    static float x = RAYLIB::GetMousePosition().x;
+    static float y = RAYLIB::GetMousePosition().y;
 
     x += ax.first;
     y += ax.second;
@@ -66,7 +66,8 @@ void rl::Camera::__freeUpdateCamera(std::pair<float, float> pos, std::pair<float
 {
     this->setPosition({pos.first - 5, 5, pos.second});
     this->setTarget({pos.first, 0.25, pos.second});
-    auto tar = this->getTarget();
+    (void)false_rota;
+    // auto tar = this->getTarget();
 }
 
 void rl::Camera::__fpUpdateCamera(std::pair<float, float> gmpAxisLeft, std::pair<float, float> gmpAxisRight)
@@ -82,7 +83,7 @@ void rl::Camera::__fpUpdateCamera(std::pair<float, float> gmpAxisLeft, std::pair
             forward.y = 0;
             forward = Vector3Normalize(forward);
             RAYLIB::Vector3 right = {forward.z * -1.0f, 0, forward.x};
-            RAYLIB::Vector3 oldPosition = this->getPosition();
+            // RAYLIB::Vector3 oldPosition = this->getPosition();
 
             this->setPosition(Vector3Add(this->getPosition(), Vector3Scale(forward, gmpAxisLeft.second * -1 * RAYLIB::GetFrameTime() * 5))); // 0.0075f is the speed bride
             this->setPosition(Vector3Add(this->getPosition(), Vector3Scale(right, gmpAxisLeft.first * RAYLIB::GetFrameTime() * 5)));
