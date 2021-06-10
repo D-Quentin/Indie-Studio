@@ -7,7 +7,7 @@
 
 #include "Text.hpp"
 
-rl::Text::Text(std::string str, int posx, int posy, int font_size, RAYLIB::Color color) : _text(str), _posx(posx), _posy(posy), _font_size(font_size), _color(color)
+rl::Text::Text(std::string str, float posx, float posy, float font_size, RAYLIB::Color color) : _text(str), _posx((int)(posx * RAYLIB::GetScreenWidth()) / 100), _posy((int)(posy * RAYLIB::GetScreenHeight()) / 100), _font_size((int)(font_size * RAYLIB::GetScreenWidth()) / 1000), _color(color)
 {
 }
 

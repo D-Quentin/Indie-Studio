@@ -22,32 +22,32 @@ GamePhase Menu::launch(Server *server)
     this->_phase = Menu::MainPhase;
 
     // MainPhase
-    this->_bPlay = Button(WIN_WIDTH / 2 - 300, 150, 600, 200);
-    this->_bQuit = Button(WIN_WIDTH / 2 - 300, 550, 600, 200);
-    this->_tPlay = rl::Text("Play", WIN_WIDTH / 2 - 150, 170, 150, RAYLIB::LIGHTGRAY);
-    this->_tQuit = rl::Text("Quit", WIN_WIDTH / 2 - 150, 570, 150, RAYLIB::LIGHTGRAY);
+    this->_bPlay = Button(34, 15, 32, 18);
+    this->_bQuit = Button(34, 55, 32, 18);
+    this->_tPlay = rl::Text("Play", 43, 17, 70, RAYLIB::LIGHTGRAY);
+    this->_tQuit = rl::Text("Quit", 43, 57, 70, RAYLIB::LIGHTGRAY);
 
     // PlayPhase
-    this->_bJoinGame = Button(WIN_WIDTH / 2 - 450, 150, 900, 200);
-    this->_bCreateGame = Button(WIN_WIDTH / 2 - 450, 550, 900, 200);
-    this->_tJoinGame = rl::Text("JoinGame", WIN_WIDTH / 2 - 350, 170, 150, RAYLIB::LIGHTGRAY);
-    this->_tCreateGame = rl::Text("CreateGame", WIN_WIDTH / 2 - 350, 570, 150, RAYLIB::LIGHTGRAY);
+    this->_bJoinGame = Button(26.5, 15, 47, 18);
+    this->_bCreateGame = Button(26.5, 55, 47, 18);
+    this->_tJoinGame = rl::Text("JoinGame", 42, 17, 70, RAYLIB::LIGHTGRAY);
+    this->_tCreateGame = rl::Text("CreateGame", 42, 57, 70, RAYLIB::LIGHTGRAY);
 
     // JoinPhase
-    this->_iIp = InputButton(150, 650, 950, 120, 16);
-    this->_iPort = InputButton(1400, 650, 300, 120, 5);
-    this->_iYourName = InputButton(WIN_WIDTH / 2 - 475, 200, 950, 120, 16);
-    this->_tYourName = rl::Text("YourName", WIN_WIDTH / 2 - 350, 50, 150, RAYLIB::LIGHTGRAY);
-    this->_tIp = rl::Text("Ip", 600, 500, 150, RAYLIB::LIGHTGRAY);
-    this->_tPort = rl::Text("Port", 1450, 500, 150, RAYLIB::LIGHTGRAY);
-    this->_bJoin = Button(WIN_WIDTH / 2 - 300, 850, 600, 200);
-    this->_tJoin = rl::Text("Join", WIN_WIDTH / 2 - 150, 870, 150, RAYLIB::LIGHTGRAY);
+    this->_iIp = InputButton(8, 60, 50, 11, 16);
+    this->_iPort = InputButton(72, 60, 15, 11, 5);
+    this->_iYourName = InputButton(25, 18, 50, 11, 16);
+    this->_tYourName = rl::Text("YourName", 41, 5, 70, RAYLIB::LIGHTGRAY);
+    this->_tIp = rl::Text("Ip", 31, 46, 70, RAYLIB::LIGHTGRAY);
+    this->_tPort = rl::Text("Port", 75, 46, 70, RAYLIB::LIGHTGRAY);
+    this->_bJoin = Button(35, 79, 31, 18);
+    this->_tJoin = rl::Text("Join", 42, 80, 70, RAYLIB::LIGHTGRAY);
 
     // CreatePhase
-    this->_iServPort = InputButton(WIN_WIDTH / 2 - 150, 400, 300, 120, 5);
-    this->_tServPort = rl::Text("Port of your server", WIN_WIDTH / 2 - 500, 280, 100, RAYLIB::LIGHTGRAY);
-    this->_bCreate = Button(WIN_WIDTH / 2 - 300, 850, 600, 200);
-    this->_tCreate = rl::Text("Create", WIN_WIDTH / 2 - 300, 870, 150, RAYLIB::LIGHTGRAY);
+    this->_iServPort = InputButton(42, 37, 15, 11, 5);
+    this->_tServPort = rl::Text("Port of your server", 24, 26, 55, RAYLIB::LIGHTGRAY);
+    this->_bCreate = Button(35, 79, 31, 18);
+    this->_tCreate = rl::Text("Create", 35, 80, 70, RAYLIB::LIGHTGRAY);
 
     return (this->restart(server));
 }

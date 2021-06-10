@@ -18,7 +18,4 @@ namespace RAYLIB {
 
 // using color = std::tuple<int,int,int,int>;
 
-#define WIN_HEIGHT 1080
-#define WIN_WIDTH 1920
-
 #endif /* !RAYLIB_ENCAPSULATION_HPP_ */

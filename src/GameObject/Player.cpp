@@ -50,8 +50,7 @@ void Player::update(std::pair<float, float> move, std::pair<float, float> rota)
     }
     RAYLIB::Vector2 toSet = {pos.x + move.first * speed, pos.y + move.second * speed };
     this->_pos = toSet;
-    std::cout << pos.y << std::endl;
-    
+
     if (rota.second == 0)
         rota.second = oldMousePos - mousePos;;
     _rota += rota.second;

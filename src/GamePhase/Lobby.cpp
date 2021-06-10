@@ -23,9 +23,9 @@ GamePhase Lobby::launch(Client *&client, std::string ip, std::string port)
 {
     this->_phase = JoinPhase;
 
-    this->_bReady = Button(WIN_WIDTH / 2 - 300, 550, 600, 200);
-    this->_tReady = rl::Text(""/*"Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player))*/, WIN_WIDTH / 2 - 150, 170, 150, RAYLIB::LIGHTGRAY);
-    this->_tLoading = rl::Text("Loading ...", 50, 1000, 60, RAYLIB::LIGHTGRAY);
+    this->_bReady = Button(35, 50, 31, 18);
+    this->_tReady = rl::Text(""/*"Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player))*/, 42, 9, 70, RAYLIB::LIGHTGRAY);
+    this->_tLoading = rl::Text("Loading ...", 5, 92, 40, RAYLIB::LIGHTGRAY);
 
     return (this->restart(client, ip, port));
 }

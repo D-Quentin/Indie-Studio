@@ -7,12 +7,15 @@
 
 #include "Button.hpp"
 
-Button::Button(int posx, int posy, int width, int height)
+Button::Button(float posx, float posy, float width, float height)
 {
-    this->_posx = posx;
-    this->_posy = posy;
-    this->_height = height;
-    this->_width = width;
+    int WIN_HEIGHT = RAYLIB::GetScreenHeight();
+    int WIN_WIDTH = RAYLIB::GetScreenWidth();
+
+    this->_posx = (int)(posx * WIN_WIDTH) / 100;
+    this->_posy = (int)(posy * WIN_HEIGHT) / 100;
+    this->_height = (int)(height * WIN_HEIGHT) / 100;
+    this->_width = (int)(width * WIN_WIDTH) / 100;
 }
 
 Button::~Button()

@@ -11,6 +11,8 @@ include_directories(include)
 include_directories(include/Encapsulation)
 include_directories(include/GameObject)
 include_directories(include/Server)
+include_directories(include/GamePhase)
+include_directories(include/GameInterface)
 LINK_DIRECTORIES(boost_1_76_0/stage/lib)
 
 file(
