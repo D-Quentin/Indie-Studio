@@ -22,7 +22,7 @@ GamePlay::GamePlay()
     _player = Player();
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
-    RAYLIB::ShowCursor();
+    // RAYLIB::ShowCursor();
     this->_weapon = new Pistol(pos);
     Pistol(pos).update({0, 0}, 0);
 }
@@ -48,7 +48,7 @@ GamePhase GamePlay::launch()
 
 GamePhase GamePlay::restart()
 {
-    RAYLIB::HideCursor();
+    // RAYLIB::HideCursor();
     while (!RAYLIB::WindowShouldClose()) {
     //updtae attrib from server
         this->handleCamera();
@@ -62,7 +62,7 @@ GamePhase GamePlay::restart()
         RAYLIB::EndDrawing();
         RAYLIB::ClearBackground({255, 255, 255, 255});
     }
-    RAYLIB::ShowCursor();
+    // RAYLIB::ShowCursor();
     return MenuPhase;
 }
 
@@ -94,7 +94,8 @@ void GamePlay::drawAll()
     _weapon->update(_player.getPos(), _player._rota);
     _weapon->draw();
 
-    this->_player.update();
+    this->_player.move();
+    this->_player.rotate();
     this->_player.draw(); // draw self
     // draw all lists
     auto campos = ACTIVE_CAMERA.getPosition();

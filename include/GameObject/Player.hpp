@@ -17,9 +17,9 @@ class Player : public EntityObjects {
         ~Player() = default;
         void draw();
         void move();
+        void rotate();
         void setPos(RAYLIB::Vector2 pos);
         void setPos(RAYLIB::Vector3 pos);
-        void update(std::pair<float, float> gmpAxisLeft = {0, 0}, std::pair<float, float> gmpAxisRight = {0.0f, 0.0f});
         void gest(Client *&client);
         std::string serialize();
         void deserialize(std::string);
