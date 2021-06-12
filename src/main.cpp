@@ -39,7 +39,7 @@ int main(int ac, char **av)
     rl::Window win(WIN_WIDTH, WIN_HEIGHT, "Indie Studio");
     Game game;
 
-    //win.fullscreen();
+    win.fullscreen();
     game.launch(win);
     win.destroy();
     return 0;

@@ -30,6 +30,12 @@ class Lobby {
         GamePhase mainPhase(GamePhase, Client *&);
         GamePhase joinPhase(GamePhase, Client *&, std::string, std::string);
 
+        size_t getMe(void);
+        int getReadyPlayer(void);
+        int getPlayer(void);
+        void setReadyPlayer(int);
+        void setPlayer(int);
+
     protected:
     private:
         Phase _phase;
@@ -40,10 +46,11 @@ class Lobby {
         size_t _me;
         rl::Camera _TopCamera;
         int _renderDistance = 40;
+        bool _host;
+        bool _ready;
 
         Button _bReady;
         rl::Text _tReady;
-        rl::Text _tLoading;
 };
 
 #endif /* !LOBBY_HPP_ */

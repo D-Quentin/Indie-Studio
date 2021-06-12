@@ -9,6 +9,7 @@
 #include "Game.hpp"
 #include <boost/algorithm/string.hpp>
 #include "Player.hpp"
+#include "Lobby.hpp"
 
 GameObject::GameObject(RAYLIB::Vector2 pos, int id) : _pos(pos), _id(id)
 {
@@ -36,7 +37,7 @@ void GameObject::setId(int id)
 }
 
 // TYPE;ID:id;X:x;Y:y\n
-void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Client *&client, int me)
+void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Client *&client, Lobby &lobby)
 {
     size_t id = 0;
     size_t pos = 0;
@@ -45,8 +46,11 @@ void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Cli
     boost::split(strs, str, boost::is_any_of("\n"));
     for (size_t i = 0; i != strs.size(); i++) {
         if (strs[i].find(INCOMMING_CONNECTION) != std::string::npos && obj.size() != 0) {
-            client->send(obj[me]->serialize());
+            client->send(obj[lobby.getMe()]->serialize());
+            lobby.setPlayer(lobby.getPlayer() + 1);
         }
+        if (strs[i].find("READY;") != std::string::npos)
+            lobby.setReadyPlayer(lobby.getReadyPlayer() + 1);
         pos = strs[i].find("ID:");
         if (pos == std::string::npos)
             continue;
@@ -54,7 +58,7 @@ void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Cli
         if (id < obj.size())
             obj.at(id)->deserialize(strs[i]);
         else {
-            if (strs[i].find("PLAYER") != std::string::npos) {
+            if (strs[i].find("PLAYER;") != std::string::npos) {
                 obj.insert(std::pair<int, GameObject *>(obj.size(), new Player({0, 0}, -1, false)));
                 obj.at(obj.size() - 1)->deserialize(strs[i]);
             }
