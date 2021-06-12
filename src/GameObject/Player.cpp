@@ -32,9 +32,9 @@ void Player::draw()
 
 void Player::update(std::pair<float, float> move, std::pair<float, float> rota)
 {
-    if (!RAYLIB::IsKeyDown(RAYLIB::KEY_W) && !RAYLIB::IsKeyDown(RAYLIB::KEY_S) &&
-    !RAYLIB::IsKeyDown(RAYLIB::KEY_D) && !RAYLIB::IsKeyDown(RAYLIB::KEY_A))
-        return;
+    // if (!RAYLIB::IsKeyDown(RAYLIB::KEY_W) && !RAYLIB::IsKeyDown(RAYLIB::KEY_S) &&
+    // !RAYLIB::IsKeyDown(RAYLIB::KEY_D) && !RAYLIB::IsKeyDown(RAYLIB::KEY_A))
+    //     return;
     static float oldMousePos = RAYLIB::GetMousePosition().x;
     float mousePos = RAYLIB::GetMousePosition().x;
     float speed = 5;
@@ -54,6 +54,7 @@ void Player::update(std::pair<float, float> move, std::pair<float, float> rota)
     if (rota.second == 0)
         rota.second = oldMousePos - mousePos;;
     _rota += rota.second;
+    _rota = (int) _rota % 360;
     oldMousePos = mousePos;
     this->_change = true;
 }

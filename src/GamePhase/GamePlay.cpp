@@ -23,6 +23,8 @@ GamePlay::GamePlay()
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
     RAYLIB::ShowCursor();
+    this->_weapon = new Pistol(pos);
+    Pistol(pos).update({0, 0}, 0);
 }
 
 GamePhase GamePlay::launch()
@@ -89,6 +91,9 @@ void GamePlay::handleCamera()
 void GamePlay::drawAll()
 {
     // auto oldpos = this->_player.getPos();
+    _weapon->update(_player.getPos(), _player._rota);
+    _weapon->draw();
+
     this->_player.update();
     this->_player.draw(); // draw self
     // draw all lists

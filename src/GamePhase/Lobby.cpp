@@ -8,6 +8,7 @@
 #include "Lobby.hpp"
 #include <string>
 #include "Server.hpp"
+#include "Encapsulation/Text.hpp"
 
 Lobby::Lobby()
 {
@@ -52,6 +53,7 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
 {
         GameObject::gestData(this->_obj, this->_client->read(), this->_client, this->_me);
         ((Player *)this->_obj[this->_me])->gest(client);
+        rl::Text(std::to_string(((Player *)this->_obj[this->_me])->_rota), 10, 10, 15, {255, 0, 0, 255}).draw();
         
         RAYLIB::BeginMode3D(this->_TopCamera.getCamera());
         auto pos = ((Player *)this->_obj[this->_me])->getPos();
@@ -61,9 +63,9 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
         for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
             it->second->draw();
         }
-        
         RAYLIB::DrawGrid(1000, 10);
         RAYLIB::EndMode3D();
+
     return (gamePhase);
 }
 

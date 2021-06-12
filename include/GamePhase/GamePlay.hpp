@@ -21,6 +21,7 @@
 #include "Encapsulation/Camera.hpp"
 #include "Encapsulation/Gamepad.hpp"
 #include "Encapsulation/Window.hpp"
+#include "Weapon.hpp"
 
 class GamePlay{
     public:
@@ -47,7 +48,7 @@ class GamePlay{
         std::list<EntityObjects*> _enemies;
         std::list<game_object::Item*> _items;
         int _renderDistance = 40;
-        //weapon
+        Weapon *_weapon;
         //power-up
         //server
         rl::Camera _FPCamera;
