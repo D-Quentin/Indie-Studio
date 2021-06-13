@@ -11,22 +11,27 @@
 #include "Item.hpp"
 #include "include.hpp"
 #include "Model.hpp"
+#include "Encapsulation/Text.hpp"
 
 class Bullet : public game_object::Item
 {
     public :
-        Bullet(RAYLIB::Vector3 pos, float rota) {};
+        Bullet(RAYLIB::Vector3 pos, float rota,rl::Models);
+        Bullet();
         ~Bullet() = default;
 
-        void update() {};
-        void draw() {};
+        void update();
+        void draw();
 
         std::string serialize() {return std::string("");};
         void deserialize(std::string) {};
 
+        bool isReal = true;
     private :
         RAYLIB::Vector3 _pos;
+        float _a;
         float _rota;
+        rl::Models _model;
 };
 
 class Weapon : public game_object::Item
@@ -48,6 +53,8 @@ class Weapon : public game_object::Item
         float _rota;
         bool _wear = true;
         unsigned short _nbBullet;
+        rl::Models _model;
+
 };
 
 class Pistol : public Weapon
@@ -61,7 +68,6 @@ class Pistol : public Weapon
 
         void draw();
     private:
-        rl::Models _model;
 };
 
 #endif /* !WEAPON_HPP_ */

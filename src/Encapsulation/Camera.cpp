@@ -64,10 +64,9 @@ void rl::Camera::updateCamera(std::pair<float, float> gmpAxisLeft, std::pair<flo
 
 void rl::Camera::__freeUpdateCamera(std::pair<float, float> pos, std::pair<float, float> false_rota)
 {
-    this->setPosition({pos.first - 5, 5, pos.second});
-    this->setTarget({pos.first, 0.25, pos.second});
+    this->setPosition({pos.first - 0.01f, 10, pos.second});
+    this->setTarget({pos.first, 0, pos.second});
     (void)false_rota;
-    // auto tar = this->getTarget();
 }
 
 void rl::Camera::__fpUpdateCamera(std::pair<float, float> gmpAxisLeft, std::pair<float, float> gmpAxisRight)

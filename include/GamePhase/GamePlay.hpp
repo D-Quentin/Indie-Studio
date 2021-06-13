@@ -21,6 +21,7 @@
 #include "Encapsulation/Camera.hpp"
 #include "Encapsulation/Gamepad.hpp"
 #include "Encapsulation/Window.hpp"
+#include "Encapsulation/Text.hpp"
 #include "Weapon.hpp"
 
 class GamePlay{
@@ -37,7 +38,7 @@ class GamePlay{
         void setEnemies(std::list<EntityObjects*> obj) {_enemies = obj;};
         void setItems(std::list<game_object::Item*> obj) {_items = obj;};
         void nonToPoi(std::list<MapBlock>);
-        void handleCamera();
+        void updateLocal();
 
         //other methods
         void drawAll();
