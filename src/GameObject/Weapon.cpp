@@ -10,16 +10,19 @@
 
 std::pair<float, float> pointInACircle(float angle, float radius)
 {
-    float x = radius * std::cos(angle);
-    float y = radius * std::sin(angle);
+
+    angle *= PI;
+
+    float x = radius * std::cos(angle / 180);
+    float y = radius * std::sin(angle / 180);
 
     return {x, y};
 }
 
 float coefDirector(std::pair<float, float> origine, std::pair<float, float> nextPoint)
 {
-    float x = nextPoint.first - origine.first;
-    float y = nextPoint.second - origine.second;
+    float x = nextPoint.first + origine.first;
+    float y = nextPoint.second + origine.second;
 
     return y / x;
 }
