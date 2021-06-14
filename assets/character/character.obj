@@ -1,6 +1,6 @@
 # Blender v2.93.0 OBJ File: 'untitled.blend'
 # www.blender.org
-mtllib untitled.mtl
+mtllib character.mtl
 o Player_Cube.003
 v -0.000175 0.012606 -0.006911
 v -0.000175 0.012423 -0.004821

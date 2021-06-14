@@ -13,10 +13,12 @@
 #include "Model.hpp"
 #include "Encapsulation/Text.hpp"
 
+// static auto bulletModel = rl::Models("assets/weapons/Bullet/Bullet.obj");
+
 class Bullet : public game_object::Item
 {
     public :
-        Bullet(RAYLIB::Vector3 pos, float rota,rl::Models);
+        Bullet(RAYLIB::Vector3 pos, float rota);
         Bullet();
         ~Bullet() = default;
 

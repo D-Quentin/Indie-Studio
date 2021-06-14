@@ -32,9 +32,9 @@ Bullet::Bullet()
     isReal = false;
 }
 
-Bullet::Bullet(RAYLIB::Vector3 pos, float rota, rl::Models model)
+Bullet::Bullet(RAYLIB::Vector3 pos, float rota)
 {
-    _model = model;
+    // _model = ;
     _pos = pos;
     _rota = rota - 90;
     _a = coefDirector({this->_pos.x, this->_pos.z}, pointInACircle(this->_rota, 1));
@@ -64,7 +64,7 @@ Bullet Weapon::shoot()
         return Bullet();
     this->_nbBullet -= 1;
 
-    return Bullet(this->_pos, this->_rota, this->_model);
+    return Bullet(this->_pos, this->_rota);
 }
 
 void Weapon::update(RAYLIB::Vector2 pos, float rota)
@@ -108,12 +108,10 @@ void Weapon::deserialize(std::string str)
 
 Pistol::Pistol(RAYLIB::Vector2 pos)
 {
-    std::string path("/home/THE/texture/");
+    std::string path("Spas\ 12/");
     float size = 0.1;
-    auto mesh = RAYLIB::GenMeshCube(size, size, size);
-    auto texture = RAYLIB::LoadTexture(std::string(path + "texture_minecraft_stone.png").c_str());
 
-    _model = rl::Models(mesh, texture);
+    _model = rl::Models(std::string(path + "Spas\ 12.obj"));
     this->_nbBullet = 21;
     this->_pos = {pos.x, size, pos.y};
     this->_time_shoot = 0.2f;
@@ -123,8 +121,9 @@ Pistol::Pistol(RAYLIB::Vector2 pos)
 
 void Pistol::draw()
 {
-    RAYLIB::Vector3 vScale = { 1, 1, 1 };
+    float scale = 0.1;
+    RAYLIB::Vector3 vScale = { scale, scale, scale };
     RAYLIB::Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f };
 
-    RAYLIB::DrawModelEx(_model._model, _pos, rotationAxis, _rota, vScale, RAYLIB::GREEN);
+    RAYLIB::DrawModelEx(_model._model, _pos, rotationAxis, _rota, vScale, RAYLIB::RED);
 }
