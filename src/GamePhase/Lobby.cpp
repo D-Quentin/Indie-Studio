@@ -9,6 +9,11 @@
 #include <string>
 #include "Server.hpp"
 #include "Encapsulation/Text.hpp"
+#if defined(_WIN32)
+    #include <windows.h>
+#else
+    #include <stdlib.h>
+#endif
 
 Lobby::Lobby()
 {
@@ -114,7 +119,11 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     this->_client->launch();
     this->_client->send(INCOMMING_CONNECTION);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    #if defined(_WIN32)
+        Sleep(1);
+    #else
+        sleep(1);
+    #endif
     std::string str = client->read();
     if (str == "") { // GESTION ERREUR
         std::cout << "First connexion time out" << std::endl;
@@ -123,7 +132,11 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     GameObject::gestData(this->_obj, str, client, *this);
 
     std::cout << "Get Info Start" << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    #if defined(_WIN32)
+        Sleep(1);
+    #else
+        sleep(1);
+    #endif
     str = client->read();
     GameObject::gestData(this->_obj, str, client, *this);
     std::cout << "Get Info End" << std::endl;
@@ -132,7 +145,11 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
         this->_host = true;
 
     client->send("PLAYER;ID:" + std::to_string(this->_me) + ";X:500;Y:500;\n");
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    #if defined(_WIN32)
+        Sleep(1);
+    #else
+        sleep(1);
+    #endif
     str = client->read();
     if (str == "") { // GESTION ERREUR
         std::cout << "Getting info time out" << std::endl;
