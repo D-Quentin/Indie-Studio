@@ -36,14 +36,21 @@ Bullet::Bullet(RAYLIB::Vector3 pos, float rota, rl::Models model)
 {
     _model = model;
     _pos = pos;
-    _rota = rota;
+    _rota = rota - 90;
     _a = coefDirector({this->_pos.x, this->_pos.z}, pointInACircle(this->_rota, 1));
+    float y = _a * 2;
+    float total = y + 2;
+    _x_ref = 2 * 100 / total;
+    _y_ref = _x_ref - 100;
 }
 
 void Bullet::update()
 {
-    this->_pos.x += (0.2 * RAYLIB::GetFrameTime());
-    this->_pos.z = this->_a * this->_pos.x;
+    float bullet_speed = 0.7;
+
+    auto pt = pointInACircle(this->_rota, (bullet_speed * RAYLIB::GetFrameTime()));
+    this->_pos.x += pt.first;
+    this->_pos.z -= pt.second;
 }
 
 void Bullet::draw()
@@ -57,7 +64,6 @@ Bullet Weapon::shoot()
         return Bullet();
     this->_nbBullet -= 1;
 
-    std::cout << "shoot" << std::endl;
     return Bullet(this->_pos, this->_rota, this->_model);
 }
 
@@ -71,7 +77,36 @@ void Weapon::update(RAYLIB::Vector2 pos, float rota)
     this->_pos.z = pos.y + circlePos.second;
 }
 
-Pistol::Pistol(RAYLIB::Vector2 pos, unsigned short nbBullet)
+std::string Weapon::serialize()
+{
+    std::string result = "###WEAPON:" + _type + "####\n";
+
+    result += "###POSITION:X:" + std::to_string(_pos.x) + ";Y:" + std::to_string(_pos.y) + ";Z:" + std::to_string(_pos.z) + "####\n";
+
+    return result;
+}
+
+void Weapon::deserialize(std::string str)
+{
+    std::string tmp;
+    std::size_t id;
+
+    while ((id = str.find("\n")) != std::string::npos) {
+        tmp = str.substr(0, id);
+        str.erase(0, id + 1);
+        if (tmp.find("WEAPON:"))
+            _type = tmp.substr(tmp.find(":") + 1, tmp.find("####"));
+        else if (tmp.find("POSITION:")) {
+            _pos.x = std::atof(tmp.substr(tmp.find("X:") + 2, tmp.find(";Y")).c_str());
+            _pos.y = std::atof(tmp.substr(tmp.find("Y:") + 2, tmp.find(";Z")).c_str());
+            _pos.z = std::atof(tmp.substr(tmp.find("Z:") + 2, tmp.find("####")).c_str());
+        }
+    }
+    if (_type == "pistol")
+        *this = Pistol({_pos.x, _pos.z});
+}
+
+Pistol::Pistol(RAYLIB::Vector2 pos)
 {
     std::string path("/home/THE/texture/");
     float size = 0.1;
@@ -79,8 +114,11 @@ Pistol::Pistol(RAYLIB::Vector2 pos, unsigned short nbBullet)
     auto texture = RAYLIB::LoadTexture(std::string(path + "texture_minecraft_stone.png").c_str());
 
     _model = rl::Models(mesh, texture);
-    this->_nbBullet = nbBullet;
+    this->_nbBullet = 21;
     this->_pos = {pos.x, size, pos.y};
+    this->_time_shoot = 0.2f;
+    this->_bullet_speed = 0.7f;
+    _type = "pistol";
 }
 
 void Pistol::draw()
