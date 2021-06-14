@@ -71,5 +71,7 @@ void Game::launch(rl::Window win)
         }
         RAYLIB::EndDrawing();
     }
+    if (lobby.second.isHost())
+        this->_client->send(CLOSING_SERVER);
     std::cout << "Quiting" << std::endl;
 }

@@ -81,8 +81,12 @@ void Server::sendTo(SEND send, std::string message)
 
 void Server::handleCommand(std::string line)
 {
-    // if (line.find(INCOMMING_CONNECTION) != std::string::npos)
-    sendTo(ALL, line);
+    if (line == CLOSING_SERVER) {
+        sendTo(ALL, CLOSING_CONNECTION);
+        std::exit(0);
+    }
+    else
+        sendTo(ALL, line);
 }
 
 void Server::launch(int port)
