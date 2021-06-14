@@ -89,7 +89,7 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
     if (this->_bPlay.isClicked()) {
         this->_phase = Menu::PlayPhase;
     }
-    RAYLIB::DrawTexture(this->_tbackground, 0, 0, RAYLIB::WHITE);
+    RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     this->_bPlay.isHover();
     this->_bSettings.isHover();
     this->_bHtp.isHover();
