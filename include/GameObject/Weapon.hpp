@@ -49,27 +49,29 @@ class Weapon : public game_object::Item
         void take() {_wear = true;};
         void drop() {_wear = false;};
         void update(RAYLIB::Vector2 pos, float rota);
+        std::string serialize();
+        void deserialize(std::string);
 
     protected:
         RAYLIB::Vector3 _pos;
+        unsigned short _nbBullet;
+        float _time_shoot;
+        float _bullet_speed;
+        std::string _type;
         float _rota;
         bool _wear = true;
-        unsigned short _nbBullet;
         rl::Models _model;
-
 };
 
 class Pistol : public Weapon
 {
     public :
-        Pistol(RAYLIB::Vector2 pos, unsigned short nbBullet = 21);
+        Pistol(RAYLIB::Vector2 pos);
         ~Pistol() = default;
-
-        std::string serialize() {return std::string("");};
-        void deserialize(std::string) {};
 
         void draw();
     private:
 };
+
 
 #endif /* !WEAPON_HPP_ */
