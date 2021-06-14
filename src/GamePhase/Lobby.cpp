@@ -114,7 +114,7 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     this->_client->launch();
     this->_client->send(INCOMMING_CONNECTION);
 
-    sleep(1);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     std::string str = client->read();
     if (str == "") { // GESTION ERREUR
         std::cout << "First connexion time out" << std::endl;
@@ -123,7 +123,7 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     GameObject::gestData(this->_obj, str, client, *this);
 
     std::cout << "Get Info Start" << std::endl;
-    sleep(1);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     str = client->read();
     GameObject::gestData(this->_obj, str, client, *this);
     std::cout << "Get Info End" << std::endl;
@@ -132,7 +132,7 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
         this->_host = true;
 
     client->send("PLAYER;ID:" + std::to_string(this->_me) + ";X:500;Y:500;\n");
-    sleep(1);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     str = client->read();
     if (str == "") { // GESTION ERREUR
         std::cout << "Getting info time out" << std::endl;

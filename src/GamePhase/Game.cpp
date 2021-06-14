@@ -9,6 +9,7 @@
 #include "Menu.hpp"
 #include "Lobby.hpp"
 #include "GamePlay.hpp"
+#include "Play.hpp"
 
 
 Game::Game()
@@ -25,6 +26,7 @@ void Game::launch(rl::Window win)
     std::pair<bool, Menu> menu = {false, Menu()};
     std::pair<bool, Lobby> lobby = {false, Lobby()};
     std::pair<bool, GamePlay> gameplay = {false, GamePlay()};
+    std::pair<bool, Play> play = {false, Play()};
 
     while (statut != QuitPhase && win.loop()) {
         RAYLIB::BeginDrawing();
@@ -55,6 +57,15 @@ void Game::launch(rl::Window win)
                 statut = gameplay.second.launch();
                 gameplay.first = true;
             }
+            break;
+        case PlayPhase:
+            if (play.first)
+                statut = play.second.restart(this->_client, lobby.second);
+            else {
+                statut = play.second.launch(this->_client, lobby.second);
+                play.first = true;
+            }
+            break;
         default:
             break;
         }
