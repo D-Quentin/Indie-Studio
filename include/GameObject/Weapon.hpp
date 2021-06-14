@@ -29,8 +29,10 @@ class Bullet : public game_object::Item
         bool isReal = true;
     private :
         RAYLIB::Vector3 _pos;
-        float _a;
+        float _x_ref;
+        float _y_ref;
         float _rota;
+        float _a;
         rl::Models _model;
 };
 

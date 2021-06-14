@@ -10,16 +10,19 @@
 
 std::pair<float, float> pointInACircle(float angle, float radius)
 {
-    float x = radius * std::cos(angle);
-    float y = radius * std::sin(angle);
+
+    angle *= PI;
+
+    float x = radius * std::cos(angle / 180);
+    float y = radius * std::sin(angle / 180);
 
     return {x, y};
 }
 
 float coefDirector(std::pair<float, float> origine, std::pair<float, float> nextPoint)
 {
-    float x = nextPoint.first - origine.first;
-    float y = nextPoint.second - origine.second;
+    float x = nextPoint.first + origine.first;
+    float y = nextPoint.second + origine.second;
 
     return y / x;
 }
@@ -35,12 +38,21 @@ Bullet::Bullet(RAYLIB::Vector3 pos, float rota, rl::Models model)
     _pos = pos;
     _rota = rota;
     _a = coefDirector({this->_pos.x, this->_pos.z}, pointInACircle(this->_rota, 1));
+    float y = _a * 2;
+    float total = y + 2;
+    _x_ref = 2 * 100 / total;
+    _y_ref = _x_ref - 100;
 }
 
 void Bullet::update()
 {
-    this->_pos.x += (0.2 * RAYLIB::GetFrameTime());
-    this->_pos.z = this->_a * this->_pos.x;
+//     float bullet_speed = 0.2;
+
+//     this->_pos.x += (((_x_ref / 10) * bullet_speed) * RAYLIB::GetFrameTime());
+//     this->_pos.z += (((_y_ref / 10) * bullet_speed) * RAYLIB::GetFrameTime());
+    auto pt = pointInACircle(this->_a, (0.2 * RAYLIB::GetFrameTime()));
+    this->_pos.x += pt.first;
+    this->_pos.z += pt.second;
 }
 
 void Bullet::draw()
@@ -50,8 +62,8 @@ void Bullet::draw()
 
 Bullet Weapon::shoot()
 {
-    if (!this->_wear || !this->_nbBullet)
-        return Bullet();
+    // if (!this->_wear || !this->_nbBullet)
+    //     return Bullet();
     this->_nbBullet -= 1;
 
     std::cout << "shoot" << std::endl;
