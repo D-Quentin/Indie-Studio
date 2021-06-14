@@ -34,9 +34,9 @@ void Game::launch(rl::Window win)
         switch (statut) {
         case MenuPhase:
             if (menu.first)
-                statut = menu.second.restart(this->_server);
+                statut = menu.second.restart();
             else {
-                statut = menu.second.launch(this->_server);
+                statut = menu.second.launch();
                 menu.first = true;
             }
             break;

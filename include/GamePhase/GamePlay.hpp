@@ -21,6 +21,8 @@
 #include "Encapsulation/Camera.hpp"
 #include "Encapsulation/Gamepad.hpp"
 #include "Encapsulation/Window.hpp"
+#include "Encapsulation/Text.hpp"
+#include "Weapon.hpp"
 
 class GamePlay{
     public:
@@ -36,7 +38,7 @@ class GamePlay{
         void setEnemies(std::list<EntityObjects*> obj) {_enemies = obj;};
         void setItems(std::list<game_object::Item*> obj) {_items = obj;};
         void nonToPoi(std::list<MapBlock>);
-        void handleCamera();
+        void updateLocal();
 
         //other methods
         void drawAll();
@@ -47,7 +49,7 @@ class GamePlay{
         std::list<EntityObjects*> _enemies;
         std::list<game_object::Item*> _items;
         int _renderDistance = 40;
-        //weapon
+        Weapon *_weapon;
         //power-up
         //server
         rl::Camera _FPCamera;

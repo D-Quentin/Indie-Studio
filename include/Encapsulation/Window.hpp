@@ -27,6 +27,7 @@ namespace rl {
             bool loop(void);
             void clear(RAYLIB::Color = RAYLIB::BLACK);
             void destroy(void);
+            static void loading(void);
 
             // Getters & setters
             void setFps(const int = 60);

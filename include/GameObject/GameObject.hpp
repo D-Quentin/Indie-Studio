@@ -12,6 +12,8 @@
 #include "Client.hpp"
 #include <map>
 
+class Lobby;
+
 class GameObject : public IGameObject {
     public:
         GameObject(RAYLIB::Vector2 = {0, 0}, int = -1);
@@ -21,7 +23,7 @@ class GameObject : public IGameObject {
         int getId();
         void setPos(RAYLIB::Vector2);
         void setId(int);
-        static void gestData(std::map<int, GameObject *> &, std::string, Client *&, int);
+        static void gestData(std::map<int, GameObject *> &, std::string, Client *&, Lobby &);
 
     protected:
         RAYLIB::Vector2 _pos;

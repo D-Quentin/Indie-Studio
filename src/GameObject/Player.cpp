@@ -8,6 +8,13 @@
 #include "Player.hpp"
 #include <string>
 
+float Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2)
+{
+    float result = atan2f(v2.y - v1.y, v2.x - v1.x)*(180.0f/PI);
+    if (result < 0) result += 360.0f;
+    return result;
+}
+
 Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
 {
     std::string path("/home/THE/texture/");
@@ -30,15 +37,36 @@ void Player::draw()
     RAYLIB::DrawModelEx(_model._model, {pos.x, 0, pos.y}, rotationAxis, _rota, vScale, RAYLIB::BLUE);
 }
 
-void Player::update(std::pair<float, float> move, std::pair<float, float> rota)
+// void Player::update(, std::pair<float, float> rota)
+// {
+//     // if (!RAYLIB::IsKeyDown(RAYLIB::KEY_W) && !RAYLIB::IsKeyDown(RAYLIB::KEY_S) &&
+//     // !RAYLIB::IsKeyDown(RAYLIB::KEY_D) && !RAYLIB::IsKeyDown(RAYLIB::KEY_A))
+//     //     return;
+//     static float oldMousePos = RAYLIB::GetMousePosition().x;
+//     float mousePos = RAYLIB::GetMousePosition().x;
+//     float speed = 5;
+//     auto pos = this->getPos();
+
+    
+
+//     if (rota.second == 0)
+//         rota.second = oldMousePos - mousePos;;
+//     _rota += rota.second;
+//     _rota = (int) _rota % 360;
+//     _rota = -Vector2Angle({(float)RAYLIB::GetScreenWidth() / 2, (float)RAYLIB::GetScreenHeight() / 2}, RAYLIB::GetMousePosition());
+//     oldMousePos = mousePos;
+//     this->_change = true;
+// }
+
+void Player::move()
 {
     if (!RAYLIB::IsKeyDown(RAYLIB::KEY_W) && !RAYLIB::IsKeyDown(RAYLIB::KEY_S) &&
     !RAYLIB::IsKeyDown(RAYLIB::KEY_D) && !RAYLIB::IsKeyDown(RAYLIB::KEY_A))
         return;
-    static float oldMousePos = RAYLIB::GetMousePosition().x;
-    float mousePos = RAYLIB::GetMousePosition().x;
+
+    std::pair<float, float> move(0, 0);
     float speed = 5;
-    auto pos = this->getPos();
+    RAYLIB::Vector2 pos = this->getPos();
 
     if (RAYLIB::IsKeyDown(RAYLIB::KEY_LEFT_SHIFT))
         speed += 1.5;
@@ -50,24 +78,17 @@ void Player::update(std::pair<float, float> move, std::pair<float, float> rota)
     }
     RAYLIB::Vector2 toSet = {pos.x + move.first * speed, pos.y + move.second * speed };
     this->_pos = toSet;
-
-    if (rota.second == 0)
-        rota.second = oldMousePos - mousePos;;
-    _rota += rota.second;
-    oldMousePos = mousePos;
     this->_change = true;
 }
 
-void Player::move()
+void Player::rotate()
 {
-    if (RAYLIB::IsKeyDown(RAYLIB::KEY_W))
-        this->_pos.y -= 1, this->_change = true;
-    if (RAYLIB::IsKeyDown(RAYLIB::KEY_S))
-        this->_pos.y += 1, this->_change = true;
-    if (RAYLIB::IsKeyDown(RAYLIB::KEY_A))
-        this->_pos.x -= 1, this->_change = true;
-    if (RAYLIB::IsKeyDown(RAYLIB::KEY_D))
-        this->_pos.x += 1, this->_change = true;
+    float newRota = -Vector2Angle({(float)RAYLIB::GetScreenWidth() / 2, (float)RAYLIB::GetScreenHeight() / 2}, RAYLIB::GetMousePosition());
+
+    if (this->_rota == newRota)
+        return;
+    this->_rota = newRota;
+    this->_change = true;
 }
 
 std::string Player::serialize()
@@ -77,6 +98,7 @@ std::string Player::serialize()
     str += "PLAYER;ID:" + std::to_string(this->_id);
     str += ";X:" + std::to_string(this->_pos.x);
     str += ";Y:" + std::to_string(this->_pos.y);
+    str += ";R:" + std::to_string(this->_rota);
 
     return (str += ";\n");
 }
@@ -91,11 +113,15 @@ void Player::deserialize(std::string str)
     this->_pos.x = std::atof(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
     pos = str.find("Y:");
     this->_pos.y = std::atof(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
+    pos = str.find("R:");
+    this->_rota = std::atof(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
 }
 
 void Player::gest(Client *&client)
 {
-    this->update();
+    // this->update();
+    this->move();
+    this->rotate();
 
     if (this->_change) {
         client->send(this->serialize());
