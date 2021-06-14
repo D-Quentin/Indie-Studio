@@ -41,8 +41,14 @@ class Menu {
         // MainPhase
         Button _bPlay;
         Button _bQuit;
-        rl::Text _tPlay;
+        Button _bWeapon;
+        Button _bHtp;
+        Button _bSettings;
         rl::Text _tQuit;
+        rl::Text _tSettings;
+        rl::Text _tHtp;
+        rl::Text _tWeapon;
+        RAYLIB::Texture2D _tbackground;
 
         // PlayPhase
         Button _bJoinGame;

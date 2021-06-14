@@ -12,19 +12,21 @@
 
 class Button {
     public:
-        Button(float = 0, float = 0, float = 0, float = 0);
+        Button(const char * = "", float = 0, float = 0, float = 0, float = 0);
         ~Button();
         bool isHover();
         bool isPressed();
         bool isClicked();
         void draw();
-
     protected:
     private:
         int _posx;
         int _posy;
         int _height;
         int _width;
+        const char *_path;
+        RAYLIB::Texture2D _texture;
+        RAYLIB::Rectangle _btnBounds;
 };
 
 #endif /* !BUTTON_HPP_ */

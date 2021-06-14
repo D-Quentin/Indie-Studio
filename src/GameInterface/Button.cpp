@@ -6,8 +6,9 @@
 */
 
 #include "Button.hpp"
+#include <cstring>
 
-Button::Button(float posx, float posy, float width, float height)
+Button::Button(const char *path, float posx, float posy, float width, float height)
 {
     int WIN_HEIGHT = RAYLIB::GetScreenHeight();
     int WIN_WIDTH = RAYLIB::GetScreenWidth();
@@ -16,6 +17,12 @@ Button::Button(float posx, float posy, float width, float height)
     this->_posy = (int)(posy * WIN_HEIGHT) / 100;
     this->_height = (int)(height * WIN_HEIGHT) / 100;
     this->_width = (int)(width * WIN_WIDTH) / 100;
+    this->_path = path;
+    if (strlen(path) != 0) {
+        RAYLIB::Texture2D texture = RAYLIB::LoadTexture(path);
+        this->_texture = texture;
+        this->_btnBounds = {float(_posx), float(_posy), (float)this->_texture.width, (float)this->_texture.height};
+    }
 }
 
 Button::~Button()
@@ -25,10 +32,18 @@ Button::~Button()
 bool Button::isHover()
 {
     RAYLIB::Vector2 pos = RAYLIB::GetMousePosition();
-
-    if (pos.x >= this->_posx && pos.x <= this->_posx + this->_width &&
-        pos.y >= this->_posy && pos.y <= this->_posy + this->_height)
+    if (strlen(this->_path) == 0) {
+        if (pos.x >= this->_posx && pos.x <= this->_posx + this->_width &&
+            pos.y >= this->_posy && pos.y <= this->_posy + this->_height)
+            return (true);
+        return (false);
+    }
+    if (CheckCollisionPointRec(pos, _btnBounds)) {
+        RAYLIB::DrawTextureEx(this->_texture, {(float)this->_posx, (float)this->_posy}, 0, RAYLIB::GetScreenHeight() / 1080, RAYLIB::RED);
         return (true);
+    } else {
+        RAYLIB::DrawTextureEx(this->_texture, {(float)this->_posx, (float)this->_posy}, 0, RAYLIB::GetScreenHeight() / 1080, RAYLIB::WHITE);
+    }
     return (false);
 }
 
@@ -48,5 +63,8 @@ bool Button::isClicked()
 
 void Button::draw()
 {
-    RAYLIB::DrawRectangle(this->_posx, this->_posy, this->_width, this->_height, RAYLIB::DARKGRAY);
+    if (strlen(this->_path) == 0)
+        RAYLIB::DrawRectangle(this->_posx, this->_posy, this->_width, this->_height, RAYLIB::DARKGRAY);
+    else
+        RAYLIB::DrawTextureEx(this->_texture, {(float)this->_posx, (float)this->_posy}, 0, RAYLIB::GetScreenHeight() / 1080, RAYLIB::WHITE);
 }

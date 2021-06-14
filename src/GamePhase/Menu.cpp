@@ -22,14 +22,20 @@ GamePhase Menu::launch()
     this->_phase = Menu::MainPhase;
 
     // MainPhase
-    this->_bPlay = Button(34, 15, 32, 18);
-    this->_bQuit = Button(34, 55, 32, 18);
-    this->_tPlay = rl::Text("Play", 43, 17, 70, RAYLIB::LIGHTGRAY);
-    this->_tQuit = rl::Text("Quit", 43, 57, 70, RAYLIB::LIGHTGRAY);
+    this->_bPlay = Button("assets/texture/play_button.png", 20, 35, 697, 112);
+    this->_bHtp = Button("assets/texture/button.png", 75, 32, 411, 108);
+    this->_bSettings = Button("assets/texture/button.png", 75, 17, 411, 108);
+    this->_bWeapon = Button("assets/texture/button.png", 75, 47, 411, 108);
+    this->_bQuit = Button("assets/texture/button.png", 75, 62, 411, 108);
+    this->_tQuit = rl::Text("Quit", 82, 65, 29, RAYLIB::BLACK);
+    this->_tSettings = rl::Text("Settings", 80, 20, 29, RAYLIB::BLACK);
+    this->_tHtp = rl::Text("How To Play", 77, 35, 29, RAYLIB::BLACK);
+    this->_tWeapon = rl::Text("Weapons", 80, 50, 29, RAYLIB::BLACK);
+    this->_tbackground = RAYLIB::LoadTexture("assets/texture/background.png");
 
     // PlayPhase
-    this->_bJoinGame = Button(26.5, 15, 47, 18);
-    this->_bCreateGame = Button(26.5, 55, 47, 18);
+    this->_bJoinGame = Button("", 26.5, 15, 47, 18);
+    this->_bCreateGame = Button("", 26.5, 55, 47, 18);
     this->_tJoinGame = rl::Text("JoinGame", 42, 17, 70, RAYLIB::LIGHTGRAY);
     this->_tCreateGame = rl::Text("CreateGame", 42, 57, 70, RAYLIB::LIGHTGRAY);
 
@@ -40,13 +46,13 @@ GamePhase Menu::launch()
     this->_tYourName = rl::Text("YourName", 41, 5, 70, RAYLIB::LIGHTGRAY);
     this->_tIp = rl::Text("Ip", 31, 46, 70, RAYLIB::LIGHTGRAY);
     this->_tPort = rl::Text("Port", 75, 46, 70, RAYLIB::LIGHTGRAY);
-    this->_bJoin = Button(35, 79, 31, 18);
+    this->_bJoin = Button("", 35, 79, 31, 18);
     this->_tJoin = rl::Text("Join", 42, 80, 70, RAYLIB::LIGHTGRAY);
 
     // CreatePhase
     this->_iServPort = InputButton(42, 37, 15, 11, 5);
     this->_tServPort = rl::Text("Port of your server", 24, 26, 55, RAYLIB::LIGHTGRAY);
-    this->_bCreate = Button(35, 79, 31, 18);
+    this->_bCreate = Button("", 35, 79, 31, 18);
     this->_tCreate = rl::Text("Create", 35, 80, 70, RAYLIB::LIGHTGRAY);
 
     return (this->restart());
@@ -83,10 +89,15 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
     if (this->_bPlay.isClicked()) {
         this->_phase = Menu::PlayPhase;
     }
-
-    this->_bPlay.draw();
-    this->_bQuit.draw();
-    this->_tPlay.draw();
+    RAYLIB::DrawTexture(this->_tbackground, 0, 0, RAYLIB::WHITE);
+    this->_bPlay.isHover();
+    this->_bSettings.isHover();
+    this->_bHtp.isHover();
+    this->_bWeapon.isHover();
+    this->_bQuit.isHover();
+    this->_tSettings.draw();
+    this->_tHtp.draw();
+    this->_tWeapon.draw();
     this->_tQuit.draw();
     return (gamePhase);
 }

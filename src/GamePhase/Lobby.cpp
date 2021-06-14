@@ -9,6 +9,11 @@
 #include <string>
 #include "Server.hpp"
 #include "Encapsulation/Text.hpp"
+#if defined(_WIN32)
+    #include <windows.h>
+#else
+    #include <stdlib.h>
+#endif
 
 Lobby::Lobby()
 {
@@ -22,6 +27,11 @@ Lobby::Lobby()
 
 Lobby::~Lobby()
 {
+}
+
+bool Lobby::isHost(void)
+{
+    return (this->_host);
 }
 
 size_t Lobby::getMe(void)
@@ -53,7 +63,7 @@ GamePhase Lobby::launch(Client *&client, std::string ip, std::string port)
 {
     this->_phase = JoinPhase;
 
-    this->_bReady = Button(65, 80, 30, 15);
+    this->_bReady = Button(" ", 65, 80, 30, 15);
     this->_tReady = rl::Text("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player), 67, 82, 50, RAYLIB::LIGHTGRAY);
 
     return (this->restart(client, ip, port));
@@ -114,7 +124,11 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     this->_client->launch();
     this->_client->send(INCOMMING_CONNECTION);
 
-    sleep(1);
+    #if defined(_WIN32)
+        Sleep(1);
+    #else
+        sleep(1);
+    #endif
     std::string str = client->read();
     if (str == "") { // GESTION ERREUR
         std::cout << "First connexion time out" << std::endl;
@@ -123,7 +137,11 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     GameObject::gestData(this->_obj, str, client, *this);
 
     std::cout << "Get Info Start" << std::endl;
-    sleep(1);
+    #if defined(_WIN32)
+        Sleep(1);
+    #else
+        sleep(1);
+    #endif
     str = client->read();
     GameObject::gestData(this->_obj, str, client, *this);
     std::cout << "Get Info End" << std::endl;
@@ -132,7 +150,11 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
         this->_host = true;
 
     client->send("PLAYER;ID:" + std::to_string(this->_me) + ";X:500;Y:500;\n");
-    sleep(1);
+    #if defined(_WIN32)
+        Sleep(1);
+    #else
+        sleep(1);
+    #endif
     str = client->read();
     if (str == "") { // GESTION ERREUR
         std::cout << "Getting info time out" << std::endl;
