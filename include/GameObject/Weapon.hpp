@@ -65,7 +65,7 @@ class Pistol : public Weapon
         Pistol(RAYLIB::Vector2 pos, unsigned short nbBullet = 21);
         ~Pistol() = default;
 
-        std::string serialize() {};
+        std::string serialize() {return std::string("");};
         void deserialize(std::string) {};
 
         void draw();
