@@ -24,6 +24,11 @@ Lobby::~Lobby()
 {
 }
 
+bool Lobby::isHost(void)
+{
+    return (this->_host);
+}
+
 size_t Lobby::getMe(void)
 {
     return (this->_me);
