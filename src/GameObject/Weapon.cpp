@@ -34,7 +34,11 @@ Bullet::Bullet()
 
 Bullet::Bullet(RAYLIB::Vector3 pos, float rota)
 {
-    // _model = ;
+    static auto mesh = RAYLIB::GenMeshSphere(0.05, 16, 16);
+    static auto texture = RAYLIB::LoadTexture("assets/weapons/Bullet/BulletsTexture.png");
+    static auto model = rl::Models(mesh, texture);
+    
+    _model = model;
     _pos = pos;
     _rota = rota - 90;
     _a = coefDirector({this->_pos.x, this->_pos.z}, pointInACircle(this->_rota, 1));
@@ -126,4 +130,14 @@ void Pistol::draw()
     RAYLIB::Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f };
 
     RAYLIB::DrawModelEx(_model._model, _pos, rotationAxis, _rota, vScale, RAYLIB::RED);
+}
+
+bool operator==(Bullet f, Bullet s)
+{
+    auto fPos = f.getPos();
+    auto sPos = s.getPos();
+
+    if (fPos.x == sPos.x && fPos.y == sPos.y)
+        return true;
+    return false;
 }

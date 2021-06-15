@@ -24,6 +24,7 @@ class Bullet : public game_object::Item
 
         void update();
         void draw();
+        RAYLIB::Vector2 getPos() {return {_pos.x, _pos.z};};
 
         std::string serialize() {return std::string("");};
         void deserialize(std::string) {};
@@ -37,6 +38,8 @@ class Bullet : public game_object::Item
         float _a;
         rl::Models _model;
 };
+
+bool operator==(Bullet f, Bullet s);
 
 class Weapon : public game_object::Item
 {
