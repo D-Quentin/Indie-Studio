@@ -11,6 +11,8 @@
 #include "GamePlay.hpp"
 #include "Play.hpp"
 
+static int signalStatus = 0;
+
 
 Game::Game()
 {
@@ -18,6 +20,12 @@ Game::Game()
 
 Game::~Game()
 {
+}
+
+void signal_handler(int signal)
+{
+    if (signal != 0)
+        signalStatus = signal;
 }
 
 void Game::launch(rl::Window win)
@@ -28,9 +36,12 @@ void Game::launch(rl::Window win)
     std::pair<bool, GamePlay> gameplay = {false, GamePlay()};
     std::pair<bool, Play> play = {false, Play()};
 
+    std::signal(SIGINT, signal_handler);
     while (statut != QuitPhase && win.loop()) {
         RAYLIB::BeginDrawing();
         win.clear({255, 255, 255, 255});
+        if (signalStatus != 0)
+            statut = QuitPhase;
         if (RAYLIB::IsKeyPressed(RAYLIB::KEY_F6))
             statut = GamePlayPhase;
         switch (statut) {
