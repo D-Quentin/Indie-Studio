@@ -78,6 +78,8 @@ GamePhase Menu::restart()
     case Menu::JoinPhase:
         gamePhase = this->joinPhase(gamePhase);
         break;
+    case Menu::SettingPhase:
+        gamePhase = this->settingPhase(gamePhase);
     
     default:
         break;
@@ -92,6 +94,9 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
     if (this->_bPlay.isClicked()) {
         this->_phase = Menu::PlayPhase;
     }
+    if (this->_bSettings.isClicked()) {
+        this->_phase = Menu::SettingPhase;
+    }
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     this->_bPlay.draw();
     this->_bSettings.draw();
@@ -102,6 +107,12 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
     this->_tHtp.draw();
     this->_tWeapon.draw();
     this->_tQuit.draw();
+    return (gamePhase);
+}
+
+GamePhase Menu::settingPhase(GamePhase gamePhase)
+{
+    RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     return (gamePhase);
 }
 

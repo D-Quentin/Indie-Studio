@@ -19,7 +19,8 @@ class Menu {
         MainPhase,
         PlayPhase,
         CreatePhase,
-        JoinPhase
+        JoinPhase,
+        SettingPhase
     };
     public:
         Menu();
@@ -28,6 +29,7 @@ class Menu {
         GamePhase restart();
         GamePhase mainPhase(GamePhase);
         GamePhase playPhase(GamePhase);
+        GamePhase settingPhase(GamePhase);
         GamePhase createPhase(GamePhase);
         GamePhase joinPhase(GamePhase);
         std::string getIp();
