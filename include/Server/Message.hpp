@@ -17,5 +17,6 @@ static const std::string ACCEPTED_CONNECTION = "##201##";
 static const std::string INCOMMING_CONNECTION = "##100##";
 static const std::string CLOSING_SERVER = "##500##";
 static const std::string CLOSING_CONNECTION = "##501##";
+static const std::string CLIENT_CLOSING_CONNECTION = "#502#"
 
 #endif /* !MESSAGE_HPP_ */

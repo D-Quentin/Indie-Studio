@@ -51,9 +51,13 @@ class Lobby {
         int _renderDistance = 40;
         bool _host;
         bool _ready;
+        std::string _port;
+        std::string _localIp;
+        std::string _publicIp;
 
         Button _bReady;
         rl::Text _tReady;
+        rl::Text _tIps;
 };
 
 #endif /* !LOBBY_HPP_ */
