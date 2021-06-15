@@ -43,9 +43,9 @@ GamePhase Menu::launch()
     this->_tbackground2 = RAYLIB::LoadTexture("assets/texture/background2.png");
 
     // JoinPhase
-    this->_iIp = InputButton(8, 60, 50, 11, 16);
-    this->_iPort = InputButton(72, 60, 15, 11, 5);
-    this->_iYourName = InputButton(25, 18, 50, 11, 16);
+    this->_iIp = InputButton("", 8, 60, 50, 11, 16, 10, 64, 37);
+    this->_iPort = InputButton("", 72, 60, 15, 11, 5, 74, 64, 37);
+    this->_iYourName = InputButton("", 25, 18, 50, 11, 16, 27, 22, 37);
     this->_tYourName = rl::Text("YourName", 41, 5, 70, RAYLIB::LIGHTGRAY);
     this->_tIp = rl::Text("Ip", 31, 46, 70, RAYLIB::LIGHTGRAY);
     this->_tPort = rl::Text("Port", 75, 46, 70, RAYLIB::LIGHTGRAY);
@@ -53,11 +53,12 @@ GamePhase Menu::launch()
     this->_tJoin = rl::Text("Join", 42, 80, 70, RAYLIB::LIGHTGRAY);
 
     // CreatePhase
-    this->_iServPort = InputButton(42, 37, 15, 11, 5);
-    this->_tServPort = rl::Text("Port of your server", 24, 26, 55, RAYLIB::LIGHTGRAY);
-    this->_bCreate = Button("", 35, 79, 31, 18);
-    this->_tCreate = rl::Text("Create", 35, 80, 70, RAYLIB::LIGHTGRAY);
-
+    this->_iServPort = InputButton("assets/texture/port_button.png", 17, 25, 68.64, 14.07, 5, 67, 29, 37);
+    this->_tServPort = rl::Text("Port of your server :", 21, 29, 37, RAYLIB::BLACK);
+    this->_iName = InputButton("assets/texture/port_button.png", 17, 45, 68.64, 14.07, 11, 60, 49, 37);
+    this->_tName = rl::Text("Choose your name :", 21, 49, 37, RAYLIB::BLACK);
+    this->_bCreate = Button("assets/texture/button.png", 60, 70, 21.4, 10);
+    this->_tCreate = rl::Text("Create", 65, 73, 29, RAYLIB::BLACK);
     return (this->restart());
 }
 
@@ -113,7 +114,7 @@ GamePhase Menu::playPhase(GamePhase gamePhase)
         this->_phase = JoinPhase;
     if (this->_bReturn.isClicked())
         this->_phase = MainPhase;
-    RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    RAYLIB::DrawTextureEx(this->_tbackground2, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     this->_bJoinGame.draw();
     this->_bCreateGame.draw();
     this->_bReturn.draw();
@@ -126,14 +127,23 @@ GamePhase Menu::playPhase(GamePhase gamePhase)
 GamePhase Menu::createPhase(GamePhase gamePhase)
 {
     if (this->_iServPort.isSelected())
-        this->_iServPort.writeChar(); // GESTION ERREUR
+        this->_iServPort.writeChar();
+    if (this->_iName.isSelected())
+        this->_iName.writeChar();
+    if (this->_bReturn.isClicked())
+        this->_phase = PlayPhase;
     if (this->_bCreate.isClicked()) {
         Server::launch(std::atoi(this->_iServPort.getText().c_str()));
         return (LobbyPhase);
     }
+    RAYLIB::DrawTextureEx(this->_tbackground2, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    this->_bReturn.draw();
+    this->_tReturn.draw();
     this->_iServPort.draw();
-    this->_bCreate.draw();
     this->_tServPort.draw();
+    this->_iName.draw();
+    this->_tName.draw();
+    this->_bCreate.draw();
     this->_tCreate.draw();
     return (gamePhase);
 }
