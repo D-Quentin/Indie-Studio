@@ -8,6 +8,8 @@
 #include "Player.hpp"
 #include <string>
 
+// static auto playerModel = rl::Models("assets/character/character.obj");
+
 float Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2)
 {
     float result = atan2f(v2.y - v1.y, v2.x - v1.x)*(180.0f/PI);
@@ -17,9 +19,8 @@ float Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2)
 
 Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
 {
-    std::string path("assets/character/");
+    // _model = {0};
     this->setPos(pos);
-    _model = rl::Models(std::string(path + "character.obj"));
     this->_rota = 0;
     this->_change = false;
     this->_id = id;

@@ -39,6 +39,7 @@ GamePhase GamePlay::launch()
     auto model = rl::Models(mesh, texture);
     auto m = Map3D(charMap, model, size);
     _spawn = m._spawns.front();
+    _player.setPos(RAYLIB::Vector2{_spawn.first, _spawn.second});
 
     _TopCamera.setPosition({_spawn.first, _TopCamera.getPosition().y, _spawn.second});
     _FPCamera.setPosition({_spawn.first, _FPCamera.getPosition().y, _spawn.second});
@@ -83,7 +84,7 @@ void GamePlay::updateLocal()
         auto playerPos = _player.getPos();
         auto blockPos = it->getPos();
         RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
-        bool col = RAYLIB::CheckCollisionCircleRec(playerPos, 0.5, blockPhysic);
+        bool col = RAYLIB::CheckCollisionCircleRec(playerPos, 0.3, blockPhysic);
 
         if (col)
             _player.setPos(oldPlayerPos);
@@ -91,6 +92,10 @@ void GamePlay::updateLocal()
         for (auto &it : _bullet)
             if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))
                 it.isReal = false;
+            else if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, 0.3)) {
+                it.isReal = false;
+                std::cerr << "touch";
+            }
     }
     //end collision
     this->_player.rotate();

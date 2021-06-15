@@ -46,8 +46,8 @@ class Weapon : public game_object::Item
     public:
         ~Weapon() = default;
 
-    //viruital
-        virtual void draw() = 0;
+    // //viruital
+    //     virtual void draw() = 0;
 
     //physical (like dl)
         Bullet shoot();
@@ -56,6 +56,7 @@ class Weapon : public game_object::Item
         void update(RAYLIB::Vector2 pos, float rota);
         std::string serialize();
         void deserialize(std::string);
+        void draw();
 
     protected:
         RAYLIB::Vector3 _pos;
@@ -74,7 +75,6 @@ class Pistol : public Weapon
         Pistol(RAYLIB::Vector2 pos);
         ~Pistol() = default;
 
-        void draw();
     private:
 };
 
