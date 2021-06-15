@@ -14,6 +14,8 @@ public:
     Target checkEnemy();
     RAYLIB::Vector2 getEnemyPosition();
     double calculateDist(RAYLIB::Vector2 pos);
+    std::vector<RAYLIB::KeyboardKey> getDirections();
+    void setDirections(RAYLIB::Vector2 newPosition);
     void getPriority();
     void moveToEnemy();
     void attackEnemy();
@@ -25,6 +27,7 @@ public:
 protected:
     RAYLIB::Vector2 targetPosition;
     Target targetStatus;
+    std::vector<RAYLIB::KeyboardKey> directions;
     std::vector<std::vector<char>> map;
     std::vector<RAYLIB::Vector2> close;
     };

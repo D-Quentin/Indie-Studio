@@ -46,8 +46,25 @@ void Ai::moveToNextTile()
     for (unsigned int i = 0; i < open.size(); i++)
         dist.push_back(calculateDist(open[i]));
     auto min_value = std::min_element(dist.begin(), dist.end());
+    setDirections(open[min_value - dist.begin()]);
     setPos(open[min_value - dist.begin()]);
-    // set direction
+}
+
+std::vector<RAYLIB::KeyboardKey> Ai::getDirections()
+{
+    return this->directions;
+}
+
+void Ai::setDirections(RAYLIB::Vector2 newPosition)
+{
+    if (newPosition.x < this->_pos.x)
+        this->directions.push_back(RAYLIB::KEY_A);
+    else if (newPosition.x > this->_pos.x)
+        this->directions.push_back(RAYLIB::KEY_D);
+    if (newPosition.y < this->_pos.y)
+        this->directions.push_back(RAYLIB::KEY_S);
+    else if (newPosition.y > this->_pos.y)
+        this->directions.push_back(RAYLIB::KEY_W);
 }
 
 void Ai::getPriority() // This function will check if there is an enemy, if he's in range to attack or move to a random point on the map
