@@ -16,6 +16,8 @@
 #include "Client.hpp"
 #include <map>
 #include <memory>
+#include <chrono>
+#include <thread>
 
 class Lobby {
     enum Phase {
@@ -31,6 +33,7 @@ class Lobby {
         GamePhase joinPhase(GamePhase, Client *&, std::string, std::string);
 
         size_t getMe(void);
+        bool isHost(void);
         int getReadyPlayer(void);
         int getPlayer(void);
         void setReadyPlayer(int);

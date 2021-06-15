@@ -27,6 +27,9 @@ rl::Window::Window(const int width, const int height, const std::string msg)
 {
     RAYLIB::InitWindow(width, height, msg.c_str());
     this->setFps();
+    RAYLIB::Image image = RAYLIB::LoadImage("assets/texture/icon.png");
+    RAYLIB::ImageFormat(&image, RAYLIB::PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
+    RAYLIB::SetWindowIcon(image);
 }
 
 // ------ Getters & setters ------
@@ -60,7 +63,9 @@ void rl::Window::fullscreen()
 
 bool rl::Window::loop()
 {
-    return (!RAYLIB::WindowShouldClose());
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_ESCAPE) || RAYLIB::IsKeyPressed(RAYLIB::KEY_ESCAPE) || RAYLIB::IsKeyReleased(RAYLIB::KEY_ESCAPE))
+        return (false);
+    return (true);
 }
 
 void rl::Window::clear(RAYLIB::Color color)
@@ -75,9 +80,9 @@ void rl::Window::destroy()
 
 void rl::Window::loading()
 {
-    RAYLIB::Texture2D tex = RAYLIB::LoadTexture("assets/background/loading.png");
+    RAYLIB::Texture2D tex = RAYLIB::LoadTexture("assets/texture/loading.png");
     RAYLIB::BeginDrawing();
-    DrawTextureEx(tex, {0, 0}, 0, RAYLIB::GetScreenHeight() / 1080, RAYLIB::WHITE);
+    DrawTextureEx(tex, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     RAYLIB::EndDrawing();
     RAYLIB::UnloadTexture(tex);
 }

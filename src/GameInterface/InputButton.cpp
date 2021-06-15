@@ -18,7 +18,7 @@ InputButton::InputButton(float posx, float posy, float width, float height, int 
     this->_width = (int)(width * WIN_WIDTH) / 100;
     this->_maxLen = maxLen;
     this->_selected = false;
-    this->_button = Button(posx, posy, width, height);
+    this->_button = Button("", posx, posy, width, height);
     this->_color = Fade(RAYLIB::ORANGE, 0.6);
     this->_printText = rl::Text("", posx + height * 0.2, posy + height * 0.08, (this->_height * 0.85) / 2, RAYLIB::LIGHTGRAY);
 }

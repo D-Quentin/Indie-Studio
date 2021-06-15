@@ -15,6 +15,7 @@ namespace rl {
     {
         public:
             Models() = default;
+            Models(std::string,  RAYLIB::Vector3 = {0, 0, 0});
             Models(RAYLIB::Mesh, RAYLIB::Texture2D, RAYLIB::Vector3 = {0, 0, 0});
             ~Models() = default;
             void draw();

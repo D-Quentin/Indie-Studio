@@ -81,8 +81,12 @@ void Server::sendTo(SEND send, std::string message)
 
 void Server::handleCommand(std::string line)
 {
-    // if (line.find(INCOMMING_CONNECTION) != std::string::npos)
-    sendTo(ALL, line);
+    if (line == CLOSING_SERVER) {
+        sendTo(ALL, CLOSING_CONNECTION);
+        std::exit(0);
+    }
+    else
+        sendTo(ALL, line);
 }
 
 void Server::launch(int port)
@@ -91,7 +95,7 @@ void Server::launch(int port)
         #if defined(_WIN32)
             system((std::string("start cmd /c bomberman --server ") + std::to_string(port)).c_str());
         #else
-            system((std::string("xterm -iconic -e \"./bomberman --server ") + std::to_string(port) + std::string("\" &")).c_str());
+            system((std::string("gnome-terminal -e \"./bomberman --server ") + std::to_string(port) + std::string("\"")).c_str());
         #endif
     }
     catch (std::exception &e) {

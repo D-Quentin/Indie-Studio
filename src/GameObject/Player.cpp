@@ -17,12 +17,9 @@ float Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2)
 
 Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
 {
-    std::string path("/home/THE/texture/");
-    float size = 0.25;
-    auto mesh = RAYLIB::GenMeshCube(size, size, size);
-    auto texture = RAYLIB::LoadTexture(std::string(path + "texture_minecraft_stone.png").c_str());
+    std::string path("assets/character/");
     this->setPos(pos);
-    _model = rl::Models(mesh, texture);
+    _model = rl::Models(std::string(path + "character.obj"));
     this->_rota = 0;
     this->_change = false;
     this->_id = id;
@@ -30,11 +27,12 @@ Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
 
 void Player::draw()
 {
-    RAYLIB::Vector3 vScale = { 1, 1, 1 };
+    float scale = 15;
+    RAYLIB::Vector3 vScale = { scale, scale, scale};
     RAYLIB::Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f };
     auto pos = this->getPos();
 
-    RAYLIB::DrawModelEx(_model._model, {pos.x, 0, pos.y}, rotationAxis, _rota, vScale, RAYLIB::BLUE);
+    RAYLIB::DrawModelEx(_model._model, {pos.x, 0, pos.y}, rotationAxis, _rota, vScale, RAYLIB::GRAY);
 }
 
 // void Player::update(, std::pair<float, float> rota)

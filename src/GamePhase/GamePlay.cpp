@@ -74,7 +74,22 @@ void GamePlay::updateLocal()
 {
     static std::list<Bullet> bullet;
     //update player
+    bool col = false;
+    auto oldPlayerPos = _player.getPos();
+
     this->_player.move();
+    // handle player / block colision
+    for (auto it : _blocks) {
+        auto playerPos = _player.getPos();
+        auto blockPos = it->getPos();
+        col = RAYLIB::CheckCollisionCircleRec(playerPos, 0.5, {blockPos.x, blockPos.y, 1, 1});
+
+        if (col) {
+            _player.setPos(oldPlayerPos);
+            break;
+        }
+    }
+    //end collision
     this->_player.rotate();
     ///update weapon
     _weapon->update(_player.getPos(), _player._rota);
@@ -112,4 +127,9 @@ void GamePlay::drawAll()
 //         it->draw();
     // RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, -0.5, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, RAYLIB::RED); //draw flor
     RAYLIB::DrawGrid(100, 5);
+    // std::cerr << "beg" << std::endl;
+    // auto bx = RAYLIB::MeshBoundingBox(_player._model._model.meshes[0]);
+    // std::cerr << "min x:" << bx.min.x << " y:" << bx.min.y << " z:" << bx.min.z << std::endl;
+    // std::cerr << "max x:" << bx.max.x << " y:" << bx.max.y << " z:" << bx.max.z << std::endl;
+    // std::cerr << "end" << std::endl;
 }
