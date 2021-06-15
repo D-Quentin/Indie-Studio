@@ -43,14 +43,14 @@ GamePhase Menu::launch()
     this->_tbackground2 = RAYLIB::LoadTexture("assets/texture/background2.png");
 
     // JoinPhase
-    this->_iIp = InputButton("", 8, 60, 50, 11, 16, 10, 64, 37);
-    this->_iPort = InputButton("", 72, 60, 15, 11, 5, 74, 64, 37);
-    this->_iYourName = InputButton("", 25, 18, 50, 11, 16, 27, 22, 37);
-    this->_tYourName = rl::Text("YourName", 41, 5, 70, RAYLIB::LIGHTGRAY);
-    this->_tIp = rl::Text("Ip", 31, 46, 70, RAYLIB::LIGHTGRAY);
-    this->_tPort = rl::Text("Port", 75, 46, 70, RAYLIB::LIGHTGRAY);
-    this->_bJoin = Button("", 35, 79, 31, 18);
-    this->_tJoin = rl::Text("Join", 42, 80, 70, RAYLIB::LIGHTGRAY);
+    this->_iIp = InputButton("assets/texture/button_div.png", 17, 45, 33.12, 13, 16, 27, 49, 37);
+    this->_tIp = rl::Text("Ip : ", 20, 49, 37, RAYLIB::BLACK);
+    this->_iPort = InputButton("assets/texture/button_div.png", 50, 45, 33.12, 13, 5, 66, 49, 37);
+    this->_tPort = rl::Text("Port : ", 54, 49, 37, RAYLIB::BLACK);
+    this->_bJoin = Button("assets/texture/button.png", 60, 70, 21.4, 10);
+    this->_tJoin = rl::Text("Join", 66, 73, 29, RAYLIB::BLACK);
+    this->_iYourName = InputButton("assets/texture/port_button.png", 17, 25, 68.64, 14.07, 11, 59, 29, 37);
+    this->_tYourName = rl::Text("Choose your name :", 21, 29, 37, RAYLIB::BLACK);
 
     // CreatePhase
     this->_iServPort = InputButton("assets/texture/port_button.png", 17, 25, 68.64, 14.07, 5, 67, 29, 37);
@@ -156,15 +156,19 @@ GamePhase Menu::joinPhase(GamePhase gamePhase)
         this->_iPort.writeChar(); // GESTION ERREUR
     if (this->_iYourName.isSelected())
         this->_iYourName.writeChar(); // GESTION ERREUR
-    if (this->_bJoin.isClicked()) {
+    if (this->_bJoin.isClicked())
         return (LobbyPhase);
-    }
+    if (this->_bReturn.isClicked())
+        this->_phase = PlayPhase;
+    RAYLIB::DrawTextureEx(this->_tbackground2, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    this->_bReturn.draw();
+    this->_tReturn.draw();
     this->_iIp.draw();
+    this->_tIp.draw();
     this->_iPort.draw();
+    this->_tPort.draw();
     this->_iYourName.draw();
     this->_bJoin.draw();
-    this->_tIp.draw();
-    this->_tPort.draw();
     this->_tYourName.draw();
     this->_tJoin.draw();
 

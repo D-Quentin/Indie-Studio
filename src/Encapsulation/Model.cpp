@@ -18,9 +18,7 @@ rl::Models::Models(RAYLIB::Mesh mesh, RAYLIB::Texture2D texture, RAYLIB::Vector3
 
 rl::Models::Models(std::string filepath, RAYLIB::Vector3 pos)
 {
-    std::cout << "ok" << std::endl;
     _model = RAYLIB::LoadModel(filepath.c_str());
-    std::cout << "end" << std::endl;
     _pos = pos;
 }
 

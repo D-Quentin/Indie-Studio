@@ -19,6 +19,7 @@ void GamePlay::nonToPoi(std::list<MapBlock> obj)
 GamePlay::GamePlay()
 {
     // _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 0, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
+    std::cerr << "first";
     _player = Player();
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
@@ -38,6 +39,7 @@ GamePhase GamePlay::launch()
     auto model = rl::Models(mesh, texture);
     auto m = Map3D(charMap, model, size);
     _spawn = m._spawns.front();
+    _player.setPos(RAYLIB::Vector2{_spawn.first, _spawn.second});
 
     _TopCamera.setPosition({_spawn.first, _TopCamera.getPosition().y, _spawn.second});
     _FPCamera.setPosition({_spawn.first, _FPCamera.getPosition().y, _spawn.second});
@@ -72,7 +74,6 @@ GamePhase GamePlay::restart()
 
 void GamePlay::updateLocal()
 {
-    static std::list<Bullet> bullet;
     //update player
     bool col = false;
     auto oldPlayerPos = _player.getPos();
@@ -82,25 +83,33 @@ void GamePlay::updateLocal()
     for (auto it : _blocks) {
         auto playerPos = _player.getPos();
         auto blockPos = it->getPos();
-        col = RAYLIB::CheckCollisionCircleRec(playerPos, 0.5, {blockPos.x, blockPos.y, 1, 1});
+        RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
+        bool col = RAYLIB::CheckCollisionCircleRec(playerPos, 0.3, blockPhysic);
 
-        if (col) {
+        if (col)
             _player.setPos(oldPlayerPos);
-            break;
-        }
+        //check collision bullet  /walls
+        for (auto &it : _bullet)
+            if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))
+                it.isReal = false;
+            else if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, 0.3)) {
+                it.isReal = false;
+                std::cerr << "touch";
+            }
     }
     //end collision
     this->_player.rotate();
     ///update weapon
     _weapon->update(_player.getPos(), _player._rota);
-    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_SPACE)) {
-        auto b = _weapon->shoot();
-        if (b.isReal)
-            bullet.push_back(b);
-    }
-    for (auto &it : bullet) {
-        it.update();
-        it.draw();
+    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_SPACE))
+        _bullet.push_back(_weapon->shoot());
+    for (auto &it : _bullet) {
+        it.update(); /// update pos
+        it.draw(); // draw
+        if (!it.isReal) {// check if element is good
+            _bullet.remove(it); //mevoe if isnt good
+            break;
+        }
     }
 
     //update camera

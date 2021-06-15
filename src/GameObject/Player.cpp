@@ -8,6 +8,8 @@
 #include "Player.hpp"
 #include <string>
 
+// static auto playerModel = rl::Models("assets/character/character.obj");
+
 float Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2)
 {
     float result = atan2f(v2.y - v1.y, v2.x - v1.x)*(180.0f/PI);

@@ -126,6 +126,11 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     std::cout << "Connecting to Ip: " << ip << " / Port: " << port << std::endl;
 
     // Connect to server
+    #if defined(_WIN32)
+        Sleep(1000);
+    #else
+        sleep(1);
+    #endif
     client = new Client(ip, std::atoi(port.c_str()));
     this->_client = client;
     this->_client->launch();
