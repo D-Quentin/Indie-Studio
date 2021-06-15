@@ -19,8 +19,7 @@ Button::Button(const char *path, float posx, float posy, float width, float heig
     this->_width = (int)(width * WIN_WIDTH) / 100;
     this->_path = path;
     if (strlen(path) != 0) {
-        RAYLIB::Texture2D texture = RAYLIB::LoadTexture(path);
-        this->_texture = texture;
+        this->_texture = RAYLIB::LoadTexture(path);
         this->_btnBounds = {float(_posx), float(_posy), (float)this->_texture.width, (float)this->_texture.height};
     }
 }
@@ -39,10 +38,10 @@ bool Button::isHover()
         return (false);
     }
     if (CheckCollisionPointRec(pos, _btnBounds)) {
-        RAYLIB::DrawTextureEx(this->_texture, {(float)this->_posx, (float)this->_posy}, 0, RAYLIB::GetScreenHeight() / 1080, RAYLIB::RED);
+        RAYLIB::DrawTextureEx(this->_texture, {(float)this->_posx, (float)this->_posy}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::RED);
         return (true);
     } else {
-        RAYLIB::DrawTextureEx(this->_texture, {(float)this->_posx, (float)this->_posy}, 0, RAYLIB::GetScreenHeight() / 1080, RAYLIB::WHITE);
+        RAYLIB::DrawTextureEx(this->_texture, {(float)this->_posx, (float)this->_posy}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     }
     return (false);
 }
@@ -66,5 +65,5 @@ void Button::draw()
     if (strlen(this->_path) == 0)
         RAYLIB::DrawRectangle(this->_posx, this->_posy, this->_width, this->_height, RAYLIB::DARKGRAY);
     else
-        RAYLIB::DrawTextureEx(this->_texture, {(float)this->_posx, (float)this->_posy}, 0, RAYLIB::GetScreenHeight() / 1080, RAYLIB::WHITE);
+        RAYLIB::DrawTextureEx(this->_texture, {(float)this->_posx, (float)this->_posy}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
 }

@@ -77,7 +77,7 @@ void rl::Window::loading()
 {
     RAYLIB::Texture2D tex = RAYLIB::LoadTexture("assets/background/loading.png");
     RAYLIB::BeginDrawing();
-    DrawTextureEx(tex, {0, 0}, 0, RAYLIB::GetScreenHeight() / 1080, RAYLIB::WHITE);
+    DrawTextureEx(tex, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     RAYLIB::EndDrawing();
     RAYLIB::UnloadTexture(tex);
 }

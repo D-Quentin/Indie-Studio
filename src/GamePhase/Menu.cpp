@@ -34,10 +34,13 @@ GamePhase Menu::launch()
     this->_tbackground = RAYLIB::LoadTexture("assets/texture/background.png");
 
     // PlayPhase
-    this->_bJoinGame = Button("", 26.5, 15, 47, 18);
-    this->_bCreateGame = Button("", 26.5, 55, 47, 18);
-    this->_tJoinGame = rl::Text("JoinGame", 42, 17, 70, RAYLIB::LIGHTGRAY);
-    this->_tCreateGame = rl::Text("CreateGame", 42, 57, 70, RAYLIB::LIGHTGRAY);
+    this->_bJoinGame = Button("assets/texture/button_second_page.png", 15, 20, 200, 200);
+    this->_bCreateGame = Button("assets/texture/button_second_page.png", 15, 45, 200, 200);
+    this->_bReturn = Button("assets/texture/button.png", 3, 85, 411, 108);
+    this->_tJoinGame = rl::Text("Join Game", 32, 23, 70, RAYLIB::BLACK);
+    this->_tCreateGame = rl::Text("Create Game", 27, 48, 70, RAYLIB::BLACK);
+    this->_tReturn = rl::Text("Return", 9, 88, 29, RAYLIB::BLACK);
+    this->_tbackground2 = RAYLIB::LoadTexture("assets/texture/background2.png");
 
     // JoinPhase
     this->_iIp = InputButton(8, 60, 50, 11, 16);
@@ -89,7 +92,7 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
     if (this->_bPlay.isClicked()) {
         this->_phase = Menu::PlayPhase;
     }
-    RAYLIB::DrawTexture(this->_tbackground, 0, 0, RAYLIB::WHITE);
+    RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     this->_bPlay.isHover();
     this->_bSettings.isHover();
     this->_bHtp.isHover();
@@ -108,11 +111,15 @@ GamePhase Menu::playPhase(GamePhase gamePhase)
         this->_phase = CreatePhase;
     if (this->_bJoinGame.isClicked())
         this->_phase = JoinPhase;
-
-    this->_bJoinGame.draw();
-    this->_bCreateGame.draw();
+    if (this->_bReturn.isClicked())
+        this->_phase = MainPhase;
+    RAYLIB::DrawTexture(this->_tbackground2, 0, 0, RAYLIB::WHITE);
+    this->_bJoinGame.isHover();
+    this->_bCreateGame.isHover();
+    this->_bReturn.isHover();
     this->_tCreateGame.draw();
     this->_tJoinGame.draw();
+    this->_tReturn.draw();
     return (gamePhase);
 }
 

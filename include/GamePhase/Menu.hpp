@@ -53,8 +53,11 @@ class Menu {
         // PlayPhase
         Button _bJoinGame;
         Button _bCreateGame;
+        Button _bReturn;
         rl::Text _tJoinGame;
         rl::Text _tCreateGame;
+        rl::Text _tReturn;
+        RAYLIB::Texture2D _tbackground2;
 
         // JoinPhase
         InputButton _iIp;
@@ -65,6 +68,7 @@ class Menu {
         rl::Text _tPort;
         Button _bJoin;
         rl::Text _tJoin;
+
 
         // CreatePhase
         InputButton _iServPort;
