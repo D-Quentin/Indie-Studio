@@ -25,13 +25,14 @@ class Player : public EntityObjects {
         void deserialize(std::string);
         RAYLIB::Vector2 getPos() {return _pos;};
         float _rota;
+        rl::Models _model;
+
 
     protected:
     private:
         bool _me;
         RAYLIB::Vector2 _pos;
         float _ypos = 0;
-        rl::Models _model;
 };
 
 #endif /* !PLAYER_HPP_ */

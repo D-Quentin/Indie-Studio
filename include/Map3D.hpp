@@ -29,6 +29,7 @@ class MapBlock : public BlockObject
         void draw();
         std::string serialize() {return ("");};
         void deserialize(std::string) {};
+        rl::Models getModel() const {return _model;};
 
 
     private:
