@@ -10,6 +10,7 @@
 
 #include <array>
 #include "GameObject.hpp"
+#include "Encapsulation/Model.hpp"
 
 class BlockObject : public GameObject {
     public:
@@ -19,7 +20,7 @@ class BlockObject : public GameObject {
         virtual int getId() = 0;
         virtual void setPos(RAYLIB::Vector2 newPosition) = 0;
         virtual void setId(int) = 0;
-
+        virtual rl::Models getModel() const = 0;
     protected:
     private:
 };
