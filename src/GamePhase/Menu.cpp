@@ -42,6 +42,10 @@ GamePhase Menu::launch()
     this->_tReturn = rl::Text("Return", 9, 88, 29, RAYLIB::BLACK);
     this->_tbackground2 = RAYLIB::LoadTexture("assets/texture/background2.png");
 
+    // Settingphase
+    this->_bUp = Button("assets/texture/button_second_page.png", 10, 30, 67.68, 17.1);
+    this->_bDown = Button("assets/texture/button_second_page.png", 15, 30, 67.68, 17.1);
+
     // JoinPhase
     this->_iIp = InputButton(8, 60, 50, 11, 16);
     this->_iPort = InputButton(72, 60, 15, 11, 5);
@@ -112,7 +116,20 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
 
 GamePhase Menu::settingPhase(GamePhase gamePhase)
 {
+    static int i = 0;
+    rl::Text sound;
+    std::stringstream sstream;
+
+    if (this->_bReturn.isClicked())
+        this->_phase = MainPhase;
+    if (this->_bUp.isClicked() && i < 101)
+        i++;
+    sstream << i;
+    sound = rl::Text(sstream.str(), 75, 46, 70, RAYLIB::LIGHTGRAY);
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    this->_tReturn.draw();
+    this->_bUp.draw();
+    sound.draw();
     return (gamePhase);
 }
 

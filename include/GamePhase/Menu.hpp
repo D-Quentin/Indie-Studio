@@ -61,6 +61,10 @@ class Menu {
         rl::Text _tReturn;
         RAYLIB::Texture2D _tbackground2;
 
+        // SettingPhase
+        Button _bUp;
+        Button _bDown;
+
         // JoinPhase
         InputButton _iIp;
         InputButton _iPort;
