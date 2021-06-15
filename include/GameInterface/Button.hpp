@@ -26,7 +26,6 @@ class Button {
         int _width;
         const char *_path;
         RAYLIB::Texture2D _texture;
-        RAYLIB::Rectangle _btnBounds;
 };
 
 #endif /* !BUTTON_HPP_ */

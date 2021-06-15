@@ -125,7 +125,7 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     this->_client->send(INCOMMING_CONNECTION);
 
     #if defined(_WIN32)
-        Sleep(1);
+        Sleep(1000);
     #else
         sleep(1);
     #endif
@@ -138,7 +138,7 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
 
     std::cout << "Get Info Start" << std::endl;
     #if defined(_WIN32)
-        Sleep(1);
+        Sleep(1000);
     #else
         sleep(1);
     #endif
@@ -151,7 +151,7 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
 
     client->send("PLAYER;ID:" + std::to_string(this->_me) + ";X:500;Y:500;\n");
     #if defined(_WIN32)
-        Sleep(1);
+        Sleep(1000);
     #else
         sleep(1);
     #endif

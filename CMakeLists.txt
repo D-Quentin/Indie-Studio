@@ -20,6 +20,7 @@ file(
     SRCS
     src/*.cpp
     src/*/*.cpp
+    assets/icon/app.o
 )
 
 if (NOT raylib_FOUND) # If there's none, fetch and build raylib

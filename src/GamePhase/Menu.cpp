@@ -22,11 +22,11 @@ GamePhase Menu::launch()
     this->_phase = Menu::MainPhase;
 
     // MainPhase
-    this->_bPlay = Button("assets/texture/play_button.png", 20, 35, 697, 112);
-    this->_bHtp = Button("assets/texture/button.png", 75, 32, 411, 108);
-    this->_bSettings = Button("assets/texture/button.png", 75, 17, 411, 108);
-    this->_bWeapon = Button("assets/texture/button.png", 75, 47, 411, 108);
-    this->_bQuit = Button("assets/texture/button.png", 75, 62, 411, 108);
+    this->_bPlay = Button("assets/texture/play_button.png", 20, 35, 36.3, 10.37);
+    this->_bHtp = Button("assets/texture/button.png", 75, 32, 21.4, 10);
+    this->_bSettings = Button("assets/texture/button.png", 75, 17, 21.4, 10);
+    this->_bWeapon = Button("assets/texture/button.png", 75, 47, 21.4, 10);
+    this->_bQuit = Button("assets/texture/button.png", 75, 62, 21.4, 10);
     this->_tQuit = rl::Text("Quit", 82, 65, 29, RAYLIB::BLACK);
     this->_tSettings = rl::Text("Settings", 80, 20, 29, RAYLIB::BLACK);
     this->_tHtp = rl::Text("How To Play", 77, 35, 29, RAYLIB::BLACK);
@@ -34,11 +34,11 @@ GamePhase Menu::launch()
     this->_tbackground = RAYLIB::LoadTexture("assets/texture/background.png");
 
     // PlayPhase
-    this->_bJoinGame = Button("assets/texture/button_second_page.png", 15, 20, 200, 200);
-    this->_bCreateGame = Button("assets/texture/button_second_page.png", 15, 45, 200, 200);
-    this->_bReturn = Button("assets/texture/button.png", 3, 85, 411, 108);
-    this->_tJoinGame = rl::Text("Join Game", 32, 23, 70, RAYLIB::BLACK);
-    this->_tCreateGame = rl::Text("Create Game", 27, 48, 70, RAYLIB::BLACK);
+    this->_bJoinGame = Button("assets/texture/button_second_page.png", 15, 30, 67.68, 17.1);
+    this->_bCreateGame = Button("assets/texture/button_second_page.png", 15, 55, 67.65, 17.1);
+    this->_bReturn = Button("assets/texture/button.png", 3, 85, 21.4, 10);
+    this->_tJoinGame = rl::Text("Join Game", 32, 33, 70, RAYLIB::BLACK);
+    this->_tCreateGame = rl::Text("Create Game", 27, 58, 70, RAYLIB::BLACK);
     this->_tReturn = rl::Text("Return", 9, 88, 29, RAYLIB::BLACK);
     this->_tbackground2 = RAYLIB::LoadTexture("assets/texture/background2.png");
 
@@ -93,11 +93,11 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
         this->_phase = Menu::PlayPhase;
     }
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
-    this->_bPlay.isHover();
-    this->_bSettings.isHover();
-    this->_bHtp.isHover();
-    this->_bWeapon.isHover();
-    this->_bQuit.isHover();
+    this->_bPlay.draw();
+    this->_bSettings.draw();
+    this->_bHtp.draw();
+    this->_bWeapon.draw();
+    this->_bQuit.draw();
     this->_tSettings.draw();
     this->_tHtp.draw();
     this->_tWeapon.draw();
@@ -113,10 +113,10 @@ GamePhase Menu::playPhase(GamePhase gamePhase)
         this->_phase = JoinPhase;
     if (this->_bReturn.isClicked())
         this->_phase = MainPhase;
-    RAYLIB::DrawTexture(this->_tbackground2, 0, 0, RAYLIB::WHITE);
-    this->_bJoinGame.isHover();
-    this->_bCreateGame.isHover();
-    this->_bReturn.isHover();
+    RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    this->_bJoinGame.draw();
+    this->_bCreateGame.draw();
+    this->_bReturn.draw();
     this->_tCreateGame.draw();
     this->_tJoinGame.draw();
     this->_tReturn.draw();
