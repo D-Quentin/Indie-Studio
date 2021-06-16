@@ -57,6 +57,7 @@ std::vector<RAYLIB::KeyboardKey> Ai::getDirections()
 
 void Ai::setDirections(RAYLIB::Vector2 newPosition)
 {
+    this->directions.clear();
     if (newPosition.x < this->_pos.x)
         this->directions.push_back(RAYLIB::KEY_A);
     else if (newPosition.x > this->_pos.x)
