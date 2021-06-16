@@ -73,7 +73,8 @@ class Weapon : public game_object::Item
 class Pistol : public Weapon
 {
     public :
-        Pistol(RAYLIB::Vector2 pos);
+        Pistol();
+        Pistol(RAYLIB::Vector2 pos = {0, 0});
         ~Pistol() = default;
 
     private:

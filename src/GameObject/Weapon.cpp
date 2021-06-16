@@ -79,6 +79,7 @@ void Weapon::update(RAYLIB::Vector2 pos, float rota)
     std::pair<float, float> circlePos = pointInACircle(std::abs(rota), 0.2);
     this->_pos.x = pos.x + circlePos.first;
     this->_pos.z = pos.y + circlePos.second;
+    this->_pos.y = 0.1;
 }
 
 std::string Weapon::serialize()
@@ -110,21 +111,6 @@ void Weapon::deserialize(std::string str)
         *this = Pistol({_pos.x, _pos.z});
 }
 
-Pistol::Pistol(RAYLIB::Vector2 pos)
-{
-    std::string path("assets/weapons/Baretta/");
-    float size = 0.1;
-
-    _model = rl::Models(std::string(path + "Beretta.obj"));
-    this->_nbBullet = 21;
-    this->_pos = {pos.x, size, pos.y};
-    this->_time_shoot = 0.2f;
-    this->_bullet_speed = 0.7f;
-    this->_damage = 20;
-    this->_cone = 5;
-    _type = "pistol";
-}
-
 void Weapon::draw()
 {
     float scale = 0.1;
@@ -132,6 +118,21 @@ void Weapon::draw()
     RAYLIB::Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f };
 
     RAYLIB::DrawModelEx(_model._model, _pos, rotationAxis, _rota, vScale, RAYLIB::RED);
+}
+
+Pistol::Pistol(RAYLIB::Vector2 pos)
+{
+    std::string path("assets/weapons/Baretta/");
+    static rl::Models pistol_model = rl::Models(std::string(path + "Beretta.obj"));
+
+    _model = pistol_model;
+    this->_nbBullet = 21;
+    this->_pos = {pos.x, 0.1, pos.y};
+    this->_time_shoot = 0.2f;
+    this->_bullet_speed = 1.5f;
+    this->_damage = 20;
+    this->_cone = 5;
+    _type = "pistol";
 }
 
 bool operator==(Bullet f, Bullet s)
