@@ -38,7 +38,7 @@ Bullet::Bullet(RAYLIB::Vector3 pos, float rota, float cone, float damage, float 
     static RAYLIB::Texture2D texture = RAYLIB::LoadTexture("assets/weapons/Bullet/BulletsTexture.png");
     static rl::Models model = rl::Models(mesh, texture);
 
-    rota -= 90;
+    rota -= 180;
     _model = model;
     _pos = pos;
     _rota = RAYLIB::GetRandomValue(rota - cone, rota + cone);
@@ -46,9 +46,11 @@ Bullet::Bullet(RAYLIB::Vector3 pos, float rota, float cone, float damage, float 
     _speed = speed;
 }
 
-void Bullet::update()
+void Bullet::update(float radius)
 {
-    auto pt = pointInACircle(this->_rota, (_speed * RAYLIB::GetFrameTime()));
+    if (std::isnan(radius))
+        radius = this->_speed * RAYLIB::GetFrameTime();
+    auto pt = pointInACircle(this->_rota, (radius));
     this->_pos.x += pt.first;
     this->_pos.z -= pt.second;
 }
@@ -65,8 +67,7 @@ Bullet Weapon::shoot()
     this->_nbBullet -= 1;
     auto toRet = Bullet(this->_pos, this->_rota, this->_cone, this->_damage, this->_bullet_speed);
 
-    for (int i = 0; i < 25; i++)
-        toRet.update();
+    toRet.update(0.35);
     return toRet;
 }
 
@@ -74,7 +75,7 @@ void Weapon::update(RAYLIB::Vector2 pos, float rota)
 {
     if (!_wear)
         return;
-    this->_rota = rota;
+    this->_rota = rota - 90;
     std::pair<float, float> circlePos = pointInACircle(std::abs(rota), 0.2);
     this->_pos.x = pos.x + circlePos.first;
     this->_pos.z = pos.y + circlePos.second;
@@ -130,7 +131,7 @@ void Weapon::draw()
     RAYLIB::Vector3 vScale = { scale, scale, scale };
     RAYLIB::Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f };
 
-    RAYLIB::DrawModelEx(_model._model, _pos, rotationAxis, _rota + 90, vScale, RAYLIB::RED);
+    RAYLIB::DrawModelEx(_model._model, _pos, rotationAxis, _rota, vScale, RAYLIB::RED);
 }
 
 bool operator==(Bullet f, Bullet s)

@@ -33,6 +33,7 @@ class Player : public EntityObjects {
         bool _me;
         RAYLIB::Vector2 _pos;
         float _ypos = 0;
+        float _scale;
 };
 
 #endif /* !PLAYER_HPP_ */

@@ -22,7 +22,7 @@ class Bullet : public game_object::Item
         Bullet();
         ~Bullet() = default;
 
-        void update();
+        void update(float radius = std::nanf("0"));
         void draw();
         RAYLIB::Vector2 getPos() {return {_pos.x, _pos.z};};
 

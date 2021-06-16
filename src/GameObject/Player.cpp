@@ -8,7 +8,7 @@
 #include "Player.hpp"
 #include <string>
 
-// static auto playerModel = rl::Models("assets/character/character.obj");
+
 
 float Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2)
 {
@@ -19,8 +19,13 @@ float Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2)
 
 Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
 {
+    static auto globalPlayerModel = rl::Models("assets/character/character.obj");
+    static auto __bb = RAYLIB::MeshBoundingBox(globalPlayerModel._model.meshes[0]);
+    static float __varForCalculateScale = __bb.min.z - __bb.max.z;
+    _scale = 0.3 / __varForCalculateScale;
     this->setPos(pos);
-    _model = rl::Models(std::string("assets/character/character.obj"));
+    _model = globalPlayerModel;
+
     this->_rota = 0;
     this->_change = false;
     this->_id = id;
@@ -28,34 +33,12 @@ Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
 
 void Player::draw()
 {
-    float scale = 15;
-    RAYLIB::Vector3 vScale = { scale, scale, scale};
+    RAYLIB::Vector3 vScale = {_scale , _scale, _scale};
     RAYLIB::Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f };
     auto pos = this->getPos();
 
     RAYLIB::DrawModelEx(_model._model, {pos.x, 0, pos.y}, rotationAxis, _rota, vScale, RAYLIB::GRAY);
 }
-
-// void Player::update(, std::pair<float, float> rota)
-// {
-//     // if (!RAYLIB::IsKeyDown(RAYLIB::KEY_W) && !RAYLIB::IsKeyDown(RAYLIB::KEY_S) &&
-//     // !RAYLIB::IsKeyDown(RAYLIB::KEY_D) && !RAYLIB::IsKeyDown(RAYLIB::KEY_A))
-//     //     return;
-//     static float oldMousePos = RAYLIB::GetMousePosition().x;
-//     float mousePos = RAYLIB::GetMousePosition().x;
-//     float speed = 5;
-//     auto pos = this->getPos();
-
-    
-
-//     if (rota.second == 0)
-//         rota.second = oldMousePos - mousePos;;
-//     _rota += rota.second;
-//     _rota = (int) _rota % 360;
-//     _rota = -Vector2Angle({(float)RAYLIB::GetScreenWidth() / 2, (float)RAYLIB::GetScreenHeight() / 2}, RAYLIB::GetMousePosition());
-//     oldMousePos = mousePos;
-//     this->_change = true;
-// }
 
 void Player::move()
 {
@@ -86,7 +69,7 @@ void Player::rotate()
 
     if (this->_rota == newRota)
         return;
-    this->_rota = newRota;
+    this->_rota = newRota - 180;
     this->_change = true;
 }
 
