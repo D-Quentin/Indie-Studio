@@ -88,5 +88,7 @@ void Game::launch(rl::Window win)
         this->_client->send(CLOSING_SERVER);
     else if (lobby.second.getMe() != -1)
         this->_client->send(CLIENT_CLOSING_CONNECTION);
-    std::cout << "Quiting" << std::endl;
+    #if defined (DEBUG)
+        std::cout << "Quiting" << std::endl;
+    #endif
 }
