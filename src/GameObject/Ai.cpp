@@ -71,7 +71,6 @@ void Ai::setDirections(RAYLIB::Vector2 newPosition)
 void Ai::getPriority() // This function will check if there is an enemy, if he's in range to attack or move to a random point on the map
 {
     Target status = checkEnemy();
-    std::pair<int, int> target_coordinates;
 
     if (status == IN_RANGE && this->targetStatus != IN_RANGE)
         attackEnemy();
@@ -79,7 +78,7 @@ void Ai::getPriority() // This function will check if there is an enemy, if he's
         moveToEnemy();
     else if (status == ABSENT && this->targetStatus != ABSENT)
         setRandomTarget();
-    else if (status == ABSENT && this->targetStatus == ABSENT)
+    if ((status == ABSENT && this->targetStatus == ABSENT) || (status == TOO_FAR && this->targetStatus == TOO_FAR))
         moveToNextTile();
 }
 
