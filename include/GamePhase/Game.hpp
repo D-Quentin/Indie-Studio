@@ -17,7 +17,7 @@
 #include "Client.hpp"
 #include "Server.hpp"
 
-#define DEBUG
+// #define DEBUG
 
 class Game {
     public:

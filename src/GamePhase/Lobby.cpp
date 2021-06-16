@@ -148,7 +148,9 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     GameObject::gestData(this->_obj, str, client, *this);
 
     // Get server data
-    std::cout << "Get Info Start" << std::endl;
+    #if defined(DEBUG)
+        std::cout << "Get Info Start" << std::endl;
+    #endif
     #if defined(_WIN32)
         Sleep(1000);
     #else
@@ -156,7 +158,9 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     #endif
     str = client->read();
     GameObject::gestData(this->_obj, str, client, *this);
-    std::cout << "Get Info End" << std::endl;
+    #if defined(DEBUG)
+        std::cout << "Get Info End" << std::endl;
+    #endif
     this->_me = this->_obj.size();
     if (this->_me == 0)
         this->_host = true;
