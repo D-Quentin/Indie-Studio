@@ -17,7 +17,8 @@ Play::~Play()
 
 GamePhase Play::launch(Client *&client, Lobby &lobby)
 {
-
+    for (int i = 0; i != this->_nbAi; i++)
+        this->_ai.push_back(new Ai(this->_map));
     return (this->restart(client, lobby));
 }
 

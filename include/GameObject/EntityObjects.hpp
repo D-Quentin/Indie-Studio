@@ -2,6 +2,7 @@
 #define BOMBERMAN_ENTITYOBJECTS_HPP
 
 #include "GameObject.hpp"
+#include "Model.hpp"
 
 class EntityObjects : public GameObject {
     public:
@@ -9,9 +10,13 @@ class EntityObjects : public GameObject {
         ~EntityObjects() = default;
 
         unsigned int getHealth();
+        void draw();
+        float _rota;
+        rl::Models _model;
 
     protected:
         unsigned int _health;
+        float _scale;
     };
 
 
