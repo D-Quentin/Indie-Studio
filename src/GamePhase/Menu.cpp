@@ -43,14 +43,14 @@ GamePhase Menu::launch()
     this->_tbackground2 = RAYLIB::LoadTexture("assets/texture/background2.png");
 
     // JoinPhase
-    this->_iIp = InputButton("assets/texture/button_div.png", 17, 45, 33.12, 13, 16, 27, 49, 37);
-    this->_tIp = rl::Text("Ip : ", 20, 49, 37, RAYLIB::BLACK);
-    this->_iPort = InputButton("assets/texture/button_div.png", 50, 45, 33.12, 13, 5, 66, 49, 37);
-    this->_tPort = rl::Text("Port : ", 54, 49, 37, RAYLIB::BLACK);
-    this->_bJoin = Button("assets/texture/button.png", 60, 70, 21.4, 10);
-    this->_tJoin = rl::Text("Join", 66, 73, 29, RAYLIB::BLACK);
-    this->_iYourName = InputButton("assets/texture/port_button.png", 17, 25, 68.64, 14.07, 11, 59, 29, 37);
-    this->_tYourName = rl::Text("Choose your name :", 21, 29, 37, RAYLIB::BLACK);
+    this->_iYourName = InputButton("assets/texture/port_button.png", 17, 20, 68.64, 14.07, 11, 59, 24, 37);
+    this->_tYourName = rl::Text("Choose your name :", 21, 24, 37, RAYLIB::BLACK);
+    this->_iIp = InputButton("assets/texture/port_button.png", 17, 38, 68.64, 14.07, 15, 27, 42, 37);
+    this->_tIp = rl::Text("Ip : ", 20, 42, 37, RAYLIB::BLACK);
+    this->_iPort = InputButton("assets/texture/button_div.png", 17, 56, 33.12, 13, 5, 33, 60, 37);
+    this->_tPort = rl::Text("Port : ", 20, 60, 37, RAYLIB::BLACK);
+    this->_bJoin = Button("assets/texture/button_div.png", 52, 56, 33.12, 13);
+    this->_tJoin = rl::Text("Join", 64, 60, 37, RAYLIB::BLACK);
 
     // CreatePhase
     this->_iServPort = InputButton("assets/texture/port_button.png", 17, 25, 68.64, 14.07, 5, 67, 29, 37);
