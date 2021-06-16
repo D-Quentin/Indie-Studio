@@ -48,6 +48,7 @@ class GamePlay{
         std::list<BlockObject*> _blocks;
         std::list<EntityObjects*> _enemies;
         std::list<game_object::Item*> _items;
+        std::list<Bullet> _bullet;
         int _renderDistance = 40;
         Weapon *_weapon;
         //power-up

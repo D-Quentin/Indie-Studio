@@ -36,7 +36,9 @@ void Game::launch(rl::Window win)
     std::pair<bool, GamePlay> gameplay = {false, GamePlay()};
     std::pair<bool, Play> play = {false, Play()};
 
-    std::signal(SIGINT, signal_handler);
+    #if not defined(_WIN32)
+        std::signal(SIGINT, signal_handler);
+    #endif
     while (statut != QuitPhase && win.loop()) {
         RAYLIB::BeginDrawing();
         win.clear({255, 255, 255, 255});
@@ -84,7 +86,9 @@ void Game::launch(rl::Window win)
     }
     if (lobby.second.isHost())
         this->_client->send(CLOSING_SERVER);
-    else 
+    else if (lobby.second.getMe() != -1)
         this->_client->send(CLIENT_CLOSING_CONNECTION);
-    std::cout << "Quiting" << std::endl;
+    #if defined (DEBUG)
+        std::cout << "Quiting" << std::endl;
+    #endif
 }

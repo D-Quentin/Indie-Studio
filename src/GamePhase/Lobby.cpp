@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #if defined(_WIN32)
     #include <windows.h>
+    #include <winsock.h>
 #else
     #include <stdlib.h>
 #endif
@@ -36,7 +37,7 @@ bool Lobby::isHost(void)
     return (this->_host);
 }
 
-size_t Lobby::getMe(void)
+int Lobby::getMe(void)
 {
     return (this->_me);
 }
@@ -125,12 +126,17 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     std::cout << "Connecting to Ip: " << ip << " / Port: " << port << std::endl;
 
     // Connect to server
+    #if defined(_WIN32)
+        Sleep(1000);
+    #else
+        sleep(1);
+    #endif
     client = new Client(ip, std::atoi(port.c_str()));
     this->_client = client;
     this->_client->launch();
     this->_client->send(INCOMMING_CONNECTION);
     #if defined(_WIN32)
-        Sleep(1000);
+        Sleep(3000);
     #else
         sleep(1);
     #endif
@@ -142,7 +148,9 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     GameObject::gestData(this->_obj, str, client, *this);
 
     // Get server data
-    std::cout << "Get Info Start" << std::endl;
+    #if defined(DEBUG)
+        std::cout << "Get Info Start" << std::endl;
+    #endif
     #if defined(_WIN32)
         Sleep(1000);
     #else
@@ -150,7 +158,9 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     #endif
     str = client->read();
     GameObject::gestData(this->_obj, str, client, *this);
-    std::cout << "Get Info End" << std::endl;
+    #if defined(DEBUG)
+        std::cout << "Get Info End" << std::endl;
+    #endif
     this->_me = this->_obj.size();
     if (this->_me == 0)
         this->_host = true;
@@ -184,15 +194,17 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     while(fgets(bufPublic, 128, file))
         this->_publicIp += bufPublic;
     #if defined(_WIN32)
-        file = _popen("ipconfig", "r");
-        while(fgets(bufLocal, 128, file)) {
-            line = bufLocal;
-            if (line.find("IPv4 Address. . . . . . . . . . . :", 0) != std::string::npos) {
-                line.erase(0,39);
-                this->_localIp = line;
-                break;
-            }
+        WSAData wsaData;
+        WSAStartup(MAKEWORD(1, 1), &wsaData);
+        char ac[80];
+        gethostname(ac, sizeof(ac));
+        struct hostent *phe = gethostbyname(ac);
+        for (int i = 0; phe->h_addr_list[i] != 0; ++i) {
+            struct in_addr addr;
+            memcpy(&addr, phe->h_addr_list[i], sizeof(struct in_addr));
+            this->_localIp += inet_ntoa(addr);
         }
+        WSACleanup();
     #else
         file = popen("hostname -I | awk '{print $1}'", "r");
         while(fgets(bufLocal, 128, file))
