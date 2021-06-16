@@ -44,6 +44,7 @@ Bullet::Bullet(RAYLIB::Vector3 pos, float rota, float cone, float damage, float 
     _rota = RAYLIB::GetRandomValue(rota - cone, rota + cone);
     _damage = damage;
     _speed = speed;
+    this->update(0.35);
 }
 
 void Bullet::update(float radius)
@@ -62,13 +63,17 @@ void Bullet::draw()
 
 Bullet Weapon::shoot()
 {
-    if (!this->_wear || !this->_nbBullet)
-        return Bullet();
-    this->_nbBullet -= 1;
-    auto toRet = Bullet(this->_pos, this->_rota, this->_cone, this->_damage, this->_bullet_speed);
+    static auto lastShoot = TIMENOW;
+    static bool first = true;
 
-    toRet.update(0.35);
-    return toRet;
+    if (first);
+    else if (!this->_wear || !this->_nbBullet || CHRONO(lastShoot) < this->_time_shoot)
+        return Bullet();
+    first = false;
+    lastShoot = TIMENOW;
+    this->_nbBullet -= 1;
+
+    return Bullet(this->_pos, this->_rota, this->_cone, this->_damage, this->_bullet_speed);;
 }
 
 void Weapon::update(RAYLIB::Vector2 pos, float rota)
@@ -128,7 +133,7 @@ Pistol::Pistol(RAYLIB::Vector2 pos)
     _model = pistol_model;
     this->_nbBullet = 21;
     this->_pos = {pos.x, 0.1, pos.y};
-    this->_time_shoot = 0.2f;
+    this->_time_shoot = 500;
     this->_bullet_speed = 1.5f;
     this->_damage = 20;
     this->_cone = 5;

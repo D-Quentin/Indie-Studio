@@ -102,7 +102,7 @@ void GamePlay::updateLocal()
     this->_player.rotate();
     ///update weapon
     _weapon->update(_player.getPos(), _player._rota);
-    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_SPACE))
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
         _bullet.push_back(_weapon->shoot());
     for (auto &it : _bullet) {
         it.update(); /// update pos
