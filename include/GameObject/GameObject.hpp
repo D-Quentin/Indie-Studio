@@ -22,6 +22,7 @@ class GameObject : public IGameObject {
         RAYLIB::Vector2 getPos();
         int getId();
         void setPos(RAYLIB::Vector2);
+        void setPos(RAYLIB::Vector3);
         void setId(int);
         static void gestData(std::map<int, GameObject *> &, std::string, Client *&, Lobby &);
 
@@ -29,6 +30,7 @@ class GameObject : public IGameObject {
         RAYLIB::Vector2 _pos;
         int _id;
         bool _change;
+        float _ypos = 0;
     private:
 };
 

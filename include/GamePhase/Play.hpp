@@ -11,6 +11,7 @@
 #include "Game.hpp"
 #include "Player.hpp"
 #include "Lobby.hpp"
+#include "Ai.hpp"
 
 class Play {
     enum Phase {
@@ -34,6 +35,9 @@ class Play {
         size_t _me;
         rl::Camera _TopCamera;
         int _renderDistance = 40;
+        std::vector<Ai *> _ai;
+        int _nbAi;
+        std::vector<std::vector<char>> _map;
 };
 
 #endif /* !PLAY_HPP_ */

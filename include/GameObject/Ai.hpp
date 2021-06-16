@@ -1,15 +1,36 @@
 #ifndef BOMBERMAN_AI_HPP
 #define BOMBERMAN_AI_HPP
 
+#include <utility>
 #include "EntityObjects.hpp"
 
-class Ai : public EntityObjects {
-    public:
-        Ai() = default;
-        ~Ai() = default;
+enum Target {IN_RANGE, TOO_FAR, ABSENT, UNDEFINED};
 
-        std::string serialize();
-        void deserialize(std::string str);
+class Ai : public EntityObjects {
+public:
+    Ai(std::vector<std::vector<char>> map);
+    ~Ai() = default;
+
+    Target checkEnemy();
+    RAYLIB::Vector2 getEnemyPosition();
+    double calculateDist(RAYLIB::Vector2 pos);
+    std::vector<RAYLIB::KeyboardKey> getDirections();
+    void setDirections(RAYLIB::Vector2 newPosition);
+    void getPriority();
+    void moveToEnemy();
+    void attackEnemy();
+    void setRandomTarget();
+    void moveToNextTile();
+
+    std::string serialize();
+    void deserialize(std::string str);
+
+protected:
+    RAYLIB::Vector2 targetPosition;
+    Target targetStatus;
+    std::vector<RAYLIB::KeyboardKey> directions;
+    std::vector<std::vector<char>> map;
+    std::vector<RAYLIB::Vector2> close;
     };
 
 

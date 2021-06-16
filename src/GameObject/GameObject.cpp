@@ -26,6 +26,12 @@ void GameObject::setPos(RAYLIB::Vector2 pos)
     this->_pos = pos;
 }
 
+void GameObject::setPos(RAYLIB::Vector3 pos)
+{
+    this->_pos = {pos.x, pos.z};
+    this->_ypos = pos.y;
+}
+
 int GameObject::getId()
 {
     return (this->_id);
