@@ -140,6 +140,36 @@ Pistol::Pistol(RAYLIB::Vector2 pos)
     _type = "pistol";
 }
 
+Rifle::Rifle(RAYLIB::Vector2 pos)
+{
+    std::string path("assets/weapons/Baretta/");
+    static rl::Models rifle_model = rl::Models(std::string(path + "Beretta.obj"));
+
+    _model = rifle_model;
+    this->_nbBullet = 35;
+    this->_pos = {pos.x, 0.1, pos.y};
+    this->_time_shoot = 100;
+    this->_bullet_speed = 2;
+    this->_damage = 40;
+    this->_cone = 10;
+    _type = "rifle";
+}
+
+Snip::Snip(RAYLIB::Vector2 pos)
+{
+    std::string path("assets/weapons/Baretta/");
+    static rl::Models snip_model = rl::Models(std::string(path + "Beretta.obj"));
+
+    _model = snip_model;
+    this->_nbBullet = 6;
+    this->_pos = {pos.x, 0.1, pos.y};
+    this->_time_shoot = 1500;
+    this->_bullet_speed = 5;
+    this->_damage = 100;
+    this->_cone = 0;
+    _type = "snip";
+}
+
 bool operator==(Bullet f, Bullet s)
 {
     auto fPos = f.getPos();

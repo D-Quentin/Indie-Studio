@@ -42,6 +42,7 @@ class GamePlay{
 
         //other methods
         void drawAll();
+        void testThings();
 
     private: //attr
         Player _player;

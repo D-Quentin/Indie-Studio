@@ -58,7 +58,7 @@ GamePhase GamePlay::restart()
         // ACTIVE_CAMERA.begin3D();
         RAYLIB::BeginMode3D(ACTIVE_CAMERA.getCamera());
         this->updateLocal();
-
+        this->testThings();
         this->drawAll();
         // ACTIVE_CAMERA.end3D();
         RAYLIB::EndMode3D();
@@ -70,6 +70,16 @@ GamePhase GamePlay::restart()
     }
     // RAYLIB::ShowCursor();
     return MenuPhase;
+}
+
+void GamePlay::testThings()
+{
+    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_V))
+        _weapon = new Pistol();
+    else if (RAYLIB::IsKeyPressed(RAYLIB::KEY_B))
+        _weapon = new Rifle();
+    else if (RAYLIB::IsKeyPressed(RAYLIB::KEY_N))
+        _weapon = new Snip();
 }
 
 void GamePlay::updateLocal()
