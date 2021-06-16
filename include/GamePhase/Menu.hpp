@@ -66,6 +66,9 @@ class Menu {
         // SettingPhase
         Button _bUp;
         Button _bDown;
+        Button _bUpFram;
+        Button _bDownFram;
+        Button _bChange;
         std::vector<Button> _bInput;
         std::vector<int> _ikey;
 
