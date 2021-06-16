@@ -35,6 +35,8 @@ class Menu {
         std::string getIp();
         std::string getPort();
         std::string getYourName();
+        void check_buttonclick();
+        void draw_touch();
 
     protected:
     private:
@@ -64,6 +66,8 @@ class Menu {
         // SettingPhase
         Button _bUp;
         Button _bDown;
+        std::vector<Button> _bInput;
+        std::vector<int> _ikey;
 
         // JoinPhase
         InputButton _iIp;

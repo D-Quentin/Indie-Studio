@@ -43,8 +43,16 @@ GamePhase Menu::launch()
     this->_tbackground2 = RAYLIB::LoadTexture("assets/texture/background2.png");
 
     // Settingphase
-    this->_bUp = Button("assets/texture/button_second_page.png", 10, 30, 67.68, 17.1);
-    this->_bDown = Button("assets/texture/button_second_page.png", 15, 30, 67.68, 17.1);
+    this->_bUp = Button("../../../Documents/indi.png", 20, 35, 9.2, 9);
+    this->_bDown = Button("../../../Documents/indi.png", 10, 35, 9.2, 9);
+    for (int i = 0, u = 60, a = 30; i != 6; i++, u += 15) {
+        this->_bInput.push_back(Button("../../../Documents/indi.png", u, a, 9.2, 9));
+        if (u == 75) {
+            u = 45;
+            a += 10;
+        }
+    }
+    this->_ikey = {'z', 's', 'q', 'd', 'e', 'i'};
 
     // JoinPhase
     this->_iIp = InputButton(8, 60, 50, 11, 16);
@@ -114,11 +122,53 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
     return (gamePhase);
 }
 
+void Menu::check_buttonclick()
+{
+    static int a = 0;
+    int b = 0;
+
+    for (int i = 0; i != 6; i++)
+        if (this->_bInput[i].isClicked())
+            a = i * -1;
+    if (a > 0)
+        return;
+    b = RAYLIB::GetCharPressed();
+    if (b <= 0)
+        return;
+    this->_ikey[a *-1] = b;
+    a = -1;
+}
+
+void Menu::draw_touch()
+{
+    rl::Text sound;
+    char c = 0;
+    std::string str;
+
+    for (int i = 0, u = 60, a = 30; i != 6; i++, u += 15) {
+        c = this->_ikey[i];
+        if (c == ' ') {
+            str = "SPACE";
+            sound = rl::Text(str, u+2, a+2, 20, RAYLIB::LIGHTGRAY);
+        }
+        else {
+            str.push_back(c);
+            sound = rl::Text(str, u+4, a, 40, RAYLIB::LIGHTGRAY);
+        }
+        sound.draw();
+        str = "";
+        if (u == 75) {
+            u = 45;
+            a += 10;
+        }
+    }
+}
+
 GamePhase Menu::settingPhase(GamePhase gamePhase)
 {
     static int i = 0;
     rl::Text sound;
-    std::stringstream sstream;
+    int select = 0;
 
     if (this->_bReturn.isClicked())
         this->_phase = MainPhase;
@@ -126,14 +176,17 @@ GamePhase Menu::settingPhase(GamePhase gamePhase)
         i++;
     if (this->_bDown.isPressed() && i > 0)
         i--;
-    sstream << i;
-    sound = rl::Text(sstream.str(), 75, 46, 70, RAYLIB::LIGHTGRAY);
+    check_buttonclick();
+    sound = rl::Text(std::to_string(i), 17, 20, 70, RAYLIB::LIGHTGRAY);
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    for (int u = 0; u != 6; u++)
+        this->_bInput[u].draw();
     this->_bReturn.draw();
     this->_tReturn.draw();
     this->_bUp.draw();
     this->_bDown.draw();
     sound.draw();
+    draw_touch();
     return (gamePhase);
 }
 
