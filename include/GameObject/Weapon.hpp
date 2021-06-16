@@ -14,7 +14,6 @@
 #include "Encapsulation/Text.hpp"
 #include <chrono>
 
-#define TIMEAT(x) std::chrono::duration_cast<std::chrono::milliseconds>(x).count()
 #define TIMENOW std::chrono::high_resolution_clock::now()
 #define CHRONO(x) std::chrono::duration_cast<std::chrono::milliseconds>(TIMENOW - x).count()
 

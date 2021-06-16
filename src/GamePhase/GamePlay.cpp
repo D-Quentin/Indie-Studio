@@ -77,6 +77,7 @@ void GamePlay::updateLocal()
     //update player
     bool col = false;
     auto oldPlayerPos = _player.getPos();
+    bool bullet_player = true;
 
     this->_player.move();
     // handle player / block colision
@@ -93,10 +94,13 @@ void GamePlay::updateLocal()
         for (auto &it : _bullet)
             if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))
                 it.isReal = false;
-            else if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius)) {
-                it.isReal = false;
-                std::cerr << "touch";
+            else if (bullet_player) {
+                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius)) {
+                    it.isReal = false;
+                    std::cerr << "touch";
+                }
             }
+        bullet_player = false;
     }
     //end collision
     this->_player.rotate();
