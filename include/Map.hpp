@@ -37,10 +37,12 @@ class map
         void create_square_part(int, int);
         void create_down_square_part(int, int);
         std::vector<char> remove_spawn_point(std::vector<char>);
+        void create_weapons();
     private:
         std::vector<std::vector<int>> plan_int;
         std::vector<std::vector<char>> plan_char;
         std::vector<int> vec_spawn;
+        std::vector<int> vec_weapons;
         std::vector<char> char_list;
         std::vector<char> char_list_high;
         std::vector<char> char_list_down;
