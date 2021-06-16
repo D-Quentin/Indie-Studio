@@ -37,7 +37,7 @@ bool Lobby::isHost(void)
     return (this->_host);
 }
 
-size_t Lobby::getMe(void)
+int Lobby::getMe(void)
 {
     return (this->_me);
 }

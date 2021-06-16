@@ -32,7 +32,7 @@ class Lobby {
         GamePhase mainPhase(GamePhase, Client *&);
         GamePhase joinPhase(GamePhase, Client *&, std::string, std::string);
 
-        size_t getMe(void);
+        int getMe(void);
         bool isHost(void);
         int getReadyPlayer(void);
         int getPlayer(void);
