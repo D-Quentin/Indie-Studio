@@ -12,17 +12,21 @@
 #include "include.hpp"
 #include "Model.hpp"
 #include "Encapsulation/Text.hpp"
+#include <chrono>
+
+#define TIMENOW std::chrono::high_resolution_clock::now()
+#define CHRONO(x) std::chrono::duration_cast<std::chrono::milliseconds>(TIMENOW - x).count()
 
 // static auto bulletModel = rl::Models("assets/weapons/Bullet/Bullet.obj");
 
 class Bullet : public game_object::Item
 {
     public :
-        Bullet(RAYLIB::Vector3 pos, float rota);
+        Bullet(RAYLIB::Vector3 pos, float rota, float cone, float damage, float speed);
         Bullet();
         ~Bullet() = default;
 
-        void update();
+        void update(float radius = std::nanf("0"));
         void draw();
         RAYLIB::Vector2 getPos() {return {_pos.x, _pos.z};};
 
@@ -32,10 +36,9 @@ class Bullet : public game_object::Item
         bool isReal = true;
     private :
         RAYLIB::Vector3 _pos;
-        float _x_ref;
-        float _y_ref;
         float _rota;
-        float _a;
+        float _damage;
+        float _speed;
         rl::Models _model;
 };
 
@@ -61,6 +64,8 @@ class Weapon : public game_object::Item
     protected:
         RAYLIB::Vector3 _pos;
         unsigned short _nbBullet;
+        float _cone;
+        float _damage;
         float _time_shoot;
         float _bullet_speed;
         std::string _type;
@@ -72,10 +77,22 @@ class Weapon : public game_object::Item
 class Pistol : public Weapon
 {
     public :
-        Pistol(RAYLIB::Vector2 pos);
+        Pistol(RAYLIB::Vector2 pos = {0, 0});
         ~Pistol() = default;
+};
 
-    private:
+class Rifle : public Weapon
+{
+    public :
+        Rifle(RAYLIB::Vector2 pos = {0, 0});
+        ~Rifle() = default;
+};
+
+class Snip : public Weapon
+{
+    public :
+        Snip(RAYLIB::Vector2 pos = {0, 0});
+        ~Snip() = default;
 };
 
 

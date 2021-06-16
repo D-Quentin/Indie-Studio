@@ -58,7 +58,7 @@ GamePhase GamePlay::restart()
         // ACTIVE_CAMERA.begin3D();
         RAYLIB::BeginMode3D(ACTIVE_CAMERA.getCamera());
         this->updateLocal();
-
+        this->testThings();
         this->drawAll();
         // ACTIVE_CAMERA.end3D();
         RAYLIB::EndMode3D();
@@ -72,19 +72,31 @@ GamePhase GamePlay::restart()
     return MenuPhase;
 }
 
+void GamePlay::testThings()
+{
+    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_V))
+        _weapon = new Pistol();
+    else if (RAYLIB::IsKeyPressed(RAYLIB::KEY_B))
+        _weapon = new Rifle();
+    else if (RAYLIB::IsKeyPressed(RAYLIB::KEY_N))
+        _weapon = new Snip();
+}
+
 void GamePlay::updateLocal()
 {
     //update player
     bool col = false;
     auto oldPlayerPos = _player.getPos();
+    bool bullet_player = true;
 
     this->_player.move();
     // handle player / block colision
     for (auto it : _blocks) {
         auto playerPos = _player.getPos();
+        float player_radius = 0.3f;
         auto blockPos = it->getPos();
         RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
-        bool col = RAYLIB::CheckCollisionCircleRec(playerPos, 0.3, blockPhysic);
+        bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
 
         if (col)
             _player.setPos(oldPlayerPos);
@@ -92,16 +104,19 @@ void GamePlay::updateLocal()
         for (auto &it : _bullet)
             if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))
                 it.isReal = false;
-            else if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, 0.3)) {
-                it.isReal = false;
-                std::cerr << "touch";
+            else if (bullet_player) {
+                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius)) {
+                    it.isReal = false;
+                    std::cerr << "touch";
+                }
             }
+        bullet_player = false;
     }
     //end collision
     this->_player.rotate();
     ///update weapon
     _weapon->update(_player.getPos(), _player._rota);
-    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_SPACE))
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
         _bullet.push_back(_weapon->shoot());
     for (auto &it : _bullet) {
         it.update(); /// update pos
