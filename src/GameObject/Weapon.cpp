@@ -32,27 +32,23 @@ Bullet::Bullet()
     isReal = false;
 }
 
-Bullet::Bullet(RAYLIB::Vector3 pos, float rota)
+Bullet::Bullet(RAYLIB::Vector3 pos, float rota, float cone, float damage, float speed)
 {
-    static auto mesh = RAYLIB::GenMeshSphere(0.05, 16, 16);
-    static auto texture = RAYLIB::LoadTexture("assets/weapons/Bullet/BulletsTexture.png");
-    static auto model = rl::Models(mesh, texture);
-    
+    static RAYLIB::Mesh mesh = RAYLIB::GenMeshSphere(0.05, 16, 16);
+    static RAYLIB::Texture2D texture = RAYLIB::LoadTexture("assets/weapons/Bullet/BulletsTexture.png");
+    static rl::Models model = rl::Models(mesh, texture);
+
+    rota -= 90;
     _model = model;
     _pos = pos;
-    _rota = rota - 90;
-    _a = coefDirector({this->_pos.x, this->_pos.z}, pointInACircle(this->_rota, 1));
-    float y = _a * 2;
-    float total = y + 2;
-    _x_ref = 2 * 100 / total;
-    _y_ref = _x_ref - 100;
+    _rota = RAYLIB::GetRandomValue(rota - cone, rota + cone);
+    _damage = damage;
+    _speed = speed;
 }
 
 void Bullet::update()
 {
-    float bullet_speed = 0.7;
-
-    auto pt = pointInACircle(this->_rota, (bullet_speed * RAYLIB::GetFrameTime()));
+    auto pt = pointInACircle(this->_rota, (_speed * RAYLIB::GetFrameTime()));
     this->_pos.x += pt.first;
     this->_pos.z -= pt.second;
 }
@@ -67,7 +63,7 @@ Bullet Weapon::shoot()
     if (!this->_wear || !this->_nbBullet)
         return Bullet();
     this->_nbBullet -= 1;
-    auto toRet = Bullet(this->_pos, this->_rota);
+    auto toRet = Bullet(this->_pos, this->_rota, this->_cone, this->_damage, this->_bullet_speed);
 
     for (int i = 0; i < 25; i++)
         toRet.update();
@@ -123,6 +119,8 @@ Pistol::Pistol(RAYLIB::Vector2 pos)
     this->_pos = {pos.x, size, pos.y};
     this->_time_shoot = 0.2f;
     this->_bullet_speed = 0.7f;
+    this->_damage = 20;
+    this->_cone = 5;
     _type = "pistol";
 }
 

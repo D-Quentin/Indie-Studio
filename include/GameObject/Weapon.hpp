@@ -18,7 +18,7 @@
 class Bullet : public game_object::Item
 {
     public :
-        Bullet(RAYLIB::Vector3 pos, float rota);
+        Bullet(RAYLIB::Vector3 pos, float rota, float cone, float damage, float speed);
         Bullet();
         ~Bullet() = default;
 
@@ -32,10 +32,9 @@ class Bullet : public game_object::Item
         bool isReal = true;
     private :
         RAYLIB::Vector3 _pos;
-        float _x_ref;
-        float _y_ref;
         float _rota;
-        float _a;
+        float _damage;
+        float _speed;
         rl::Models _model;
 };
 
@@ -61,6 +60,8 @@ class Weapon : public game_object::Item
     protected:
         RAYLIB::Vector3 _pos;
         unsigned short _nbBullet;
+        float _cone;
+        float _damage;
         float _time_shoot;
         float _bullet_speed;
         std::string _type;
