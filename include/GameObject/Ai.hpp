@@ -21,6 +21,7 @@ public:
     void attackEnemy();
     void setRandomTarget();
     void moveToNextTile();
+
     std::string serialize();
     void deserialize(std::string str);
 
