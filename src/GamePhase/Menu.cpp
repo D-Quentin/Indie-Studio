@@ -122,13 +122,17 @@ GamePhase Menu::settingPhase(GamePhase gamePhase)
 
     if (this->_bReturn.isClicked())
         this->_phase = MainPhase;
-    if (this->_bUp.isClicked() && i < 101)
+    if (this->_bUp.isPressed() && i < 100)
         i++;
+    if (this->_bDown.isPressed() && i > 0)
+        i--;
     sstream << i;
     sound = rl::Text(sstream.str(), 75, 46, 70, RAYLIB::LIGHTGRAY);
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    this->_bReturn.draw();
     this->_tReturn.draw();
     this->_bUp.draw();
+    this->_bDown.draw();
     sound.draw();
     return (gamePhase);
 }
