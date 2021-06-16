@@ -7,8 +7,7 @@
 
 #include "Player.hpp"
 #include <string>
-
-
+#include <Weapon.hpp>
 
 float Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2)
 {
@@ -61,6 +60,14 @@ void Player::move()
     RAYLIB::Vector2 toSet = {pos.x + move.first * speed, pos.y + move.second * speed };
     this->_pos = toSet;
     this->_change = true;
+}
+
+void Player::dash()
+{
+    auto pos = getPos();
+    std::pair<float, float> circlePos = pointInACircle(std::abs(_rota + 90), 0.0025);
+    this->_pos.x += circlePos.first;
+    this->_pos.y += circlePos.second;
 }
 
 void Player::rotate()

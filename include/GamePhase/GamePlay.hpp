@@ -23,6 +23,7 @@
 #include "Encapsulation/Window.hpp"
 #include "Encapsulation/Text.hpp"
 #include "Weapon.hpp"
+#include "PowerUp.hpp"
 
 class GamePlay{
     public:
@@ -39,6 +40,7 @@ class GamePlay{
         void setItems(std::list<game_object::Item*> obj) {_items = obj;};
         void nonToPoi(std::list<MapBlock>);
         void updateLocal();
+        void updatePowerUp();
 
         //other methods
         void drawAll();
@@ -52,7 +54,7 @@ class GamePlay{
         std::list<Bullet> _bullet;
         int _renderDistance = 40;
         Weapon *_weapon;
-        //power-up
+        std::list<PowerUp*> _power_up;
         //server
         rl::Camera _FPCamera;
         rl::Camera _TopCamera;

@@ -95,5 +95,6 @@ class Snip : public Weapon
         ~Snip() = default;
 };
 
+std::pair<float, float> pointInACircle(float angle, float radius);
 
 #endif /* !WEAPON_HPP_ */
