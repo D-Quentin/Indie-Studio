@@ -15,15 +15,26 @@ void GamePlay::testThings()
         _weapon = new Rifle();
     else if (RAYLIB::IsKeyPressed(RAYLIB::KEY_KP_2))
         _weapon = new Snip();
+    else if (RAYLIB::IsKeyPressed(RAYLIB::KEY_KP_3))
+        _power_up.push_back(new Dash);
+    else if (RAYLIB::IsKeyPressed(RAYLIB::KEY_KP_4))
+        _power_up.push_back(new Shield);
+    else if (RAYLIB::IsKeyPressed(RAYLIB::KEY_KP_5))
+        _power_up.push_back(new Speed);
+}
+
+bool compare(PowerUp *f, PowerUp *s)
+{
+    return f->getPower() == s->getPower();
 }
 
 void GamePlay::updatePowerUp()
 {
-    _power_up.push_back(new Dash());
+    _power_up.unique(compare);
     for (auto &it : _power_up)
         switch (it->getPower()) {
             case PUSpeed:
-                it->update();
+                _player.setSpeed(it->update());
                 break;
             case PUShield:
                 _player.setShield();
@@ -33,8 +44,10 @@ void GamePlay::updatePowerUp()
                 it->update();
                 break;
             case PUDash:
-                if (RAYLIB::IsKeyPressed(RAYLIB::KEY_ENTER))
+                if (RAYLIB::IsKeyPressed(RAYLIB::KEY_ENTER)) {
                     _player.dash();
+                    it->use();
+                }
                 break;
             case PUNothing:
                 break;
@@ -45,7 +58,6 @@ void GamePlay::updateLocal()
 {
     //update player
     bool col = false;
-    auto oldPlayerPos = _player.getPos();
     bool bullet_player = true;
 
     this->_player.move();
@@ -58,7 +70,7 @@ void GamePlay::updateLocal()
         bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
 
         if (col)
-            _player.setPos(oldPlayerPos);
+            _player.setPos(_oldPlayerPos);
         //check collision bullet  /walls
         for (auto &it : _bullet) {
             if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))

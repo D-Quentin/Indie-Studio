@@ -25,10 +25,13 @@ class PowerUp {
     public:
         ~PowerUp();
         void use() {_type = PUNothing;};
-        void update() {
+        bool update() {
             static auto start = TIMENOW;
-            if (CHRONO(start) >= this->_time * 1000)
+            if (CHRONO(start) >= this->_time * 1000) {
                 this->_type = PUNothing;
+                return false;
+            }
+            return true;
         };
         EnumPowerUp getPower() const {return _type;};
 

@@ -58,6 +58,7 @@ class GamePlay{
 
     private: //attr
         Player _player;
+        RAYLIB::Vector2 _oldPlayerPos;
         std::list<BlockObject*> _blocks;
         std::list<EntityObjects*> _enemies;
         std::list<game_object::Item*> _items;
