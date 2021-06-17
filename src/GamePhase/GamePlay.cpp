@@ -57,14 +57,16 @@ GamePhase GamePlay::restart()
 
         // ACTIVE_CAMERA.begin3D();
         RAYLIB::BeginMode3D(ACTIVE_CAMERA.getCamera());
-        this->updatePowerUp();
-        this->updateLocal();
-        this->testThings();
+        if (_player.isAlive()) {
+            this->updatePowerUp();
+            this->updateLocal();
+            this->testThings();
+        }
         this->drawAll();
         // ACTIVE_CAMERA.end3D();
         RAYLIB::EndMode3D();
         RAYLIB::DrawFPS(10, 10);
-        rl::Text(std::to_string(_player._rota), 15, 10, 25, {255, 0, 0, 255}).draw();
+        rl::Text(std::to_string(_player.getHealth()), 15, 10, 25, {255, 0, 0, 255}).draw();
 
         RAYLIB::EndDrawing();
         RAYLIB::ClearBackground({255, 255, 255, 255});
@@ -132,7 +134,7 @@ void GamePlay::updateLocal()
             else if (bullet_player) {
                 if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius)) {
                     it.isReal = false;
-                    std::cerr << "touch";
+                    _player.takeDamage(it.getDamage());
                 }
             }
         bullet_player = false;
