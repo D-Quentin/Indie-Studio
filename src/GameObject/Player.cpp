@@ -21,7 +21,7 @@ Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
     static auto globalPlayerModel = rl::Models("assets/character/character.obj");
     static auto __bb = RAYLIB::MeshBoundingBox(globalPlayerModel._model.meshes[0]);
     static float __varForCalculateScale = __bb.min.z - __bb.max.z;
-    _scale = 0.3 / __varForCalculateScale;
+    _scale = std::abs(0.3 / __varForCalculateScale);
     this->setPos(pos);
     _model = globalPlayerModel;
 
