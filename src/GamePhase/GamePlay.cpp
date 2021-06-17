@@ -7,7 +7,7 @@
 
 #include "GamePlay.hpp"
 
-// #define ACTIVE_CAMERA ((this->_isFpCam) ? this->_FPCamera : this->_TopCamera)
+// #define ACTIVE_CAMERA ((!this->_player.isAlive()) ? this->_FPCamera : this->_TopCamera)
 
 void GamePlay::nonToPoi(std::list<MapBlock> obj)
 {
@@ -17,7 +17,7 @@ void GamePlay::nonToPoi(std::list<MapBlock> obj)
 
 GamePlay::GamePlay()
 {
-    // _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 0, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
+    _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 0, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
     _player = Player();
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
@@ -56,7 +56,6 @@ GamePhase GamePlay::restart()
         }
         this->drawAll();
         RAYLIB::DrawFPS(10, 10);
-        rl::Text(std::to_string(_player.getHealth()), 15, 10, 25, {255, 0, 0, 255}).draw();
 
         RAYLIB::EndDrawing();
         RAYLIB::ClearBackground({255, 255, 255, 255});
@@ -75,6 +74,7 @@ void GamePlay::aliveCall()
 void GamePlay::specCall()
 {
     //todo
+    ACTIVE_CAMERA.updateCamera();
 }
 
 void GamePlay::drawAll()

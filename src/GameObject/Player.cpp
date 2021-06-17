@@ -67,7 +67,7 @@ void Player::rotate()
 
     if (this->_rota == newRota)
         return;
-    this->_rota = newRota - 180;
+    this->_rota = newRota;
     this->_change = true;
 }
 
