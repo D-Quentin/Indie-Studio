@@ -18,13 +18,11 @@ void GamePlay::nonToPoi(std::list<MapBlock> obj)
 GamePlay::GamePlay()
 {
     // _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 0, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
-    std::cerr << "first";
     _player = Player();
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
     // RAYLIB::ShowCursor();
     this->_weapon = new Pistol(pos);
-    Pistol(pos).update({0, 0}, 0);
 }
 
 GamePhase GamePlay::launch()
@@ -37,8 +35,6 @@ GamePhase GamePlay::launch()
     auto texture = RAYLIB::LoadTexture(std::string(path + "texture_minecraft_stone.png").c_str());
     auto model = rl::Models(mesh, texture);
     auto m = Map3D(charMap, model, size);
-    _spawn = m._spawns.front();
-    _player.setPos(RAYLIB::Vector2{_spawn.first, _spawn.second});
 
     _TopCamera.setPosition({_spawn.first, _TopCamera.getPosition().y, _spawn.second});
     _FPCamera.setPosition({_spawn.first, _FPCamera.getPosition().y, _spawn.second});
@@ -97,8 +93,8 @@ void GamePlay::drawAll()
     }
 //     for (auto it : this->_enemies)
 //         it->draw();
-//     for (auto it : this->_items)
-//         it->draw();
+    for (auto it : this->_items)
+        it->draw();
     for (auto &it : _bullet) {
         it.update();
         it.draw(); // draw

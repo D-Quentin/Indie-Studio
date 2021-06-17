@@ -125,7 +125,7 @@ void Weapon::draw()
     RAYLIB::Vector3 vScale = { scale, scale, scale };
     RAYLIB::Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f };
 
-    RAYLIB::DrawModelEx(_model._model, {_pos.x, _ypos, _pos.y}, rotationAxis, _rota, vScale, RAYLIB::RED);
+    RAYLIB::DrawModelEx(_model._model, {_pos.x, _ypos, _pos.y}, rotationAxis, _rota, vScale, RAYLIB::WHITE);
 }
 
 Pistol::Pistol(RAYLIB::Vector2 pos)

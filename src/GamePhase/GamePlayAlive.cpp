@@ -40,9 +40,6 @@ void GamePlay::updatePowerUp()
                 _player.setShield();
                 it->use();
                 break;
-            case PUView:
-                it->update();
-                break;
             case PUDash:
                 if (RAYLIB::IsKeyPressed(RAYLIB::KEY_ENTER)) {
                     _player.dash();
