@@ -62,6 +62,11 @@ void Lobby::setPlayer(int player)
     this->_player = player;
 }
 
+std::map<int, GameObject *> Lobby::getObj()
+{
+    return (this->_obj);
+}
+
 GamePhase Lobby::launch(Client *&client, std::string ip, std::string port)
 {
     this->_phase = JoinPhase;
@@ -100,6 +105,8 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
         this->_ready = true;
         client->send("READY;\n");
     }
+    if (this->_readyPlayer == this->_player)
+            gamePhase = PlayPhase;
     this->_tReady.setText("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player));
 
     // 2D Drawing

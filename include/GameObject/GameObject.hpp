@@ -13,6 +13,7 @@
 #include <map>
 
 class Lobby;
+class Play;
 
 class GameObject : public IGameObject {
     public:
@@ -25,6 +26,7 @@ class GameObject : public IGameObject {
         void setPos(RAYLIB::Vector3);
         void setId(int);
         static void gestData(std::map<int, GameObject *> &, std::string, Client *&, Lobby &);
+        static void gestData(std::map<int, GameObject *> &, std::string, Client *&, Play &);
 
     protected:
         RAYLIB::Vector2 _pos;

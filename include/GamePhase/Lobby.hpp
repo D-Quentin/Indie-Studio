@@ -36,6 +36,7 @@ class Lobby {
         bool isHost(void);
         int getReadyPlayer(void);
         int getPlayer(void);
+        std::map<int, GameObject *> getObj(void);
         void setReadyPlayer(int);
         void setPlayer(int);
 
