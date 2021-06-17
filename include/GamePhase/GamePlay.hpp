@@ -25,6 +25,8 @@
 #include "Weapon.hpp"
 #include "PowerUp.hpp"
 
+#define ACTIVE_CAMERA (this->_TopCamera)
+
 class GamePlay{
     public:
         GamePlay();
@@ -39,12 +41,20 @@ class GamePlay{
         void setEnemies(std::list<EntityObjects*> obj) {_enemies = obj;};
         void setItems(std::list<game_object::Item*> obj) {_items = obj;};
         void nonToPoi(std::list<MapBlock>);
+
+        //alive methode
         void updateLocal();
         void updatePowerUp();
+        void testThings();
+        void delFalseBullet();
+
+        //spec method
+        //todo
 
         //other methods
+        void aliveCall();
+        void specCall();
         void drawAll();
-        void testThings();
 
     private: //attr
         Player _player;

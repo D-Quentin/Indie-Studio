@@ -8,7 +8,6 @@
 #include "GamePlay.hpp"
 
 // #define ACTIVE_CAMERA ((this->_isFpCam) ? this->_FPCamera : this->_TopCamera)
-#define ACTIVE_CAMERA (this->_TopCamera)
 
 void GamePlay::nonToPoi(std::list<MapBlock> obj)
 {
@@ -50,21 +49,15 @@ GamePhase GamePlay::launch()
 
 GamePhase GamePlay::restart()
 {
-    // RAYLIB::HideCursor();
     while (!RAYLIB::WindowShouldClose()) {
     //updtae attrib from server
         RAYLIB::BeginDrawing();
-
-        // ACTIVE_CAMERA.begin3D();
-        RAYLIB::BeginMode3D(ACTIVE_CAMERA.getCamera());
         if (_player.isAlive()) {
-            this->updatePowerUp();
-            this->updateLocal();
-            this->testThings();
+            this->aliveCall();
+        } else {
+            this->specCall();
         }
         this->drawAll();
-        // ACTIVE_CAMERA.end3D();
-        RAYLIB::EndMode3D();
         RAYLIB::DrawFPS(10, 10);
         rl::Text(std::to_string(_player.getHealth()), 15, 10, 25, {255, 0, 0, 255}).draw();
 
@@ -75,93 +68,22 @@ GamePhase GamePlay::restart()
     return MenuPhase;
 }
 
-void GamePlay::updatePowerUp()
+void GamePlay::aliveCall()
 {
-    _power_up.push_back(new Dash());
-    for (auto &it : _power_up)
-        switch (it->getPower()) {
-            case PUSpeed:
-                it->update();
-                break;
-            case PUShield:
-                _player.setShield();
-                it->use();
-                break;
-            case PUView:
-                it->update();
-                break;
-            case PUDash:
-                if (RAYLIB::IsKeyPressed(RAYLIB::KEY_ENTER))
-                    _player.dash();
-                break;
-            case PUNothing:
-                break;
-        }
+    this->updatePowerUp();
+    this->updateLocal();
+    this->testThings();
 }
 
-void GamePlay::testThings()
+void GamePlay::specCall()
 {
-    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_KP_0))
-        _weapon = new Pistol();
-    else if (RAYLIB::IsKeyPressed(RAYLIB::KEY_KP_1))
-        _weapon = new Rifle();
-    else if (RAYLIB::IsKeyPressed(RAYLIB::KEY_KP_2))
-        _weapon = new Snip();
-}
-
-void GamePlay::updateLocal()
-{
-    //update player
-    bool col = false;
-    auto oldPlayerPos = _player.getPos();
-    bool bullet_player = true;
-
-    this->_player.move();
-    // handle player / block colision
-    for (auto it : _blocks) {
-        auto playerPos = _player.getPos();
-        float player_radius = 0.3f;
-        auto blockPos = it->getPos();
-        RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
-        bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
-
-        if (col)
-            _player.setPos(oldPlayerPos);
-        //check collision bullet  /walls
-        for (auto &it : _bullet)
-            if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))
-                it.isReal = false;
-            else if (bullet_player) {
-                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius)) {
-                    it.isReal = false;
-                    _player.takeDamage(it.getDamage());
-                }
-            }
-        bullet_player = false;
-    }
-    //end collision
-    this->_player.rotate();
-    ///update weapon
-    _weapon->update(_player.getPos(), _player._rota);
-    if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
-        _bullet.push_back(_weapon->shoot());
-    for (auto &it : _bullet) {
-        it.update(); /// update pos
-        it.draw(); // draw
-        if (!it.isReal) {// check if element is good
-            _bullet.remove(it); //mevoe if isnt good
-            break;
-        }
-    }
-
-    //update camera
-        auto ppos = this->_player.getPos();
-        ACTIVE_CAMERA.updateCamera({ppos.x, ppos.y});
+    //todo
 }
 
 void GamePlay::drawAll()
 {
-    // auto oldpos = this->_player.getPos();
+    RAYLIB::BeginMode3D(ACTIVE_CAMERA.getCamera());
+
     _weapon->draw();
 
     this->_player.draw(); // draw self
@@ -176,11 +98,12 @@ void GamePlay::drawAll()
 //         it->draw();
 //     for (auto it : this->_items)
 //         it->draw();
+    for (auto &it : _bullet) {
+        it.update();
+        it.draw(); // draw
+    }
+
     // RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, -0.5, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, RAYLIB::RED); //draw flor
     RAYLIB::DrawGrid(100, 5);
-    // std::cerr << "beg" << std::endl;
-    // auto bx = RAYLIB::MeshBoundingBox(_player._model._model.meshes[0]);
-    // std::cerr << "min x:" << bx.min.x << " y:" << bx.min.y << " z:" << bx.min.z << std::endl;
-    // std::cerr << "max x:" << bx.max.x << " y:" << bx.max.y << " z:" << bx.max.z << std::endl;
-    // std::cerr << "end" << std::endl;
+    RAYLIB::EndMode3D();
 }
