@@ -20,19 +20,19 @@ class Player : public EntityObjects {
         void gest(Client *&client);
         std::string serialize();
         void deserialize(std::string);
-        RAYLIB::Vector2 getPos() {return _pos;};
+        // RAYLIB::Vector2 getPos() {return _pos;};
         void setShield() {_shield = true;};
         void dash();
-        float _rota;
-        rl::Models _model;
+        // float _rota;
+        // rl::Models _model;
 
     protected:
     private:
         bool _me;
         bool _shield = false;
-        RAYLIB::Vector2 _pos;
-        float _ypos = 0;
-        float _scale;
+        // RAYLIB::Vector2 _pos;
+        // float _ypos = 0;
+        // float _scale;
 };
 
 #endif /* !PLAYER_HPP_ */

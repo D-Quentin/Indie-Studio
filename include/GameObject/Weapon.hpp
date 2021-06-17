@@ -28,14 +28,13 @@ class Bullet : public game_object::Item
 
         void update(float radius = std::nanf("0"));
         void draw();
-        RAYLIB::Vector2 getPos() {return {_pos.x, _pos.z};};
+        // RAYLIB::Vector2 getPos() {return {_pos.x, _pos.z};};
 
         std::string serialize() {return std::string("");};
         void deserialize(std::string) {};
 
         bool isReal = true;
     private :
-        RAYLIB::Vector3 _pos;
         float _rota;
         float _damage;
         float _speed;

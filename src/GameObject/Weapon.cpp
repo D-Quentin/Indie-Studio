@@ -35,12 +35,11 @@ Bullet::Bullet()
 Bullet::Bullet(RAYLIB::Vector3 pos, float rota, float cone, float damage, float speed)
 {
     static RAYLIB::Mesh mesh = RAYLIB::GenMeshSphere(0.05, 16, 16);
-    static RAYLIB::Texture2D texture = RAYLIB::LoadTexture("assets/weapons/Bullet/BulletsTexture.png");
-    static rl::Models model = rl::Models(mesh, texture);
+    static rl::Models model = rl::Models(mesh);
 
     rota -= 180;
     _model = model;
-    _pos = pos;
+    this->setPos(pos);
     _rota = RAYLIB::GetRandomValue(rota - cone, rota + cone);
     _damage = damage;
     _speed = speed;
@@ -53,12 +52,12 @@ void Bullet::update(float radius)
         radius = this->_speed * RAYLIB::GetFrameTime();
     auto pt = pointInACircle(this->_rota, (radius));
     this->_pos.x += pt.first;
-    this->_pos.z -= pt.second;
+    this->_pos.y -= pt.second;
 }
 
 void Bullet::draw()
 {
-    RAYLIB::DrawModel(_model._model, _pos, 1, RAYLIB::GREEN);
+    RAYLIB::DrawModel(_model._model, {_pos.x, _ypos, _pos.y}, 1, RAYLIB::GREEN);
 }
 
 Bullet Weapon::shoot()
