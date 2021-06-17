@@ -10,7 +10,8 @@ class EntityObjects : public GameObject {
         ~EntityObjects() = default;
 
         int getHealth();
-        void takeDamage(int damage) {_health -= damage;};
+        void setShield() {_shield = true;};
+        void takeDamage(int damage);
         bool isAlive() {return (_health > 0) ;};
         void draw();
         float _rota;
@@ -19,6 +20,7 @@ class EntityObjects : public GameObject {
     protected:
         int _health = 100;
         float _scale;
+        bool _shield = false;
     };
 
 

@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2021
+** B-YEP-400-PAR-4-1-indiestudio-quentin.daville
+** File description:
+** EntityObjects
+*/
+
 #include "EntityObjects.hpp"
 
 int EntityObjects::getHealth()
@@ -12,4 +19,13 @@ void EntityObjects::draw()
     auto pos = this->getPos();
 
     RAYLIB::DrawModelEx(_model._model, {pos.x, 0, pos.y}, rotationAxis, _rota, vScale, RAYLIB::GRAY);
+}
+
+void EntityObjects::takeDamage(int damage)
+{
+    if (this->_shield) {
+        _shield = false;
+        return;
+    }
+    this->_health -= damage;
 }
