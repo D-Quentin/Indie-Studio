@@ -1,6 +1,6 @@
 #include "EntityObjects.hpp"
 
-unsigned int EntityObjects::getHealth()
+int EntityObjects::getHealth()
 {
     return this->_health;
 }

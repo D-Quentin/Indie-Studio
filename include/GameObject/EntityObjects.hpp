@@ -9,13 +9,15 @@ class EntityObjects : public GameObject {
         EntityObjects(RAYLIB::Vector2 = {0, 0}, int = -1) {};
         ~EntityObjects() = default;
 
-        unsigned int getHealth();
+        int getHealth();
+        void takeDamage(int damage) {_health -= damage;};
+        bool isAlive() {return (_health > 0) ;};
         void draw();
         float _rota;
         rl::Models _model;
 
     protected:
-        unsigned int _health;
+        int _health = 100;
         float _scale;
     };
 

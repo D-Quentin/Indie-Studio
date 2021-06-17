@@ -8,6 +8,7 @@
 #include "Weapon.hpp"
 #include <cmath>
 
+
 std::pair<float, float> pointInACircle(float angle, float radius)
 {
 
@@ -34,14 +35,15 @@ Bullet::Bullet()
 
 Bullet::Bullet(RAYLIB::Vector3 pos, float rota, float cone, float damage, float speed)
 {
+
     static RAYLIB::Mesh mesh = RAYLIB::GenMeshSphere(0.05, 16, 16);
-    static rl::Models model = rl::Models(mesh);
+    static rl::Models bulletModel = rl::Models(mesh);
 
     rota -= 180;
-    _model = model;
+    _model = bulletModel;
     this->setPos(pos);
     _rota = RAYLIB::GetRandomValue(rota - cone, rota + cone);
-    _damage = damage;
+    _damage = (int) damage;
     _speed = speed;
     this->update(0.35);
 }
@@ -72,7 +74,7 @@ Bullet Weapon::shoot()
     lastShoot = TIMENOW;
     this->_nbBullet -= 1;
 
-    return Bullet(this->_pos, this->_rota, this->_cone, this->_damage, this->_bullet_speed);;
+    return Bullet({this->_pos.x, _ypos, _pos.y}, this->_rota, this->_cone, this->_damage, this->_bullet_speed);;
 }
 
 void Weapon::update(RAYLIB::Vector2 pos, float rota)
@@ -82,15 +84,15 @@ void Weapon::update(RAYLIB::Vector2 pos, float rota)
     this->_rota = rota - 90;
     std::pair<float, float> circlePos = pointInACircle(std::abs(rota), 0.2);
     this->_pos.x = pos.x + circlePos.first;
-    this->_pos.z = pos.y + circlePos.second;
-    this->_pos.y = 0.1;
+    this->_pos.y = pos.y + circlePos.second;
+    this->_ypos = 0.1;
 }
 
 std::string Weapon::serialize()
 {
     std::string result = "###WEAPON:" + _type + "####\n";
 
-    result += "###POSITION:X:" + std::to_string(_pos.x) + ";Y:" + std::to_string(_pos.y) + ";Z:" + std::to_string(_pos.z) + "####\n";
+    result += "###POSITION:X:" + std::to_string(_pos.x) + ";Y:" + std::to_string(_ypos) + ";Z:" + std::to_string(_pos.y) + "####\n";
 
     return result;
 }
@@ -107,12 +109,12 @@ void Weapon::deserialize(std::string str)
             _type = tmp.substr(tmp.find(":") + 1, tmp.find("####"));
         else if (tmp.find("POSITION:")) {
             _pos.x = std::atof(tmp.substr(tmp.find("X:") + 2, tmp.find(";Y")).c_str());
-            _pos.y = std::atof(tmp.substr(tmp.find("Y:") + 2, tmp.find(";Z")).c_str());
-            _pos.z = std::atof(tmp.substr(tmp.find("Z:") + 2, tmp.find("####")).c_str());
+            _ypos = std::atof(tmp.substr(tmp.find("Y:") + 2, tmp.find(";Z")).c_str());
+            _pos.y = std::atof(tmp.substr(tmp.find("Z:") + 2, tmp.find("####")).c_str());
         }
     }
     if (_type == "pistol")
-        *this = Pistol({_pos.x, _pos.z});
+        *this = Pistol({_pos.x, _pos.y});
 }
 
 void Weapon::draw()
@@ -121,7 +123,7 @@ void Weapon::draw()
     RAYLIB::Vector3 vScale = { scale, scale, scale };
     RAYLIB::Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f };
 
-    RAYLIB::DrawModelEx(_model._model, _pos, rotationAxis, _rota, vScale, RAYLIB::RED);
+    RAYLIB::DrawModelEx(_model._model, {_pos.x, _ypos, _pos.y}, rotationAxis, _rota, vScale, RAYLIB::RED);
 }
 
 Pistol::Pistol(RAYLIB::Vector2 pos)
@@ -131,7 +133,8 @@ Pistol::Pistol(RAYLIB::Vector2 pos)
 
     _model = pistol_model;
     this->_nbBullet = 21;
-    this->_pos = {pos.x, 0.1, pos.y};
+    this->_pos = pos;
+    _ypos = 0.1;
     this->_time_shoot = 500;
     this->_bullet_speed = 1.5f;
     this->_damage = 20;
@@ -146,7 +149,8 @@ Rifle::Rifle(RAYLIB::Vector2 pos)
 
     _model = rifle_model;
     this->_nbBullet = 35;
-    this->_pos = {pos.x, 0.1, pos.y};
+    this->_pos = pos;
+    _ypos = 0.1;
     this->_time_shoot = 100;
     this->_bullet_speed = 2;
     this->_damage = 40;
@@ -161,7 +165,8 @@ Snip::Snip(RAYLIB::Vector2 pos)
 
     _model = snip_model;
     this->_nbBullet = 6;
-    this->_pos = {pos.x, 0.1, pos.y};
+    this->_pos = pos;
+    _ypos = 0.1;
     this->_time_shoot = 1500;
     this->_bullet_speed = 5;
     this->_damage = 100;

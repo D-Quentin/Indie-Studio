@@ -28,7 +28,7 @@ class Bullet : public game_object::Item
 
         void update(float radius = std::nanf("0"));
         void draw();
-        // RAYLIB::Vector2 getPos() {return {_pos.x, _pos.z};};
+        int getDamage(){return _damage;};
 
         std::string serialize() {return std::string("");};
         void deserialize(std::string) {};
@@ -36,7 +36,7 @@ class Bullet : public game_object::Item
         bool isReal = true;
     private :
         float _rota;
-        float _damage;
+        int _damage;
         float _speed;
         rl::Models _model;
 };
@@ -61,7 +61,6 @@ class Weapon : public game_object::Item
         void draw();
 
     protected:
-        RAYLIB::Vector3 _pos;
         unsigned short _nbBullet;
         float _cone;
         float _damage;
