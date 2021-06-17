@@ -20,14 +20,13 @@ class Player : public EntityObjects {
         void gest(Client *&client);
         std::string serialize();
         void deserialize(std::string);
-        // RAYLIB::Vector2 getPos() {return _pos;};
         void dash();
-        // float _rota;
-        // rl::Models _model;
+        void setSpeed(bool val) {_moreSpeed = val;};
 
     protected:
     private:
         bool _me;
+        bool _moreSpeed = false;
         // RAYLIB::Vector2 _pos;
         // float _ypos = 0;
         // float _scale;

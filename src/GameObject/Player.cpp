@@ -41,7 +41,7 @@ void Player::move()
     RAYLIB::Vector2 pos = this->getPos();
 
     if (RAYLIB::IsKeyDown(RAYLIB::KEY_LEFT_SHIFT))
-        speed += 1.5;
+        speed += 1.5 + (_moreSpeed ? 2 : 0);
     if (move == std::make_pair(0.0f, 0.0f)) {
         move.first += RAYLIB::IsKeyDown(RAYLIB::KEY_W) - RAYLIB::IsKeyDown(RAYLIB::KEY_S);
         move.second += RAYLIB::IsKeyDown(RAYLIB::KEY_D) - RAYLIB::IsKeyDown(RAYLIB::KEY_A);
@@ -56,7 +56,7 @@ void Player::move()
 void Player::dash()
 {
     auto pos = getPos();
-    std::pair<float, float> circlePos = pointInACircle(std::abs(_rota + 90), 0.0025);
+    std::pair<float, float> circlePos = pointInACircle(std::abs(_rota + 90), 1);
     this->_pos.x += circlePos.first;
     this->_pos.y += circlePos.second;
 }

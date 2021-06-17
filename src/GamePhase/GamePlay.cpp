@@ -50,6 +50,7 @@ GamePhase GamePlay::launch()
 GamePhase GamePlay::restart()
 {
     while (!RAYLIB::WindowShouldClose()) {
+        _oldPlayerPos = _player.getPos();
     //updtae attrib from server
         RAYLIB::BeginDrawing();
         if (_player.isAlive()) {
