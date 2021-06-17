@@ -35,9 +35,8 @@ Bullet::Bullet()
 
 Bullet::Bullet(RAYLIB::Vector3 pos, float rota, float cone, float damage, float speed)
 {
-
-    static RAYLIB::Mesh mesh = RAYLIB::GenMeshSphere(0.05, 16, 16);
-    static rl::Models bulletModel = rl::Models(mesh);
+    RAYLIB::Mesh mesh = RAYLIB::GenMeshSphere(0.05, 16, 16);
+    rl::Models bulletModel = rl::Models(mesh);
 
     rota -= 180;
     _model = bulletModel;
@@ -50,6 +49,8 @@ Bullet::Bullet(RAYLIB::Vector3 pos, float rota, float cone, float damage, float 
 
 void Bullet::update(float radius)
 {
+    if (!isReal)
+        return;
     if (std::isnan(radius))
         radius = this->_speed * RAYLIB::GetFrameTime();
     auto pt = pointInACircle(this->_rota, (radius));
@@ -59,7 +60,8 @@ void Bullet::update(float radius)
 
 void Bullet::draw()
 {
-    RAYLIB::DrawModel(_model._model, {_pos.x, _ypos, _pos.y}, 1, RAYLIB::GREEN);
+    if (isReal)
+        RAYLIB::DrawModel(_model._model, {_pos.x, _ypos, _pos.y}, 1, RAYLIB::BLACK);
 }
 
 Bullet Weapon::shoot()
