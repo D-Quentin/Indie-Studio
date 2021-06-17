@@ -16,6 +16,12 @@ rl::Models::Models(RAYLIB::Mesh mesh, RAYLIB::Texture2D texture, RAYLIB::Vector3
     _pos = pos;
 }
 
+rl::Models::Models(RAYLIB::Mesh mesh, RAYLIB::Vector3 pos)
+{
+    _model = LoadModelFromMesh(mesh);
+    _pos = pos;
+}
+
 rl::Models::Models(std::string filepath, RAYLIB::Vector3 pos)
 {
     _model = RAYLIB::LoadModel(filepath.c_str());
