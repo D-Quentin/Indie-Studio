@@ -10,7 +10,7 @@
 #include "Lobby.hpp"
 #include "GamePlay.hpp"
 #include "Play.hpp"
-
+#include "Setting.hpp"
 
 Game::Game()
 {
@@ -27,11 +27,12 @@ void Game::launch(rl::Window win)
     std::pair<bool, Lobby> lobby = {false, Lobby()};
     std::pair<bool, GamePlay> gameplay = {false, GamePlay()};
     std::pair<bool, Play> play = {false, Play()};
+    std::pair<bool, Setting> setting = {false, Setting()};
 
     while (statut != QuitPhase && win.loop()) {
         RAYLIB::BeginDrawing();
         win.clear({255, 255, 255, 255});
-        if (RAYLIB::IsKeyPressed(RAYLIB::KEY_F6))
+        if (RAYLIB::IsKeyPressed(RAYLIB::KEY_F6))   
             statut = GamePlayPhase;
         switch (statut) {
         case MenuPhase:
@@ -66,6 +67,13 @@ void Game::launch(rl::Window win)
                 play.first = true;
             }
             break;
+        case SettingPhase:
+            if (setting.first)
+                statut = setting.second.restart();
+            else {
+                statut = setting.second.launch();
+                setting.first = true;
+            }
         default:
             break;
         }
