@@ -99,7 +99,7 @@ GamePhase Lobby::restart(Client *&client, std::string ip, std::string port)
 GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
 {
     GameObject::gestData(this->_obj, this->_client->read(), this->_client, *this);
-    ((Player *)this->_obj[this->_me])->gest(client);
+    ((Player *)this->_obj[this->_me])->gest(client, this->_blocks);
     // rl::Text(std::to_string(((Player *)this->_obj[this->_me])->_rota), 10, 10, 15, {255, 0, 0, 255}).draw();
     if (!this->_ready && this->_bReady.isClicked()) {
         this->_ready = true;

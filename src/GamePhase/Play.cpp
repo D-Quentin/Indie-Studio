@@ -26,6 +26,7 @@ GamePhase Play::launch(Client *&client, Lobby &lobby)
     this->_obj = lobby.getObj();
     this->_me = lobby.getMe();
     this->_phase = Play::JoinPhase;
+    this->_tHp = rl::Text("Hp ", 1, 2, 20, RAYLIB::LIGHTGRAY);
     return (this->restart(client, lobby));
 }
 
@@ -51,7 +52,12 @@ GamePhase Play::restart(Client *&client, Lobby &lobby)
 GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
 {
     GameObject::gestData(this->_obj, client->read(), client, *this);
-    ((Player *)this->_obj[this->_me])->gest(client);
+    ((Player *)this->_obj[this->_me])->gest(client, this->_blocks);
+
+    this->_tHp.setText("Hp " + std::to_string(((Player *)this->_obj[this->_me])->getHealth()));
+
+    // ZD Drawing
+    this->_tHp.draw();
 
     // 3D Drawing
     RAYLIB::BeginMode3D(this->_TopCamera.getCamera());
@@ -158,6 +164,7 @@ GamePhase Play::joinPhase(GamePhase gamePhase, Client *&client, Lobby &lobby)
 
     for (int i = 0; i != this->_nbAi; i++)
         this->_ai.push_back(new Ai(this->_map));
+    ((Player *)this->_obj[this->_me])->setWeaponUse(1);
     this->_phase = Play::MainPhase;
     return (gamePhase);
 }

@@ -42,6 +42,8 @@ class Play {
         std::vector<std::vector<char>> _map;
         std::pair<float, float> _mapSize;
         std::list<BlockObject *> _blocks;
+
+        rl::Text _tHp;
 };
 
 #endif /* !PLAY_HPP_ */

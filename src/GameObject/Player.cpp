@@ -28,6 +28,7 @@ Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
     this->_rota = 0;
     this->_change = false;
     this->_id = id;
+    this->_weapon1 = new Pistol();
 }
 
 void Player::move()
@@ -55,7 +56,6 @@ void Player::move()
 
 void Player::dash()
 {
-    auto pos = getPos();
     std::pair<float, float> circlePos = pointInACircle(std::abs(_rota + 90), 1);
     this->_pos.x += circlePos.first;
     this->_pos.y += circlePos.second;
@@ -69,6 +69,42 @@ void Player::rotate()
         return;
     this->_rota = newRota - 180;
     this->_change = true;
+}
+
+void Player::gestColision(std::list<BlockObject *> blocks, RAYLIB::Vector2 oldPlayerPos)
+{
+    bool bullet_player = true;
+
+    for (auto it : blocks) {
+        // With Player
+        RAYLIB::Vector2 playerPos = this->_pos;
+        float player_radius = 0.3f;
+        RAYLIB::Vector2 blockPos = it->getPos();
+        RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
+        bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
+
+        if (col)
+            this->_pos = oldPlayerPos;
+
+        // With Bullets
+        for (auto &it : _bullet) {
+            if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))
+                it.isReal = false;
+            else if (bullet_player) {
+                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius)) {
+                    it.isReal = false;
+                    this->takeDamage(it.getDamage());
+                }
+            }
+        }
+        bullet_player = false;
+    }
+    for (auto &it : _bullet) {
+        if (!it.isReal) {
+            _bullet.remove(it);
+            break;
+        }
+    }
 }
 
 std::string Player::serialize()
@@ -97,11 +133,22 @@ void Player::deserialize(std::string str)
     this->_rota = std::atof(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
 }
 
-void Player::gest(Client *&client)
+void Player::gest(Client *&client, std::list<BlockObject *> blocks)
 {
-    // this->update();
+    RAYLIB::Vector2 oldPlayerPos = this->_pos;
+
     this->move();
     this->rotate();
+    this->gestColision(blocks, oldPlayerPos);
+    if (this->_weaponUse == 1) {
+        this->_weapon1->update(this->_pos, this->_rota);
+        if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
+            _bullet.push_back(this->_weapon1->shoot());
+    } else if (this->_weaponUse == 2) {
+        this->_weapon2->update(this->_pos, this->_rota);
+        if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
+            _bullet.push_back(this->_weapon2->shoot());
+    }
 
     if (this->_change) {
         client->send(this->serialize());

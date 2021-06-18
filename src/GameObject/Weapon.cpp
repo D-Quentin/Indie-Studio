@@ -76,7 +76,7 @@ Bullet Weapon::shoot()
     lastShoot = TIMENOW;
     this->_nbBullet -= 1;
 
-    return Bullet({this->_pos.x, _ypos, _pos.y}, this->_rota, this->_cone, this->_damage, this->_bullet_speed);;
+    return Bullet({this->_pos.x, _ypos, _pos.y}, this->_rota, this->_cone, this->_damage, this->_bullet_speed);
 }
 
 void Weapon::update(RAYLIB::Vector2 pos, float rota)
@@ -130,11 +130,10 @@ void Weapon::draw()
 
 Pistol::Pistol(RAYLIB::Vector2 pos)
 {
-    std::string path("assets/weapons/Baretta/");
-    static rl::Models pistol_model = rl::Models(std::string(path + "Beretta.obj"));
+    static rl::Models pistol_model = rl::Models("assets/weapons/DesertEagle/DesertEagle.obj");
 
     _model = pistol_model;
-    this->_nbBullet = 21;
+    this->_nbBullet = 65535;
     this->_pos = pos;
     _ypos = 0.1;
     this->_time_shoot = 500;

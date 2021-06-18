@@ -10,6 +10,7 @@
 
 #include "GameObject.hpp"
 #include "Model.hpp"
+#include "Weapon.hpp"
 
 class EntityObjects : public GameObject {
     public:
@@ -18,6 +19,7 @@ class EntityObjects : public GameObject {
 
         int getHealth();
         void setShield() {_shield = true;};
+        void setWeaponUse(int weapon);
         void takeDamage(int damage);
         bool isAlive() {return (_health > 0) ;};
         void draw();
@@ -28,6 +30,10 @@ class EntityObjects : public GameObject {
         int _health = 100;
         float _scale;
         bool _shield = false;
+        int _weaponUse = 0;
+        Weapon *_weapon1;
+        Weapon *_weapon2;
+        std::list<Bullet> _bullet;
     };
 
 

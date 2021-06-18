@@ -44,6 +44,7 @@ class Lobby {
     private:
         Phase _phase;
         std::map<int, GameObject *> _obj;
+        std::list<BlockObject *> _blocks;
         int _player;
         int _readyPlayer;
         Client *_client;

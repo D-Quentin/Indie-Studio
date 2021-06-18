@@ -10,6 +10,7 @@
 
 #include "EntityObjects.hpp"
 #include "Model.hpp"
+#include "BlockObject.hpp"
 
 class Player : public EntityObjects {
     public:
@@ -17,11 +18,12 @@ class Player : public EntityObjects {
         ~Player() = default;
         void move();
         void rotate();
-        void gest(Client *&client);
+        void gest(Client *&client, std::list<BlockObject *> blocks);
         std::string serialize();
         void deserialize(std::string);
         void dash();
         void setSpeed(bool val) {_moreSpeed = val;};
+        void gestColision(std::list<BlockObject *> blocks, RAYLIB::Vector2 oldPlayerPos);
 
     protected:
     private:
