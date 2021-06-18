@@ -31,8 +31,26 @@
 #define SPAWNCOLOR {233,150,122, 255}
 #define ITEMCOLOR {42, 157, 244, 255}
 
+enum EnumItems {
+    ITSpeed = 0,
+    ITShield,
+    ITDash,
+    ITPistol,
+    ITRifle,
+    ITSnip
+};
+
 class GamePlay{
     public:
+        const std::map<EnumItems, game_object::Item*> enumToItem = {
+            {ITSpeed, (game_object::Item*) new Speed},
+            {ITShield, (game_object::Item*) new Shield},
+            {ITDash, (game_object::Item*) new Dash},
+            // {ITHealth, (game_object::Item*) new Dash},
+            {ITPistol, (game_object::Item*) new Pistol},
+            {ITRifle, (game_object::Item*) new Rifle},
+            {ITSnip, (game_object::Item*)new  Snip}
+        };
         GamePlay();
         ~GamePlay() = default;
 
@@ -41,6 +59,7 @@ class GamePlay{
 
     private: //methodes
         //set
+        void placeItems(std::list<std::pair<float, float>> poslist);
         void setBlocks(std::list<BlockObject*> obj) {_blocks = obj;};
         void setEnemies(std::list<EntityObjects*> obj) {_enemies = obj;};
         void setItems(std::list<game_object::Item*> obj) {_items = obj;};

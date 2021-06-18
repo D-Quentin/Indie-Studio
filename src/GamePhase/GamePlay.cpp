@@ -20,14 +20,20 @@ GamePlay::GamePlay()
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
     this->_weapon = new Pistol(pos);
-    _items.push_front(new Speed);
-    _items.front()->setPos(RAYLIB::Vector2{-5, -5});
-    _items.push_front(new Shield);
-    _items.front()->setPos(RAYLIB::Vector2{-6, -5});
-    _items.push_front(new Speed);
-    _items.front()->setPos(RAYLIB::Vector2{-7, -5});
-    _items.push_front(new Rifle);
-    _items.front()->setPos(RAYLIB::Vector2{-10, -5});
+}
+
+void GamePlay::placeItems(std::list<std::pair<float, float>> itemsPos)
+{
+    int rand = 0;
+
+    for (auto it : itemsPos) {
+        rand = RAYLIB::GetRandomValue(0, enumToItem.size());
+        try {
+            auto obj = enumToItem.at((EnumItems)rand);
+            obj->setPos(RAYLIB::Vector2{it.first, it.second});
+            _items.push_back(obj);
+        } catch(...) {};
+    }
 }
 
 GamePhase GamePlay::launch()
@@ -40,6 +46,7 @@ GamePhase GamePlay::launch()
     auto model = rl::Models(mesh, texture);
     auto m = Map3D(charMap, model, size);
 
+    placeItems(m._items);
     _spawns = m._spawns;
     _spawn = m._spawns.front();
     _player.setPos(RAYLIB::Vector2{_spawn.first, _spawn.second});
