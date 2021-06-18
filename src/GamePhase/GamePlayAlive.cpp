@@ -90,21 +90,32 @@ void GamePlay::updatePowerUp()
 
 void GamePlay::updateLocal()
 {
-    //update player
-    bool col = false;
     bool bullet_player = true;
+    auto playerPos = _player.getPos();
+    float player_radius = 0.15f;
 
     this->_player.move();
+    for (auto &it : _items) {
+        bool col = RAYLIB::CheckCollisionCircles(it->getPos(), player_radius, playerPos, player_radius);
+        if (!col)
+            continue;
+        if (it->isWeapon) {
+            _weapon = (Weapon *)it;
+            it->isWear = true;
+        }
+        else  {
+            _power_up.push_back((PowerUp *)it);
+            it->isWear = true;
+        }
+    }
     // handle player / block colision
     for (auto it : _blocks) {
-        auto playerPos = _player.getPos();
-        float player_radius = 0.15f;
         auto blockPos = it->getPos();
         RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
         bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
 
-        if (col)
-            _player.setPos(_oldPlayerPos);
+        // if (col)
+        //     _player.setPos(_oldPlayerPos);
         //check collision bullet  /walls
         for (auto &it : _bullet) {
             if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))

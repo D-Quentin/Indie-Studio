@@ -17,6 +17,7 @@ namespace game_object {
         ~Item() = default;
         bool isWear = false;
         void draw();
+        bool isWeapon = false;
     protected:
         rl::Models _model;
     };

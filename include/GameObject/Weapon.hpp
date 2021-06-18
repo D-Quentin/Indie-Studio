@@ -46,6 +46,7 @@ bool operator==(Bullet f, Bullet s);
 class Weapon : public game_object::Item
 {
     public:
+        Weapon() {isWeapon = true;};
         ~Weapon() = default;
 
     // //viruital
