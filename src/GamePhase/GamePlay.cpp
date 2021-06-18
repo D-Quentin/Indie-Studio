@@ -21,7 +21,6 @@ GamePlay::GamePlay()
     _player = Player();
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
-    // RAYLIB::ShowCursor();
     this->_weapon = new Pistol(pos);
 }
 
