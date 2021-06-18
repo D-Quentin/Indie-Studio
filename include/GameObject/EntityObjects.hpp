@@ -21,6 +21,7 @@ class EntityObjects : public GameObject {
         void setShield() {_shield = true;};
         void setWeaponUse(int weapon);
         void takeDamage(int damage);
+        void heal() {_health = 100;};
         bool isAlive() {return (_health > 0) ;};
         void draw();
         float _rota;
