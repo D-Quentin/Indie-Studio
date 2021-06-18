@@ -34,14 +34,9 @@ void Setting::init()
     this->_bDown = Button("../../../Documents/indi.png", 10, 35, 9.2, 9);
     this->_bUpFram = Button("../../../Documents/indi.png", 30, 60, 9.2, 9);
     this->_bDownFram = Button("../../../Documents/indi.png", 10, 60, 9.2, 9);
-    for (int i = 0, u = 60, a = 30; i != 6; i++, u += 15) {
-        this->_bInput.push_back(Button("../../../Documents/indi.png", u, a, 9.2, 9));
-        if (u == 75) {
-            u = 45;
-            a += 10;
-        }
-    }
-    this->_ikey = {'z', 's', 'q', 'd', 'e', 'i'};
+    for (int i = 0, a = 20; i != 6; i++, a += 13)
+    this->_bInput.push_back(Button("../../../Documents/indi.png", 85, a, 9.2, 9));
+    this->_ikey = {'z', 's', 'q', 'd', 'e', 32};
     this->_bChange = Button("assets/texture/button.png", 3, 85, 21.4, 10);
     this->_bReturn = Button("assets/texture/button.png", 3, 85, 21.4, 10);
     this->_tReturn = rl::Text("Return", 9, 88, 29, RAYLIB::BLACK);
@@ -50,7 +45,7 @@ void Setting::init()
 
 void Setting::check_buttonclick()
 {
-    static int a = 0;
+    static int a = 1;
     int b = 0;
 
     for (int i = 0; i != 6; i++)
@@ -61,6 +56,9 @@ void Setting::check_buttonclick()
     b = RAYLIB::GetCharPressed();
     if (b <= 0)
         return;
+    for (int i = 0; i != 6; i++)
+        if (this->_ikey[i] == b)
+            return;
     this->_ikey[a *-1] = b;
     a = 1;
 }
@@ -71,22 +69,19 @@ void Setting::draw_touch()
     char c = 0;
     std::string str;
 
-    for (int i = 0, u = 60, a = 30; i != 6; i++, u += 15) {
+    for (int i = 0, u = 60, a = 20; i != 6; i++, u += 15) {
         c = this->_ikey[i];
         if (c == ' ') {
             str = "SPACE";
-            sound = rl::Text(str, u+2, a+2, 20, RAYLIB::LIGHTGRAY);
+            sound = rl::Text(str, 87, a+2, 20, RAYLIB::LIGHTGRAY);
         }
         else {
             str.push_back(c);
-            sound = rl::Text(str, u+4, a, 40, RAYLIB::LIGHTGRAY);
+            sound = rl::Text(str, 89, a, 40, RAYLIB::LIGHTGRAY);
         }
         sound.draw();
         str = "";
-        if (u == 75) {
-            u = 45;
-            a += 10;
-        }
+            a += 13;
     }
 }
 
@@ -97,6 +92,24 @@ static float check_dist(int nb)
     if (nb >= 10)
         return (1.2);
     return (0);
+}
+
+void print_touch()
+{
+    rl::Text touch;
+
+    touch = rl::Text("forward", 67, 20, 40, RAYLIB::LIGHTGRAY);
+    touch.draw();
+    touch = rl::Text("backward", 64, 33, 40, RAYLIB::LIGHTGRAY);
+    touch.draw();
+    touch = rl::Text("left", 76, 46, 40, RAYLIB::LIGHTGRAY);
+    touch.draw();
+    touch = rl::Text("right", 74, 59, 40, RAYLIB::LIGHTGRAY);
+    touch.draw();
+    touch = rl::Text("dash", 74, 72, 40, RAYLIB::LIGHTGRAY);
+    touch.draw();
+    touch = rl::Text("utilities", 69, 85, 40, RAYLIB::LIGHTGRAY);
+    touch.draw();
 }
 
 GamePhase Setting::settingPhase(GamePhase gamePhase)
@@ -113,7 +126,7 @@ GamePhase Setting::settingPhase(GamePhase gamePhase)
         i++;
     if (this->_bDown.isPressed() && i > 0)
         i--;
-    if (this->_bUpFram.isPressed() && f < 100)
+    if (this->_bUpFram.isPressed() && f < 120)
         f++;
     if (this->_bDownFram.isPressed() && f > 10)
         f--;
@@ -136,6 +149,7 @@ GamePhase Setting::settingPhase(GamePhase gamePhase)
     fram = rl::Text("Framerate", 14, 48, 50, RAYLIB::LIGHTGRAY);
     sound.draw();
     fram.draw();
+    print_touch();
     draw_touch();
     return (gamePhase);
 }
