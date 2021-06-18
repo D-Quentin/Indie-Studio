@@ -25,6 +25,8 @@
 #include "Weapon.hpp"
 #include "PowerUp.hpp"
 
+#define ACTIVE_CAMERA ((!this->_player.isAlive()) ? this->_FPCamera : this->_TopCamera)
+
 #define GROUNDCOLOR {119,136,153, 255}
 #define SPAWNCOLOR {233,150,122, 255}
 #define ITEMCOLOR {42, 157, 244, 255}
