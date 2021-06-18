@@ -75,14 +75,14 @@ Bullet Weapon::shoot()
     lastShoot = TIMENOW;
     this->_nbBullet -= 1;
 
-    return Bullet({this->_pos.x, _ypos, _pos.y}, this->_rota + 180, this->_cone, this->_damage, this->_bullet_speed);
+    return Bullet({this->_pos.x, _ypos, _pos.y}, this->_rota - 90, this->_cone, this->_damage, this->_bullet_speed);
 }
 
 void Weapon::update(RAYLIB::Vector2 pos, float rota)
 {
     if (!_wear)
         return;
-    this->_rota = rota + 90;
+    this->_rota = rota;
     std::pair<float, float> circlePos = pointInACircle(std::abs(rota), 0.2);
     this->_pos.x = pos.x + circlePos.first;
     this->_pos.y = pos.y + circlePos.second;
