@@ -91,10 +91,11 @@ void GamePlay::updatePowerUp()
 void GamePlay::updateLocal()
 {
     bool bullet_player = true;
-    auto playerPos = _player.getPos();
     float player_radius = 0.15f;
 
     this->_player.move();
+    auto playerPos = _player.getPos();
+
     for (auto &it : _items) {
         bool col = RAYLIB::CheckCollisionCircles(it->getPos(), player_radius, playerPos, player_radius);
         if (!col)
