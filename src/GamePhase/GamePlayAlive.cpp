@@ -114,8 +114,8 @@ void GamePlay::updateLocal()
         RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
         bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
 
-        // if (col)
-        //     _player.setPos(_oldPlayerPos);
+        if (col)
+            _player.setPos(_oldPlayerPos);
         //check collision bullet  /walls
         for (auto &it : _bullet) {
             if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))
