@@ -59,6 +59,7 @@ class GamePlay{
         void setEnemies(std::list<EntityObjects*> obj) {_enemies = obj;};
         void setItems(std::list<game_object::Item*> obj) {_items = obj;};
         void nonToPoi(std::list<MapBlock>);
+        void collisionBulletWall();
 
         //alive methode
         void updateLocal();

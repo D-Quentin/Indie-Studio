@@ -88,14 +88,46 @@ void GamePlay::updatePowerUp()
         }
 }
 
-void GamePlay::updateLocal()
+void GamePlay::collisionBulletWall()
 {
     bool bullet_player = true;
     float player_radius = 0.15f;
+    auto playerPos = _player.getPos();
+
+    for (auto &itblock : _blocks) {
+        auto blockPos = itblock->getPos();
+        RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
+        bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
+
+        if (col)
+            _player.setPos(_oldPlayerPos);
+        //check collision bullet  /walls
+        for (auto &it : _bullet) {
+            if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic)) {
+                it.isReal = false;
+                if (itblock->isBreakable) {
+                    _blocks.remove(itblock); // remove breakable block
+                    return;
+                }
+            }
+            else if (bullet_player) {
+                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius)) {
+                    it.isReal = false;
+                    _player.takeDamage(it.getDamage());
+                }
+            }
+        }
+        bullet_player = false;
+    }
+}
+
+void GamePlay::updateLocal()
+{
+    float player_radius = 0.15f;
     auto it_items = _items.begin();
+    auto playerPos = _player.getPos();
 
     this->_player.move();
-    auto playerPos = _player.getPos();
 
     for (auto &it : _items) {
         bool col = RAYLIB::CheckCollisionCircles(it->getPos(), player_radius, playerPos, player_radius);
@@ -115,26 +147,7 @@ void GamePlay::updateLocal()
         break;
     }
     // handle player / block colision
-    for (auto it : _blocks) {
-        auto blockPos = it->getPos();
-        RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
-        bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
-
-        if (col)
-            _player.setPos(_oldPlayerPos);
-        //check collision bullet  /walls
-        for (auto &it : _bullet) {
-            if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))
-                it.isReal = false;
-            else if (bullet_player) {
-                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius)) {
-                    it.isReal = false;
-                    _player.takeDamage(it.getDamage());
-                }
-            }
-        }
-        bullet_player = false;
-    }
+    collisionBulletWall();
     this->delFalseBullet();
     //end collision
     this->_player.rotate();
