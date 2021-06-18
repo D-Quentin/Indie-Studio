@@ -15,6 +15,36 @@ Setting::~Setting()
 {
 }
 
+int Setting::getForward()
+{
+    return (this->_ikey[0]);
+}
+
+int Setting::getBackward()
+{
+    return (this->_ikey[1]);
+}
+
+int Setting::getRight()
+{
+    return (this->_ikey[2]);
+}
+
+int Setting::getLeft()
+{
+    return (this->_ikey[3]);
+}
+
+int Setting::getDash()
+{
+    return (this->_ikey[4]);
+}
+
+int Setting::getUtilities()
+{
+    return (this->_ikey[5]);
+}
+
 GamePhase Setting::launch()
 {
     init();
@@ -23,8 +53,6 @@ GamePhase Setting::launch()
 
 GamePhase Setting::restart()
 {
-    GamePhase gamePhase = SettingPhase;
-
     return (settingPhase(SettingPhase));
 }
 
@@ -43,7 +71,7 @@ void Setting::init()
     this->_tbackground = RAYLIB::LoadTexture("assets/texture/background.png");
 }
 
-void Setting::check_buttonclick()
+void Setting::checkButtonclick()
 {
     static int a = 1;
     int b = 0;
@@ -63,7 +91,7 @@ void Setting::check_buttonclick()
     a = 1;
 }
 
-void Setting::draw_touch()
+void Setting::drawTouch()
 {
     rl::Text sound;
     char c = 0;
@@ -94,43 +122,63 @@ static float check_dist(int nb)
     return (0);
 }
 
-void print_touch()
+void printTouch()
 {
     rl::Text touch;
 
-    touch = rl::Text("forward", 67, 20, 40, RAYLIB::LIGHTGRAY);
+    touch = rl::Text("Forward", 67, 20, 40, RAYLIB::LIGHTGRAY);
     touch.draw();
-    touch = rl::Text("backward", 64, 33, 40, RAYLIB::LIGHTGRAY);
+    touch = rl::Text("Backward", 64, 33, 40, RAYLIB::LIGHTGRAY);
     touch.draw();
-    touch = rl::Text("left", 76, 46, 40, RAYLIB::LIGHTGRAY);
+    touch = rl::Text("Left", 76, 46, 40, RAYLIB::LIGHTGRAY);
     touch.draw();
-    touch = rl::Text("right", 74, 59, 40, RAYLIB::LIGHTGRAY);
+    touch = rl::Text("Right", 74, 59, 40, RAYLIB::LIGHTGRAY);
     touch.draw();
-    touch = rl::Text("dash", 74, 72, 40, RAYLIB::LIGHTGRAY);
+    touch = rl::Text("Dash", 74, 72, 40, RAYLIB::LIGHTGRAY);
     touch.draw();
-    touch = rl::Text("utilities", 69, 85, 40, RAYLIB::LIGHTGRAY);
+    touch = rl::Text("Utilities", 69, 85, 40, RAYLIB::LIGHTGRAY);
     touch.draw();
 }
 
 GamePhase Setting::settingPhase(GamePhase gamePhase)
 {
-    static int i = 0;
+    static int i = 50;
     static int f = 60;
     rl::Text sound;
     rl::Text fram;
     int select = 0;
+    static int musp = 0;
+    static int musd = 0;
 
     if (this->_bReturn.isClicked())
-        return (GamePhase::MenuPhase);
-    if (this->_bUp.isPressed() && i < 100)
-        i++;
-    if (this->_bDown.isPressed() && i > 0)
-        i--;
-    if (this->_bUpFram.isPressed() && f < 120)
+        gamePhase = MenuPhase;
+    if (this->_bUp.isPressed() && i < 100) {
+        if (musp == 4) {
+            musp = 0;
+            i++;
+        }
+        else
+            musp++;
+        RAYLIB::SetMasterVolume(i);
+    }
+    if (this->_bDown.isPressed() && i > 0) {
+        if (musd == 4) {
+            musd = 0;
+            i--;
+        }
+        else
+            musd++;
+        RAYLIB::SetMasterVolume(i);
+    }
+    if (this->_bUpFram.isPressed() && f < 144) {
         f++;
-    if (this->_bDownFram.isPressed() && f > 10)
+        RAYLIB::SetTargetFPS(f);
+    }
+    if (this->_bDownFram.isPressed() && f > 10) {
         f--;
-    check_buttonclick();
+        RAYLIB::SetTargetFPS(f);
+    }
+    checkButtonclick();
     sound = rl::Text(std::to_string(i), 23 - check_dist(i), 34, 70, RAYLIB::LIGHTGRAY);
     fram = rl::Text(std::to_string(f), 23 - check_dist(f), 58, 70, RAYLIB::LIGHTGRAY);
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
@@ -149,8 +197,8 @@ GamePhase Setting::settingPhase(GamePhase gamePhase)
     fram = rl::Text("Framerate", 14, 48, 50, RAYLIB::LIGHTGRAY);
     sound.draw();
     fram.draw();
-    print_touch();
-    draw_touch();
+    printTouch();
+    drawTouch();
     return (gamePhase);
 }
 

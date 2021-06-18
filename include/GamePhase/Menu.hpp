@@ -19,8 +19,7 @@ class Menu {
         MainPhase,
         PlayPhase,
         CreatePhase,
-        JoinPhase,
-        SettingPhase
+        JoinPhase
     };
     public:
         Menu();
@@ -35,7 +34,7 @@ class Menu {
         std::string getIp();
         std::string getPort();
         std::string getYourName();
-        void check_buttonclick();
+        void checkButtonclick();
         void draw_touch();
 
     protected:

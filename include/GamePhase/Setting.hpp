@@ -19,11 +19,17 @@ class Setting
 public:
     Setting();
     ~Setting();
-    void check_buttonclick();
-    void draw_touch();
+    void checkButtonclick();
+    void drawTouch();
     GamePhase settingPhase(GamePhase gamePhase);
     GamePhase launch();
     GamePhase restart();
+    int getForward();
+    int getBackward();
+    int getLeft();
+    int getRight();
+    int getDash();
+    int getUtilities();
     void init();
 private:
     Button _bUp;

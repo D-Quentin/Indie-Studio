@@ -78,9 +78,6 @@ GamePhase Menu::restart()
     case Menu::JoinPhase:
         gamePhase = this->joinPhase(gamePhase);
         break;
-    case Menu::SettingPhase:
-        gamePhase = GamePhase::SettingPhase;
-        break;
     default:
         break;
     }
@@ -95,7 +92,7 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
         this->_phase = Menu::PlayPhase;
     }
     if (this->_bSettings.isClicked())
-        this->_phase = SettingPhase;
+        gamePhase = SettingPhase;
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     this->_bPlay.draw();
     this->_bSettings.draw();
