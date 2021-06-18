@@ -17,7 +17,7 @@ void GamePlay::nonToPoi(std::list<MapBlock> obj)
 
 GamePlay::GamePlay()
 {
-    _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 0, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
+    _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 10, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
     _player = Player();
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
@@ -36,6 +36,8 @@ GamePhase GamePlay::launch()
     auto model = rl::Models(mesh, texture);
     auto m = Map3D(charMap, model, size);
 
+    _spawn = m._spawns.front();
+    _player.setPos(RAYLIB::Vector2{_spawn.first, _spawn.second});
     _TopCamera.setPosition({_spawn.first, _TopCamera.getPosition().y, _spawn.second});
     _FPCamera.setPosition({_spawn.first, _FPCamera.getPosition().y, _spawn.second});
     this->_mapSize = {charMap.size(), charMap.front().size()};
@@ -100,7 +102,6 @@ void GamePlay::drawAll()
         it.draw(); // draw
     }
 
-    // RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, -0.5, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, RAYLIB::RED); //draw flor
-    RAYLIB::DrawGrid(100, 5);
+    RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, 0, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, {147, 72, 56, 255}); //draw flor
     RAYLIB::EndMode3D();
 }
