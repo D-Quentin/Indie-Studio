@@ -38,7 +38,6 @@ Bullet::Bullet(RAYLIB::Vector3 pos, float rota, float cone, float damage, float 
     RAYLIB::Mesh mesh = RAYLIB::GenMeshSphere(0.05, 16, 16);
     rl::Models bulletModel = rl::Models(mesh);
 
-    rota -= 180;
     _model = bulletModel;
     this->setPos(pos);
     _rota = RAYLIB::GetRandomValue(rota - cone, rota + cone);
@@ -76,14 +75,14 @@ Bullet Weapon::shoot()
     lastShoot = TIMENOW;
     this->_nbBullet -= 1;
 
-    return Bullet({this->_pos.x, _ypos, _pos.y}, this->_rota, this->_cone, this->_damage, this->_bullet_speed);
+    return Bullet({this->_pos.x, _ypos, _pos.y}, this->_rota + 180, this->_cone, this->_damage, this->_bullet_speed);
 }
 
 void Weapon::update(RAYLIB::Vector2 pos, float rota)
 {
     if (!_wear)
         return;
-    this->_rota = rota - 90;
+    this->_rota = rota + 90;
     std::pair<float, float> circlePos = pointInACircle(std::abs(rota), 0.2);
     this->_pos.x = pos.x + circlePos.first;
     this->_pos.y = pos.y + circlePos.second;
@@ -125,7 +124,7 @@ void Weapon::draw()
     RAYLIB::Vector3 vScale = { scale, scale, scale };
     RAYLIB::Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f };
 
-    RAYLIB::DrawModelEx(_model._model, {_pos.x, _ypos, _pos.y}, rotationAxis, _rota, vScale, RAYLIB::RED);
+    RAYLIB::DrawModelEx(_model._model, {_pos.x, _ypos, _pos.y}, rotationAxis, _rota, vScale, RAYLIB::WHITE);
 }
 
 Pistol::Pistol(RAYLIB::Vector2 pos)
@@ -137,7 +136,7 @@ Pistol::Pistol(RAYLIB::Vector2 pos)
     this->_pos = pos;
     _ypos = 0.1;
     this->_time_shoot = 500;
-    this->_bullet_speed = 1.5f;
+    this->_bullet_speed = 15;
     this->_damage = 20;
     this->_cone = 5;
     _type = "pistol";
@@ -153,7 +152,7 @@ Rifle::Rifle(RAYLIB::Vector2 pos)
     this->_pos = pos;
     _ypos = 0.1;
     this->_time_shoot = 100;
-    this->_bullet_speed = 2;
+    this->_bullet_speed = 20;
     this->_damage = 40;
     this->_cone = 10;
     _type = "rifle";
@@ -169,7 +168,7 @@ Snip::Snip(RAYLIB::Vector2 pos)
     this->_pos = pos;
     _ypos = 0.1;
     this->_time_shoot = 1500;
-    this->_bullet_speed = 5;
+    this->_bullet_speed = 30;
     this->_damage = 100;
     this->_cone = 0;
     _type = "snip";

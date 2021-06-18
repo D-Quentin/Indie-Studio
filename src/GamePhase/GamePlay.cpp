@@ -7,7 +7,7 @@
 
 #include "GamePlay.hpp"
 
-// #define ACTIVE_CAMERA ((this->_isFpCam) ? this->_FPCamera : this->_TopCamera)
+#define ACTIVE_CAMERA ((!this->_player.isAlive()) ? this->_FPCamera : this->_TopCamera)
 
 void GamePlay::nonToPoi(std::list<MapBlock> obj)
 {
@@ -17,14 +17,11 @@ void GamePlay::nonToPoi(std::list<MapBlock> obj)
 
 GamePlay::GamePlay()
 {
-    // _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 0, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
-    std::cerr << "first";
+    _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 10, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
     _player = Player();
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
-    // RAYLIB::ShowCursor();
     this->_weapon = new Pistol(pos);
-    Pistol(pos).update({0, 0}, 0);
 }
 
 GamePhase GamePlay::launch()
@@ -37,9 +34,9 @@ GamePhase GamePlay::launch()
     auto texture = RAYLIB::LoadTexture(std::string(path + "texture_minecraft_stone.png").c_str());
     auto model = rl::Models(mesh, texture);
     auto m = Map3D(charMap, model, size);
+
     _spawn = m._spawns.front();
     _player.setPos(RAYLIB::Vector2{_spawn.first, _spawn.second});
-
     _TopCamera.setPosition({_spawn.first, _TopCamera.getPosition().y, _spawn.second});
     _FPCamera.setPosition({_spawn.first, _FPCamera.getPosition().y, _spawn.second});
     this->_mapSize = {charMap.size(), charMap.front().size()};
@@ -60,7 +57,6 @@ GamePhase GamePlay::restart()
         }
         this->drawAll();
         RAYLIB::DrawFPS(10, 10);
-        rl::Text(std::to_string(_player.getHealth()), 15, 10, 25, {255, 0, 0, 255}).draw();
 
         RAYLIB::EndDrawing();
         RAYLIB::ClearBackground({255, 255, 255, 255});
@@ -79,6 +75,7 @@ void GamePlay::aliveCall()
 void GamePlay::specCall()
 {
     //todo
+    ACTIVE_CAMERA.updateCamera();
 }
 
 void GamePlay::drawAll()
@@ -97,14 +94,13 @@ void GamePlay::drawAll()
     }
 //     for (auto it : this->_enemies)
 //         it->draw();
-//     for (auto it : this->_items)
-//         it->draw();
+    for (auto it : this->_items)
+        it->draw();
     for (auto &it : _bullet) {
         it.update();
         it.draw(); // draw
     }
 
-    // RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, -0.5, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, RAYLIB::RED); //draw flor
-    RAYLIB::DrawGrid(100, 5);
+    RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, 0, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, {147, 72, 56, 255}); //draw flor
     RAYLIB::EndMode3D();
 }

@@ -69,7 +69,6 @@ class Weapon : public game_object::Item
         std::string _type;
         float _rota;
         bool _wear = true;
-        rl::Models _model;
 };
 
 class Pistol : public Weapon
