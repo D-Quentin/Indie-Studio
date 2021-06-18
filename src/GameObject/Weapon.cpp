@@ -129,7 +129,7 @@ void Weapon::draw()
 
 Pistol::Pistol(RAYLIB::Vector2 pos)
 {
-    static rl::Models pistol_model = rl::Models("assets/weapons/DesertEagle/DesertEagle.obj");
+    static rl::Models pistol_model = rl::Models("assets/weapons/Glock18/Glock18.obj");
 
     _model = pistol_model;
     this->_nbBullet = 65535;
@@ -144,8 +144,7 @@ Pistol::Pistol(RAYLIB::Vector2 pos)
 
 Rifle::Rifle(RAYLIB::Vector2 pos)
 {
-    std::string path("assets/weapons/Baretta/");
-    static rl::Models rifle_model = rl::Models(std::string(path + "Beretta.obj"));
+    static rl::Models rifle_model = rl::Models("assets/weapons/M4/M4.obj");
 
     _model = rifle_model;
     this->_nbBullet = 35;
@@ -160,8 +159,7 @@ Rifle::Rifle(RAYLIB::Vector2 pos)
 
 Snip::Snip(RAYLIB::Vector2 pos)
 {
-    std::string path("assets/weapons/Baretta/");
-    static rl::Models snip_model = rl::Models(std::string(path + "Beretta.obj"));
+    static rl::Models snip_model = rl::Models("assets/weapons/L115A3/L115A3.obj");
 
     _model = snip_model;
     this->_nbBullet = 6;

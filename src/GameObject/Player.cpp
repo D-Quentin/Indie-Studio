@@ -78,7 +78,7 @@ void Player::gestColision(std::list<BlockObject *> blocks, RAYLIB::Vector2 oldPl
     for (auto it : blocks) {
         // With Player
         RAYLIB::Vector2 playerPos = this->_pos;
-        float player_radius = 0.3f;
+        float player_radius = 0.15f;
         RAYLIB::Vector2 blockPos = it->getPos();
         RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
         bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
