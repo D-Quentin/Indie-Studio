@@ -23,9 +23,29 @@
 #include "Encapsulation/Window.hpp"
 #include "Encapsulation/Text.hpp"
 #include "Weapon.hpp"
+#include "PowerUp.hpp"
+
+#define ACTIVE_CAMERA ((!this->_player.isAlive()) ? this->_FPCamera : this->_TopCamera)
+
+#define GROUNDCOLOR {119,136,153, 255}
+#define SPAWNCOLOR {233,150,122, 255}
+#define ITEMCOLOR {42, 157, 244, 255}
+
+enum EnumItems {
+    ITSpeed = 0,
+    ITHealth,
+    ITRifle,
+    ITSnip
+};
 
 class GamePlay{
     public:
+        const std::map<EnumItems, game_object::Item*> enumToItem = {
+            {ITSpeed, (game_object::Item*) new Speed},
+            {ITHealth, (game_object::Item*) new Dash},
+            {ITRifle, (game_object::Item*) new Rifle},
+            {ITSnip, (game_object::Item*)new  Snip}
+        };
         GamePlay();
         ~GamePlay() = default;
 
@@ -34,23 +54,37 @@ class GamePlay{
 
     private: //methodes
         //set
+        void placeItems(std::list<std::pair<float, float>> poslist);
         void setBlocks(std::list<BlockObject*> obj) {_blocks = obj;};
         void setEnemies(std::list<EntityObjects*> obj) {_enemies = obj;};
         void setItems(std::list<game_object::Item*> obj) {_items = obj;};
         void nonToPoi(std::list<MapBlock>);
+
+        //alive methode
         void updateLocal();
+        void updatePowerUp();
+        void testThings();
+        void delFalseBullet();
+        void reloadPower();
+
+        //spec method
+        //todo
 
         //other methods
+        void aliveCall();
+        void specCall();
         void drawAll();
 
     private: //attr
         Player _player;
+        RAYLIB::Vector2 _oldPlayerPos;
         std::list<BlockObject*> _blocks;
         std::list<EntityObjects*> _enemies;
         std::list<game_object::Item*> _items;
+        std::list<Bullet> _bullet;
         int _renderDistance = 40;
         Weapon *_weapon;
-        //power-up
+        std::list<PowerUp*> _power_up;
         //server
         rl::Camera _FPCamera;
         rl::Camera _TopCamera;
@@ -58,6 +92,7 @@ class GamePlay{
         bool _isFpCam = true;
         std::pair<float, float> _mapSize;
         std::pair<float, float> _spawn;
+        std::list<std::pair<float, float>> _spawns;
 };
 
 #endif /* !GAMEPLAY_HPP_ */

@@ -32,10 +32,11 @@ class Lobby {
         GamePhase mainPhase(GamePhase, Client *&);
         GamePhase joinPhase(GamePhase, Client *&, std::string, std::string);
 
-        size_t getMe(void);
+        int getMe(void);
         bool isHost(void);
         int getReadyPlayer(void);
         int getPlayer(void);
+        std::map<int, GameObject *> getObj(void);
         void setReadyPlayer(int);
         void setPlayer(int);
 
@@ -43,6 +44,7 @@ class Lobby {
     private:
         Phase _phase;
         std::map<int, GameObject *> _obj;
+        std::list<BlockObject *> _blocks;
         int _player;
         int _readyPlayer;
         Client *_client;
@@ -51,9 +53,13 @@ class Lobby {
         int _renderDistance = 40;
         bool _host;
         bool _ready;
+        std::string _port;
+        std::string _localIp;
+        std::string _publicIp;
 
         Button _bReady;
         rl::Text _tReady;
+        rl::Text _tIps;
 };
 
 #endif /* !LOBBY_HPP_ */

@@ -84,8 +84,10 @@ class Menu {
 
         // CreatePhase
         InputButton _iServPort;
+        InputButton _iName;
         rl::Text _tServPort;
         rl::Text _tCreate;
+        rl::Text _tName;
         Button _bCreate;
 };
 

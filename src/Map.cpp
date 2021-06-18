@@ -343,6 +343,49 @@ void map::create_spawn()
     }
 }
 
+int number_of_rooms(std::vector<std::vector<int>> plan_int)
+{
+    int number = 0;
+    for (size_t i = 0; i != plan_int.size(); i++) {
+        for (size_t b = 0; b != plan_int[i].size(); b++) {
+            if (plan_int[i][b] != ' ') {
+                number++;
+            }
+        }
+    }
+    return number;
+}
+
+void map::create_weapons()
+{
+    std::vector<int> pos_x;
+    std::vector<int> pos_y;
+    int z = 0, c = 0;
+
+    for (std::size_t x = 0; x != this->plan_char.size(); x++) {
+        for (std::size_t y = 0; y != this->plan_char[x].size();) {
+            if (x % (this->size * 11) == 0 && y % (this->size * 11) == 0) {
+                pos_x.push_back(1 + std::rand()/((RAND_MAX + 1u)/(this->size * 9)));
+                pos_y.push_back(1 + std::rand()/((RAND_MAX + 1u)/(this->size * 9)));
+                c = 0;
+            }
+            y = y + this->size;
+            for (int v = 0; v != this->size * 9; v++) {
+                if (v == pos_x[z] && c == pos_y[z] && this->plan_char[x][y] == ' ') {
+                    this->plan_char[x][y] = 'P';
+                }
+                y++;
+            }
+            y = y + this->size;
+            z++;
+        }
+        pos_x.clear();
+        pos_y.clear();
+        z = 0;
+        c++;
+    }
+}
+
 std::vector<std::vector<char>> map::create(int nb_player, int size)
 {
     std::vector<int> map_int;
@@ -360,6 +403,7 @@ std::vector<std::vector<char>> map::create(int nb_player, int size)
     create_rooms();
     create_spawn();
     create_real_map();
+    create_weapons();
     return this->plan_char;
 }
 
@@ -367,16 +411,22 @@ std::vector<std::vector<char>> setup_door(std::vector<std::vector<char>> map, in
 {
     int o = 0;
     int p = 0;
-
-    printf("%d\n", size);
+    int j = 0;
     for (; i != 0 && map[nb-1][i] != 'X' && map[nb+4][i] != 'X'; i--);
     p = i;
     i++;
     for (;map[nb-1][i+1] != 'X' && map[nb+4][i+1] != 'X'; i++, o++);
     int rando = rand()%o +1;
+    if (rando <= 0)
+        rando++;
+    j = std::rand()/((RAND_MAX + 1u)/(3));
     for (int m = 0; m != size*2; m++) {
-        for(int c = 0; c != size; c++)
-            map[nb-m+((size*2)-1)][p+rando+c] = ' ';
+        for(int c = 0; c != size; c++) {
+            if (j == 2)
+                map[nb-m+((size*2)-1)][p+rando+c] = 'C';
+            else
+                map[nb-m+((size*2)-1)][p+rando+c] = ' ';
+        }
     }
     return (map);
 }
@@ -385,15 +435,22 @@ std::vector<std::vector<char>> setup2_door(std::vector<std::vector<char>> map, i
 {
     int o = 0;
     int p = 0;
+    int j = 0;
 
     for (; i != 0 && map[nb][i-1] != 'X' && map[nb][i+4] != 'X'; nb--);
     p = nb;
     nb++;
     for (;map[nb][i-1] != 'X' && map[nb][i+4] != 'X'; nb++, o++);
     int rando = rand()%o -1;
+    j = std::rand()/((RAND_MAX + 1u)/(3));
+    if (rando <= 0)
+        rando++;
     for (int m = 0; m != 2*size; m++) {
         for (int c = 0; c != size; c++) {
-            map[p+rando+1+c][i+m] = ' ';
+            if (j == 2)
+                map[p+rando+1+c][i+m] = 'C';
+            else 
+                map[p+rando+1+c][i+m] = ' ';
         }
     }
     return (map);
@@ -416,7 +473,7 @@ std::vector<std::vector<char>> change_door(std::vector<std::vector<char>> map, i
         map = check(map, i, size);
     }
     for (size_t i = 0; i != map.size(); i++)
-        for (size_t o = 0; o != map[i].size() && o != '\0'; o++)
+        for (size_t o = 0; o != map[i].size(); o++)
             if (map[i][o] == 'H')
                 map[i][o] = 'X';
     return (map);

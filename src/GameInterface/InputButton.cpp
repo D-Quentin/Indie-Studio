@@ -6,8 +6,9 @@
 */
 
 #include "InputButton.hpp"
+#include <cstring>
 
-InputButton::InputButton(float posx, float posy, float width, float height, int maxLen)
+InputButton::InputButton(const char *path, float posx, float posy, float width, float height, int maxLen, float textx, float texty, float textlengh)
 {
     int WIN_HEIGHT = RAYLIB::GetScreenHeight();
     int WIN_WIDTH = RAYLIB::GetScreenWidth();
@@ -18,9 +19,12 @@ InputButton::InputButton(float posx, float posy, float width, float height, int 
     this->_width = (int)(width * WIN_WIDTH) / 100;
     this->_maxLen = maxLen;
     this->_selected = false;
-    this->_button = Button("", posx, posy, width, height);
+    this->_button = Button(path, posx, posy, width, height);
     this->_color = Fade(RAYLIB::ORANGE, 0.6);
-    this->_printText = rl::Text("", posx + height * 0.2, posy + height * 0.08, (this->_height * 0.85) / 2, RAYLIB::LIGHTGRAY);
+    this->_printText = rl::Text("", textx, texty, textlengh, RAYLIB::BLACK);
+    this->_path = path;
+    if (strlen(path) != 0)
+        this->_texture = RAYLIB::LoadTexture(path);
 }
 
 InputButton::~InputButton()
@@ -56,8 +60,14 @@ void InputButton::writeChar()
 
 void InputButton::draw()
 {
-    RAYLIB::DrawRectangle(this->_posx, this->_posy, this->_width, this->_height, this->_color);
-    RAYLIB::DrawRectangle(this->_posx + this->_height * 0.08, this->_posy + this->_height * 0.08, this->_width - this->_height * 0.16, this->_height - this->_height * 0.16, RAYLIB::DARKGRAY);
+    if (strlen(this->_path) != 0 && this->_selected == false)
+        RAYLIB::DrawTextureEx(this->_texture, {(float)this->_posx, (float)this->_posy}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    else if (strlen(this->_path) != 0 && this->_selected == true)
+        RAYLIB::DrawTextureEx(this->_texture, {(float)this->_posx, (float)this->_posy}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::RED);
+    else if (strlen(this->_path) == 0) {
+        RAYLIB::DrawRectangle(this->_posx, this->_posy, this->_width, this->_height, this->_color);
+        RAYLIB::DrawRectangle(this->_posx + this->_height * 0.08, this->_posy + this->_height * 0.08, this->_width - this->_height * 0.16, this->_height - this->_height * 0.16, RAYLIB::DARKGRAY);
+    }
     this->_printText.draw();
 }
 

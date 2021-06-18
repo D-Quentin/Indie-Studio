@@ -12,12 +12,21 @@
 #include "Play.hpp"
 #include "Setting.hpp"
 
+static int signalStatus = 0;
+
+
 Game::Game()
 {
 }
 
 Game::~Game()
 {
+}
+
+void signal_handler(int signal)
+{
+    if (signal != 0)
+        signalStatus = signal;
 }
 
 void Game::launch(rl::Window win)
@@ -29,10 +38,15 @@ void Game::launch(rl::Window win)
     std::pair<bool, Play> play = {false, Play()};
     std::pair<bool, Setting> setting = {false, Setting()};
 
+    #if not defined(_WIN32)
+        std::signal(SIGINT, signal_handler);
+    #endif
     while (statut != QuitPhase && win.loop()) {
         RAYLIB::BeginDrawing();
         win.clear({255, 255, 255, 255});
-        if (RAYLIB::IsKeyPressed(RAYLIB::KEY_F6))   
+        if (signalStatus != 0)
+            statut = QuitPhase;
+        if (RAYLIB::IsKeyPressed(RAYLIB::KEY_F6))
             statut = GamePlayPhase;
         switch (statut) {
         case MenuPhase:
@@ -81,5 +95,9 @@ void Game::launch(rl::Window win)
     }
     if (lobby.second.isHost())
         this->_client->send(CLOSING_SERVER);
-    std::cout << "Quiting" << std::endl;
+    else if (lobby.second.getMe() != -1)
+        this->_client->send(CLIENT_CLOSING_CONNECTION);
+    #if defined (DEBUG)
+        std::cout << "Quiting" << std::endl;
+    #endif
 }

@@ -9,8 +9,11 @@
 #include <string>
 #include "Server.hpp"
 #include "Encapsulation/Text.hpp"
+#include <stdio.h>
+#include <stdlib.h>
 #if defined(_WIN32)
     #include <windows.h>
+    #include <winsock.h>
 #else
     #include <stdlib.h>
 #endif
@@ -34,7 +37,7 @@ bool Lobby::isHost(void)
     return (this->_host);
 }
 
-size_t Lobby::getMe(void)
+int Lobby::getMe(void)
 {
     return (this->_me);
 }
@@ -59,12 +62,18 @@ void Lobby::setPlayer(int player)
     this->_player = player;
 }
 
+std::map<int, GameObject *> Lobby::getObj()
+{
+    return (this->_obj);
+}
+
 GamePhase Lobby::launch(Client *&client, std::string ip, std::string port)
 {
     this->_phase = JoinPhase;
 
     this->_bReady = Button(" ", 65, 80, 30, 15);
     this->_tReady = rl::Text("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player), 67, 82, 50, RAYLIB::LIGHTGRAY);
+    this->_tIps = rl::Text("", 1, 2, 20, RAYLIB::LIGHTGRAY);
 
     return (this->restart(client, ip, port));
 }
@@ -90,17 +99,20 @@ GamePhase Lobby::restart(Client *&client, std::string ip, std::string port)
 GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
 {
     GameObject::gestData(this->_obj, this->_client->read(), this->_client, *this);
-    ((Player *)this->_obj[this->_me])->gest(client);
+    ((Player *)this->_obj[this->_me])->gest(client, this->_blocks);
     // rl::Text(std::to_string(((Player *)this->_obj[this->_me])->_rota), 10, 10, 15, {255, 0, 0, 255}).draw();
     if (!this->_ready && this->_bReady.isClicked()) {
         this->_ready = true;
         client->send("READY;\n");
     }
+    if (this->_readyPlayer == this->_player)
+            gamePhase = PlayPhase;
     this->_tReady.setText("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player));
 
     // 2D Drawing
     this->_bReady.draw();
     this->_tReady.draw();
+    this->_tIps.draw();
 
     // 3D Drawing
     RAYLIB::BeginMode3D(this->_TopCamera.getCamera());
@@ -119,13 +131,19 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
 {
     rl::Window::loading();
     std::cout << "Connecting to Ip: " << ip << " / Port: " << port << std::endl;
+
+    // Connect to server
+    #if defined(_WIN32)
+        Sleep(1000);
+    #else
+        sleep(1);
+    #endif
     client = new Client(ip, std::atoi(port.c_str()));
     this->_client = client;
     this->_client->launch();
     this->_client->send(INCOMMING_CONNECTION);
-
     #if defined(_WIN32)
-        Sleep(1000);
+        Sleep(3000);
     #else
         sleep(1);
     #endif
@@ -136,7 +154,10 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     }
     GameObject::gestData(this->_obj, str, client, *this);
 
-    std::cout << "Get Info Start" << std::endl;
+    // Get server data
+    #if defined(DEBUG)
+        std::cout << "Get Info Start" << std::endl;
+    #endif
     #if defined(_WIN32)
         Sleep(1000);
     #else
@@ -144,11 +165,15 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     #endif
     str = client->read();
     GameObject::gestData(this->_obj, str, client, *this);
-    std::cout << "Get Info End" << std::endl;
+    #if defined(DEBUG)
+        std::cout << "Get Info End" << std::endl;
+    #endif
     this->_me = this->_obj.size();
     if (this->_me == 0)
         this->_host = true;
+    this->_player += this->_me;
 
+    // Send server data
     client->send("PLAYER;ID:" + std::to_string(this->_me) + ";X:500;Y:500;\n");
     #if defined(_WIN32)
         Sleep(1000);
@@ -161,6 +186,45 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
         return (QuitPhase);
     }
     GameObject::gestData(this->_obj, str, client, *this);
+
+    // Get Ip
+    FILE *file;
+    char bufLocal[128];
+    char bufPublic[128];
+    std::string line;
+    std::string ips = "These infos has been copied to your clipboard\n";
+    #if defined(_WIN32)
+        file = _popen("curl ifconfig.me", "r");
+    #else
+        file = popen("curl ifconfig.me", "r");
+    #endif
+    while(fgets(bufPublic, 128, file))
+        this->_publicIp += bufPublic;
+    #if defined(_WIN32)
+        WSAData wsaData;
+        WSAStartup(MAKEWORD(1, 1), &wsaData);
+        char ac[80];
+        gethostname(ac, sizeof(ac));
+        struct hostent *phe = gethostbyname(ac);
+        for (int i = 0; phe->h_addr_list[i] != 0; ++i) {
+            struct in_addr addr;
+            memcpy(&addr, phe->h_addr_list[i], sizeof(struct in_addr));
+            this->_localIp += inet_ntoa(addr);
+        }
+        WSACleanup();
+    #else
+        file = popen("hostname -I | awk '{print $1}'", "r");
+        while(fgets(bufLocal, 128, file))
+            this->_localIp += bufLocal;
+    #endif
+    this->_port = port;
+
+    ips += "Public Ip: " + this->_publicIp + "\n";
+    ips += "Local Ip: " + this->_localIp + "\n";
+    ips += "Port: " + this->_port;
+    this->_tIps.setText(ips);
+    ips.erase(0, 46);
+    RAYLIB::SetClipboardText(ips.c_str());
 
     this->_phase = MainPhase;
     return (gamePhase);

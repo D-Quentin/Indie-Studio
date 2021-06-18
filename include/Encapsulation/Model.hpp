@@ -17,6 +17,7 @@ namespace rl {
             Models() = default;
             Models(std::string,  RAYLIB::Vector3 = {0, 0, 0});
             Models(RAYLIB::Mesh, RAYLIB::Texture2D, RAYLIB::Vector3 = {0, 0, 0});
+            Models(RAYLIB::Mesh, RAYLIB::Vector3 = {0, 0, 0});
             ~Models() = default;
             void draw();
             void setPos(RAYLIB::Vector3 pos) {_pos = pos;};

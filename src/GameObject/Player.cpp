@@ -7,6 +7,7 @@
 
 #include "Player.hpp"
 #include <string>
+#include <Weapon.hpp>
 
 float Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2)
 {
@@ -17,44 +18,18 @@ float Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2)
 
 Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
 {
-    std::string path("assets/character/");
+    static auto globalPlayerModel = rl::Models("assets/character/character.obj");
+    static auto __bb = RAYLIB::MeshBoundingBox(globalPlayerModel._model.meshes[0]);
+    static float __varForCalculateScale = __bb.min.z - __bb.max.z;
+    _scale = std::abs(0.3 / __varForCalculateScale);
     this->setPos(pos);
-    _model = rl::Models(std::string(path + "character.obj"));
+    _model = globalPlayerModel;
+
     this->_rota = 0;
     this->_change = false;
     this->_id = id;
+    this->_weapon1 = new Pistol();
 }
-
-void Player::draw()
-{
-    float scale = 15;
-    RAYLIB::Vector3 vScale = { scale, scale, scale};
-    RAYLIB::Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f };
-    auto pos = this->getPos();
-
-    RAYLIB::DrawModelEx(_model._model, {pos.x, 0, pos.y}, rotationAxis, _rota, vScale, RAYLIB::GRAY);
-}
-
-// void Player::update(, std::pair<float, float> rota)
-// {
-//     // if (!RAYLIB::IsKeyDown(RAYLIB::KEY_W) && !RAYLIB::IsKeyDown(RAYLIB::KEY_S) &&
-//     // !RAYLIB::IsKeyDown(RAYLIB::KEY_D) && !RAYLIB::IsKeyDown(RAYLIB::KEY_A))
-//     //     return;
-//     static float oldMousePos = RAYLIB::GetMousePosition().x;
-//     float mousePos = RAYLIB::GetMousePosition().x;
-//     float speed = 5;
-//     auto pos = this->getPos();
-
-    
-
-//     if (rota.second == 0)
-//         rota.second = oldMousePos - mousePos;;
-//     _rota += rota.second;
-//     _rota = (int) _rota % 360;
-//     _rota = -Vector2Angle({(float)RAYLIB::GetScreenWidth() / 2, (float)RAYLIB::GetScreenHeight() / 2}, RAYLIB::GetMousePosition());
-//     oldMousePos = mousePos;
-//     this->_change = true;
-// }
 
 void Player::move()
 {
@@ -67,7 +42,7 @@ void Player::move()
     RAYLIB::Vector2 pos = this->getPos();
 
     if (RAYLIB::IsKeyDown(RAYLIB::KEY_LEFT_SHIFT))
-        speed += 1.5;
+        speed += 1.5 + (_moreSpeed ? 2 : 0);
     if (move == std::make_pair(0.0f, 0.0f)) {
         move.first += RAYLIB::IsKeyDown(RAYLIB::KEY_W) - RAYLIB::IsKeyDown(RAYLIB::KEY_S);
         move.second += RAYLIB::IsKeyDown(RAYLIB::KEY_D) - RAYLIB::IsKeyDown(RAYLIB::KEY_A);
@@ -79,6 +54,13 @@ void Player::move()
     this->_change = true;
 }
 
+void Player::dash()
+{
+    std::pair<float, float> circlePos = pointInACircle(std::abs(_rota + 90), 1);
+    this->_pos.x += circlePos.first;
+    this->_pos.y += circlePos.second;
+}
+
 void Player::rotate()
 {
     float newRota = -Vector2Angle({(float)RAYLIB::GetScreenWidth() / 2, (float)RAYLIB::GetScreenHeight() / 2}, RAYLIB::GetMousePosition());
@@ -87,6 +69,42 @@ void Player::rotate()
         return;
     this->_rota = newRota;
     this->_change = true;
+}
+
+void Player::gestColision(std::list<BlockObject *> blocks, RAYLIB::Vector2 oldPlayerPos)
+{
+    bool bullet_player = true;
+
+    for (auto it : blocks) {
+        // With Player
+        RAYLIB::Vector2 playerPos = this->_pos;
+        float player_radius = 0.3f;
+        RAYLIB::Vector2 blockPos = it->getPos();
+        RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
+        bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
+
+        if (col)
+            this->_pos = oldPlayerPos;
+
+        // With Bullets
+        for (auto &it : _bullet) {
+            if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))
+                it.isReal = false;
+            else if (bullet_player) {
+                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius)) {
+                    it.isReal = false;
+                    this->takeDamage(it.getDamage());
+                }
+            }
+        }
+        bullet_player = false;
+    }
+    for (auto &it : _bullet) {
+        if (!it.isReal) {
+            _bullet.remove(it);
+            break;
+        }
+    }
 }
 
 std::string Player::serialize()
@@ -115,24 +133,25 @@ void Player::deserialize(std::string str)
     this->_rota = std::atof(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
 }
 
-void Player::gest(Client *&client)
+void Player::gest(Client *&client, std::list<BlockObject *> blocks)
 {
-    // this->update();
+    RAYLIB::Vector2 oldPlayerPos = this->_pos;
+
     this->move();
     this->rotate();
+    this->gestColision(blocks, oldPlayerPos);
+    if (this->_weaponUse == 1) {
+        this->_weapon1->update(this->_pos, this->_rota);
+        if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
+            _bullet.push_back(this->_weapon1->shoot());
+    } else if (this->_weaponUse == 2) {
+        this->_weapon2->update(this->_pos, this->_rota);
+        if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
+            _bullet.push_back(this->_weapon2->shoot());
+    }
 
     if (this->_change) {
         client->send(this->serialize());
         this->_change = false;
     }
-}
-void Player::setPos(RAYLIB::Vector2 pos)
-{
-    this->_pos = pos;
-}
-
-void Player::setPos(RAYLIB::Vector3 pos)
-{
-    this->_pos = {pos.x, pos.z};
-    this->_ypos = pos.y;
 }

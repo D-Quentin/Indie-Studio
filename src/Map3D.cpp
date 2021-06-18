@@ -21,8 +21,10 @@ Map3D::Map3D(std::vector<std::vector<char>> map, rl::Models model, float size)
         for (const auto &it : itj) {
             if (it == 'X')
                 this->_mapBlocks.push_back(MapBlock(model, {size * i, 0, size * j}, size));
-            if (it == 'S')
+            else if (it == 'S')
                 this->_spawns.push_back({size * i, size * j});
+            else if (it == 'P')
+                this->_items.push_back({size * i, size * j});
             i += 1;
         }
         j += 1;
@@ -39,7 +41,7 @@ void Map3D::draw()
 
 MapBlock::MapBlock(rl::Models model, RAYLIB::Vector3 pos, float size)
 {
-    model.setPos(pos);
+    model.setPos({pos.x, pos.y + size / 2, pos.z});
     _model = model;
     _pos = pos;
     _size = size;

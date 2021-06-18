@@ -49,6 +49,7 @@ class Map3D {
 
         std::list<MapBlock> _mapBlocks;
         std::list<std::pair<float, float>> _spawns;
+        std::list<std::pair<float, float>> _items;
 };
 
 #endif /* !Map3D_HPP_ */

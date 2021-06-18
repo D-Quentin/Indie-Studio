@@ -13,7 +13,7 @@
 
 class InputButton {
     public:
-        InputButton(float = 0, float = 0, float = 0, float = 0, int = 0);
+        InputButton(const char *path = "", float = 0, float = 0, float = 0, float = 0, int = 0, float = 0, float = 0, float = 0);
         ~InputButton();
         bool isSelected();
         void writeChar();
@@ -32,6 +32,8 @@ class InputButton {
         rl::Text _printText;
         Button _button;
         RAYLIB::Color _color;
+        const char *_path;
+        RAYLIB::Texture2D _texture;
 };
 
 #endif /* !INPUTBUTTON_HPP_ */

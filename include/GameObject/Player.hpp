@@ -10,29 +10,28 @@
 
 #include "EntityObjects.hpp"
 #include "Model.hpp"
+#include "BlockObject.hpp"
 
 class Player : public EntityObjects {
     public:
         Player(RAYLIB::Vector2 = {0, 0}, int = -1, bool = false);
         ~Player() = default;
-        void draw();
         void move();
         void rotate();
-        void setPos(RAYLIB::Vector2 pos);
-        void setPos(RAYLIB::Vector3 pos);
-        void gest(Client *&client);
+        void gest(Client *&client, std::list<BlockObject *> blocks);
         std::string serialize();
         void deserialize(std::string);
-        RAYLIB::Vector2 getPos() {return _pos;};
-        float _rota;
-        rl::Models _model;
-
+        void dash();
+        void setSpeed(bool val) {_moreSpeed = val;};
+        void gestColision(std::list<BlockObject *> blocks, RAYLIB::Vector2 oldPlayerPos);
 
     protected:
     private:
         bool _me;
-        RAYLIB::Vector2 _pos;
-        float _ypos = 0;
+        bool _moreSpeed = false;
+        // RAYLIB::Vector2 _pos;
+        // float _ypos = 0;
+        // float _scale;
 };
 
 #endif /* !PLAYER_HPP_ */
