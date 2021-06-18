@@ -92,14 +92,17 @@ void GamePlay::updateLocal()
 {
     bool bullet_player = true;
     float player_radius = 0.15f;
+    auto it_items = _items.begin();
 
     this->_player.move();
     auto playerPos = _player.getPos();
 
     for (auto &it : _items) {
         bool col = RAYLIB::CheckCollisionCircles(it->getPos(), player_radius, playerPos, player_radius);
-        if (!col)
+        if (!col) {
+            it_items++;
             continue;
+        }
         if (it->isWeapon) {
             _weapon = (Weapon *)it;
             it->isWear = true;
@@ -108,6 +111,8 @@ void GamePlay::updateLocal()
             _power_up.push_back((PowerUp *)it);
             it->isWear = true;
         }
+        _items.erase(it_items);
+        break;
     }
     // handle player / block colision
     for (auto it : _blocks) {
