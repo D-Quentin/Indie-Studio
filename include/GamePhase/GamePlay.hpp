@@ -47,6 +47,7 @@ class GamePlay{
         void updatePowerUp();
         void testThings();
         void delFalseBullet();
+        void reloadPower();
 
         //spec method
         //todo

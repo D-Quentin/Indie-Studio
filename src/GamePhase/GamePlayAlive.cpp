@@ -7,6 +7,21 @@
 
 #include "GamePlay.hpp"
 
+bool compare(PowerUp *f, PowerUp *s)
+{
+    return f->getPower() == s->getPower();
+}
+
+namespace std {
+    bool find(list<PowerUp*> lst, EnumPowerUp pw)
+    {
+        for (const auto &it : lst)
+            if (it->getPower() == pw)
+                return true;
+        return false;
+    }
+};
+
 void GamePlay::testThings()
 {
     if (RAYLIB::IsKeyPressed(RAYLIB::KEY_KP_0))
@@ -27,9 +42,27 @@ void GamePlay::testThings()
     }
 }
 
-bool compare(PowerUp *f, PowerUp *s)
+void GamePlay::reloadPower()
 {
-    return f->getPower() == s->getPower();
+    static auto timeDash = TIMENOW;
+    static auto timeShield = TIMENOW;
+    static bool boolDash = true;
+    static bool boolShield = true;
+
+    boolDash = std::find(_power_up, PUDash) ? true : false;
+    boolShield = std::find(_power_up, PUShield) ? true : false;
+    if (!boolDash && CHRONO(timeDash) >= 1000) {
+        boolDash = false;
+        timeDash = TIMENOW;
+        _power_up.push_back(new Dash);
+    } else if (boolDash)
+        timeDash = TIMENOW;
+    if (!boolShield && CHRONO(timeShield) >= 5000) {
+        boolShield = false;
+        timeShield = TIMENOW;
+        _power_up.push_back(new Shield);
+    } else if (boolShield)
+        timeShield = TIMENOW;
 }
 
 void GamePlay::updatePowerUp()

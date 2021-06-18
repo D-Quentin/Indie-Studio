@@ -67,6 +67,7 @@ GamePhase GamePlay::restart()
 
 void GamePlay::aliveCall()
 {
+    this->reloadPower();
     this->updatePowerUp();
     this->updateLocal();
     this->testThings();
