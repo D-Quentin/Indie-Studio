@@ -34,7 +34,7 @@ class PowerUp : public game_object::Item
             {PUShield, shieldModel},
             {PUDash, dashModel}
         };
-        ~PowerUp();
+        ~PowerUp() = default;
         void use() {_type = PUNothing;};
         bool update() {
             static auto start = TIMENOW;
@@ -44,16 +44,14 @@ class PowerUp : public game_object::Item
             }
             return true;
         };
+        void setModel() {
+            try {
+                _model = powerUpModel.at(_type);
+            } catch(...){};
+        };
         EnumPowerUp getPower() const {return _type;};
         std::string serialize() {return std::string("");};
         void deserialize(std::string) {};
-        void draw() {
-            if (this->isWear || this->_type == PUNothing)
-                return;
-            try {
-                RAYLIB::DrawModel(powerUpModel.at(this->_type)._model, {_pos.x, _ypos, _pos.y}, 1, RAYLIB::WHITE);
-            } catch (...) {};
-        };
 
     protected:
         EnumPowerUp _type;
@@ -63,21 +61,21 @@ class PowerUp : public game_object::Item
 class Speed : public PowerUp
 {
     public:
-        Speed() {_type = PUSpeed; _time = 15;};
+        Speed() {_type = PUSpeed; _time = 15; setModel();};
         ~Speed() = default;
 };
 
 class Shield : public PowerUp
 {
     public:
-        Shield() {_type = PUShield; _time = 0;};
+        Shield() {_type = PUShield; _time = 0; setModel();};
         ~Shield() = default;
 };
 
 class Dash : public PowerUp
 {
     public:
-        Dash() {_type = PUDash; _time = 0;};
+        Dash() {_type = PUDash; _time = 0; setModel();};
         ~Dash() = default;
 };
 

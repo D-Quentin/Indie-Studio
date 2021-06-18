@@ -22,6 +22,14 @@ GamePlay::GamePlay()
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
     this->_weapon = new Pistol(pos);
+    // _items.push_front(new Dash);
+    // _items.front()->setPos(RAYLIB::Vector2{-5, -5});
+    // _items.push_front(new Shield);
+    // _items.front()->setPos(RAYLIB::Vector2{-6, -5});
+    // _items.push_front(new Speed);
+    // _items.front()->setPos(RAYLIB::Vector2{-7, -5});
+    // _items.push_front(new Pistol);
+    // _items.front()->setPos(RAYLIB::Vector2{-10, -5});
 }
 
 GamePhase GamePlay::launch()
