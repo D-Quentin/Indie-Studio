@@ -7,7 +7,7 @@
 
 #include "GamePlay.hpp"
 
-// #define ACTIVE_CAMERA ((!this->_player.isAlive()) ? this->_FPCamera : this->_TopCamera)
+#define ACTIVE_CAMERA ((!this->_player.isAlive()) ? this->_FPCamera : this->_TopCamera)
 
 void GamePlay::nonToPoi(std::list<MapBlock> obj)
 {

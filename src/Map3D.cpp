@@ -39,7 +39,7 @@ void Map3D::draw()
 
 MapBlock::MapBlock(rl::Models model, RAYLIB::Vector3 pos, float size)
 {
-    model.setPos(pos);
+    model.setPos({pos.x, pos.y + size / 2, pos.z});
     _model = model;
     _pos = pos;
     _size = size;
