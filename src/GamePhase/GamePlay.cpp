@@ -22,27 +22,27 @@ GamePlay::GamePlay()
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
     this->_weapon = new Pistol(pos);
-    // _items.push_front(new Speed);
-    // _items.front()->setPos(RAYLIB::Vector2{-5, -5});
-    // _items.push_front(new Shield);
-    // _items.front()->setPos(RAYLIB::Vector2{-6, -5});
-    // _items.push_front(new Speed);
-    // _items.front()->setPos(RAYLIB::Vector2{-7, -5});
-    // _items.push_front(new Rifle);
-    // _items.front()->setPos(RAYLIB::Vector2{-10, -5});
+    _items.push_front(new Speed);
+    _items.front()->setPos(RAYLIB::Vector2{-5, -5});
+    _items.push_front(new Shield);
+    _items.front()->setPos(RAYLIB::Vector2{-6, -5});
+    _items.push_front(new Speed);
+    _items.front()->setPos(RAYLIB::Vector2{-7, -5});
+    _items.push_front(new Rifle);
+    _items.front()->setPos(RAYLIB::Vector2{-10, -5});
 }
 
 GamePhase GamePlay::launch()
 {
     //SET ALL
-    std::string path("/home/THE/texture/");
     float size = 1;
     auto mesh = RAYLIB::GenMeshCube(size, size, size);
     auto charMap = main_create_map(2, 1);
-    auto texture = RAYLIB::LoadTexture(std::string(path + "texture_minecraft_stone.png").c_str());
+    auto texture = RAYLIB::LoadTexture(std::string("assets/texture/wall.png").c_str());
     auto model = rl::Models(mesh, texture);
     auto m = Map3D(charMap, model, size);
 
+    _spawns = m._spawns;
     _spawn = m._spawns.front();
     _player.setPos(RAYLIB::Vector2{_spawn.first, _spawn.second});
     _TopCamera.setPosition({_spawn.first, _TopCamera.getPosition().y, _spawn.second});
@@ -109,7 +109,12 @@ void GamePlay::drawAll()
         it.update();
         it.draw(); // draw
     }
+    RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, -0.01, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, GROUNDCOLOR); //draw flor
 
-    RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, 0, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, {147, 72, 56, 255}); //draw flor
+    for (auto it : _spawns)
+        RAYLIB::DrawPlane((RAYLIB::Vector3){ it.first, 0, it.second}, (RAYLIB::Vector2){ 1, 1}, SPAWNCOLOR);
+    for (auto it : _items)
+        RAYLIB::DrawPlane((RAYLIB::Vector3){ it->getPos().x, 0, it->getPos().y}, (RAYLIB::Vector2){ 1, 1}, ITEMCOLOR);
+
     RAYLIB::EndMode3D();
 }

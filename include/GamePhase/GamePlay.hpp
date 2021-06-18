@@ -25,7 +25,9 @@
 #include "Weapon.hpp"
 #include "PowerUp.hpp"
 
-#define ACTIVE_CAMERA (this->_TopCamera)
+#define GROUNDCOLOR {119,136,153, 255}
+#define SPAWNCOLOR {233,150,122, 255}
+#define ITEMCOLOR {42, 157, 244, 255}
 
 class GamePlay{
     public:
@@ -74,6 +76,7 @@ class GamePlay{
         bool _isFpCam = true;
         std::pair<float, float> _mapSize;
         std::pair<float, float> _spawn;
+        std::list<std::pair<float, float>> _spawns;
 };
 
 #endif /* !GAMEPLAY_HPP_ */
