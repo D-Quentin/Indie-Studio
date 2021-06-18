@@ -34,6 +34,7 @@
 enum EnumItems {
     ITSpeed = 0,
     ITHealth,
+    ITShield,
     ITRifle,
     ITSnip
 };
@@ -43,6 +44,7 @@ class GamePlay{
         const std::map<EnumItems, game_object::Item*> enumToItem = {
             {ITSpeed, (game_object::Item*) new Speed},
             {ITHealth, (game_object::Item*) new Health},
+            {ITShield, (game_object::Item*) new Shield},
             {ITRifle, (game_object::Item*) new Rifle},
             {ITSnip, (game_object::Item*)new  Snip}
         };

@@ -41,7 +41,7 @@ GamePhase GamePlay::launch()
     //SET ALL
     float size = 1;
     auto mesh = RAYLIB::GenMeshCube(size, size, size);
-    auto charMap = main_create_map(2, 1);
+    auto charMap = main_create_map(5, 1);
     auto texture = RAYLIB::LoadTexture(std::string("assets/texture/wall.png").c_str());
     auto model = rl::Models(mesh, texture);
     auto m = Map3D(charMap, model, size);

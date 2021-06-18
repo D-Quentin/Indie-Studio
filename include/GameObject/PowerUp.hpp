@@ -27,7 +27,7 @@ class PowerUp : public game_object::Item
 {
     public:
         const rl::Models speedModel = rl::Models("assets/powerUp/chilli/chilli.glb");
-        const rl::Models shieldModel = rl::Models("assets/weapons/Baretta/Beretta.obj");
+        const rl::Models shieldModel = rl::Models("assets/powerUp/shield/shield.glb");
         const rl::Models dashModel = rl::Models("assets/weapons/Baretta/Beretta.obj");
         const rl::Models healthModel = rl::Models("assets/powerUp/Heart/heart.obj");
 
