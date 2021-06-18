@@ -40,11 +40,6 @@ int Setting::getDash()
     return (this->_ikey[4]);
 }
 
-int Setting::getUtilities()
-{
-    return (this->_ikey[5]);
-}
-
 GamePhase Setting::launch()
 {
     init();
@@ -58,13 +53,13 @@ GamePhase Setting::restart()
 
 void Setting::init()
 {
-    this->_bUp = Button("../../../Documents/indi.png", 30, 35, 9.2, 9);
-    this->_bDown = Button("../../../Documents/indi.png", 10, 35, 9.2, 9);
-    this->_bUpFram = Button("../../../Documents/indi.png", 30, 60, 9.2, 9);
-    this->_bDownFram = Button("../../../Documents/indi.png", 10, 60, 9.2, 9);
-    for (int i = 0, a = 20; i != 6; i++, a += 13)
-    this->_bInput.push_back(Button("../../../Documents/indi.png", 85, a, 9.2, 9));
-    this->_ikey = {'z', 's', 'q', 'd', 'e', 32};
+    this->_bUp = Button("assets/texture/litlebutton.png", 30, 35, 9.2, 9);
+    this->_bDown = Button("assets/texture/litlebutton.png", 10, 35, 9.2, 9);
+    this->_bUpFram = Button("assets/texture/litlebutton.png", 30, 60, 9.2, 9);
+    this->_bDownFram = Button("assets/texture/litlebutton.png", 10, 60, 9.2, 9);
+    for (int i = 0, a = 20; i != 5; i++, a += 13)
+    this->_bInput.push_back(Button("assets/texture/litlebutton.png", 85, a, 9.2, 9));
+    this->_ikey = {'z', 's', 'q', 'd', 32, 0};
     this->_bChange = Button("assets/texture/button.png", 3, 85, 21.4, 10);
     this->_bReturn = Button("assets/texture/button.png", 3, 85, 21.4, 10);
     this->_tReturn = rl::Text("Return", 9, 88, 29, RAYLIB::BLACK);
@@ -76,7 +71,7 @@ void Setting::checkButtonclick()
     static int a = 1;
     int b = 0;
 
-    for (int i = 0; i != 6; i++)
+    for (int i = 0; i != 5; i++)
         if (this->_bInput[i].isClicked())
             a = i * -1;
     if (a > 0)
@@ -84,7 +79,7 @@ void Setting::checkButtonclick()
     b = RAYLIB::GetCharPressed();
     if (b <= 0)
         return;
-    for (int i = 0; i != 6; i++)
+    for (int i = 0; i != 5; i++)
         if (this->_ikey[i] == b)
             return;
     this->_ikey[a *-1] = b;
@@ -97,7 +92,7 @@ void Setting::drawTouch()
     char c = 0;
     std::string str;
 
-    for (int i = 0, u = 60, a = 20; i != 6; i++, u += 15) {
+    for (int i = 0, u = 60, a = 20; i != 5; i++, u += 15) {
         c = this->_ikey[i];
         if (c == ' ') {
             str = "SPACE";
@@ -135,8 +130,6 @@ void printTouch()
     touch = rl::Text("Right", 74, 59, 40, RAYLIB::LIGHTGRAY);
     touch.draw();
     touch = rl::Text("Dash", 74, 72, 40, RAYLIB::LIGHTGRAY);
-    touch.draw();
-    touch = rl::Text("Utilities", 69, 85, 40, RAYLIB::LIGHTGRAY);
     touch.draw();
 }
 
@@ -182,7 +175,7 @@ GamePhase Setting::settingPhase(GamePhase gamePhase)
     sound = rl::Text(std::to_string(i), 23 - check_dist(i), 34, 70, RAYLIB::LIGHTGRAY);
     fram = rl::Text(std::to_string(f), 23 - check_dist(f), 58, 70, RAYLIB::LIGHTGRAY);
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
-    for (int u = 0; u != 6; u++)
+    for (int u = 0; u != 5; u++)
         this->_bInput[u].draw();
     this->_bChange.draw();
     this->_bReturn.draw();
