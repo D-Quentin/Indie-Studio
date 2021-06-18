@@ -51,7 +51,7 @@ void GamePlay::reloadPower()
 
     boolDash = std::find(_power_up, PUDash) ? true : false;
     boolShield = std::find(_power_up, PUShield) ? true : false;
-    if (!boolDash && CHRONO(timeDash) >= 1000) {
+    if (!boolDash && CHRONO(timeDash) >= 10000) {
         boolDash = false;
         timeDash = TIMENOW;
         _power_up.push_back(new Dash);
