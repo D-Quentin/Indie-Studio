@@ -137,7 +137,7 @@ Pistol::Pistol(RAYLIB::Vector2 pos)
     this->_pos = pos;
     _ypos = 0.1;
     this->_time_shoot = 500;
-    this->_bullet_speed = 1.5f;
+    this->_bullet_speed = 15;
     this->_damage = 20;
     this->_cone = 5;
     _type = "pistol";
@@ -153,7 +153,7 @@ Rifle::Rifle(RAYLIB::Vector2 pos)
     this->_pos = pos;
     _ypos = 0.1;
     this->_time_shoot = 100;
-    this->_bullet_speed = 2;
+    this->_bullet_speed = 20;
     this->_damage = 40;
     this->_cone = 10;
     _type = "rifle";
@@ -169,7 +169,7 @@ Snip::Snip(RAYLIB::Vector2 pos)
     this->_pos = pos;
     _ypos = 0.1;
     this->_time_shoot = 1500;
-    this->_bullet_speed = 5;
+    this->_bullet_speed = 30;
     this->_damage = 100;
     this->_cone = 0;
     _type = "snip";
