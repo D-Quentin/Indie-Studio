@@ -21,6 +21,10 @@ void GamePlay::testThings()
         _power_up.push_back(new Shield);
     else if (RAYLIB::IsKeyPressed(RAYLIB::KEY_KP_5))
         _power_up.push_back(new Speed);
+    else if (RAYLIB::IsKeyDown(RAYLIB::KEY_K) && RAYLIB::IsKeyDown(RAYLIB::KEY_I) && RAYLIB::IsKeyDown(RAYLIB::KEY_L)) {
+        _player.takeDamage(100);
+        _player.takeDamage(100);
+    }
 }
 
 bool compare(PowerUp *f, PowerUp *s)
