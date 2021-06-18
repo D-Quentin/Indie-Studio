@@ -61,7 +61,7 @@ void GamePlay::updateLocal()
     // handle player / block colision
     for (auto it : _blocks) {
         auto playerPos = _player.getPos();
-        float player_radius = 0.3f;
+        float player_radius = 0.15f;
         auto blockPos = it->getPos();
         RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
         bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
