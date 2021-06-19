@@ -69,6 +69,8 @@ void EntityObjects::createWeapon(std::string weapon, int nb)
         if (weapon == "SNIP")
             this->_weapon2 = new Pistol((this->_id + 1) * 1000 + 1);
     }
+}
+
 bool EntityObjects::getShield()
 {
     return this->_shield;
