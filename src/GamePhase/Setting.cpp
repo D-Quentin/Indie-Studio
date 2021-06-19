@@ -63,7 +63,7 @@ void Setting::init()
     this->_bChange = Button("assets/texture/button.png", 3, 85, 21.4, 10);
     this->_bReturn = Button("assets/texture/button.png", 3, 85, 21.4, 10);
     this->_tReturn = rl::Text("Return", 9, 88, 29, RAYLIB::BLACK);
-    this->_tbackground = RAYLIB::LoadTexture("assets/texture/background.png");
+    this->_tbackground = RAYLIB::LoadTexture("assets/texture/background2.png");
 }
 
 void Setting::checkButtonclick()
