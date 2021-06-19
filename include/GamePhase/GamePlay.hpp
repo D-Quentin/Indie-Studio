@@ -62,7 +62,7 @@ class GamePlay{
         void setItems(std::list<game_object::Item*> obj) {_items = obj;};
         void nonToPoi(std::list<MapBlock>);
         void collisionBulletWall();
-
+        void lifeAndShield();
         //alive methode
         void updateLocal();
         void updatePowerUp();
@@ -96,6 +96,9 @@ class GamePlay{
         std::pair<float, float> _mapSize;
         std::pair<float, float> _spawn;
         std::list<std::pair<float, float>> _spawns;
+        RAYLIB::Texture2D _heart;
+        RAYLIB::Texture2D _shield;
+
 };
 
 #endif /* !GAMEPLAY_HPP_ */

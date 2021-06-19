@@ -57,6 +57,27 @@ GamePhase GamePlay::launch()
     return GamePlayPhase;
 }
 
+void GamePlay::lifeAndShield()
+{
+    static int i = 0;
+    if (i == 0) {
+        this->_shield = RAYLIB::LoadTexture(std::string("assets/texture/shield.png").c_str());
+        this->_heart = RAYLIB::LoadTexture(std::string("assets/texture/heart.png").c_str());
+        i++;
+    }
+    RAYLIB::DrawTextureEx(this->_heart, {785, 975}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    RAYLIB::DrawTextureEx(this->_shield, {1055, 975}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    RAYLIB::DrawRectangleLines(850, 975, 200, 60, RAYLIB::BLACK);
+    RAYLIB::DrawRectangle(851, 976, 198, 58, RAYLIB::GRAY);
+    RAYLIB::DrawRectangle(851, 976, (this->_player.getHealth() * 2) - 2, 58, RAYLIB::RED);
+    RAYLIB::DrawRectangleLines(1120, 975, 50, 60, RAYLIB::BLACK);
+    RAYLIB::DrawRectangle(1121, 976, 48, 58, RAYLIB::GRAY);
+    if (this->_player.getShield() == 1)
+        RAYLIB::DrawRectangle(1121, 976, 48, 58, RAYLIB::BLUE);
+    RAYLIB::EndDrawing();
+    RAYLIB::ClearBackground({255, 255, 255, 255});
+}
+
 GamePhase GamePlay::restart()
 {
     while (!RAYLIB::WindowShouldClose()) {
@@ -70,9 +91,7 @@ GamePhase GamePlay::restart()
         }
         this->drawAll();
         RAYLIB::DrawFPS(10, 10);
-
-        RAYLIB::EndDrawing();
-        RAYLIB::ClearBackground({255, 255, 255, 255});
+        lifeAndShield();
     }
     // RAYLIB::ShowCursor();
     return MenuPhase;
@@ -115,11 +134,9 @@ void GamePlay::drawAll()
         it.draw(); // draw
     }
     RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, -0.01, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, GROUNDCOLOR); //draw flor
-
     for (auto it : _spawns)
         RAYLIB::DrawPlane((RAYLIB::Vector3){ it.first, 0, it.second}, (RAYLIB::Vector2){ 1, 1}, SPAWNCOLOR);
     for (auto it : _items)
         RAYLIB::DrawPlane((RAYLIB::Vector3){ it->getPos().x, 0, it->getPos().y}, (RAYLIB::Vector2){ 1, 1}, ITEMCOLOR);
-
     RAYLIB::EndMode3D();
 }

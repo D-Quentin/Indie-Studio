@@ -48,3 +48,8 @@ void EntityObjects::setWeaponUse(int weapon)
 {
     this->_weaponUse = weapon;
 }
+
+bool EntityObjects::getShield()
+{
+    return this->_shield;
+}
