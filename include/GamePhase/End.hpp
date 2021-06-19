@@ -29,6 +29,8 @@ private:
     Button _bReturn;
     rl::Text _tReturn;
     rl::Text _tName;
+    Button _bAgain;
+    rl::Text _tAgain;
 };
 
 #endif

@@ -93,19 +93,17 @@ void Game::launch(rl::Window win)
             }
         case EndPhase:
             if (end.first)
-                statut = end.second.restart("aze");
+                statut = end.second.restart("name");
             else {
-                statut = end.second.launch("aze");
+                statut = end.second.launch("name");
                 end.first = true;
             }
             break;
         case SettingPhase:
             if (setting.first)
-                statut = end.second.restart("aze");
-//                statut = setting.second.restart();
+                statut = setting.second.restart();
             else {
-                statut = end.second.launch("aze");
-//                statut = setting.second.launch();
+                statut = setting.second.launch();
                 setting.first = true;
             }
             break;
