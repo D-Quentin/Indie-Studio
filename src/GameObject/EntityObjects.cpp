@@ -40,6 +40,8 @@ void EntityObjects::draw()
 
 void EntityObjects::takeDamage(int damage)
 {
+    static rl::Sound music = rl::Sound();
+    music.playTakeDamage();
     if (this->_shield) {
         _shield = false;
         return;

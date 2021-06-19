@@ -99,16 +99,21 @@ void Bullet::deserialize(std::string str)
 
 Bullet Weapon::shoot(int id_bullet)
 {
+    static rl::Sound music = rl::Sound();
     static auto lastShoot = TIMENOW;
     static bool first = true;
-
     if (first);
     else if (!this->_wear || !this->_nbBullet || CHRONO(lastShoot) < this->_time_shoot)
         return Bullet();
     first = false;
     lastShoot = TIMENOW;
     this->_nbBullet -= 1;
-
+    if (this->getObjType() == "Rifle")
+        music.playRiffleShoot();
+    else if (this->getObjType() == "Pisol")
+        music.playGunShoot();
+    else if (this->getObjType() == "Snip")
+        music.playSniperShoot();
     return Bullet(id_bullet, {this->_pos.x, _ypos, _pos.y}, this->_rota - 90, this->_cone, this->_damage, this->_bullet_speed);
 }
 

@@ -97,6 +97,7 @@ void GamePlay::collisionBulletWall()
     bool bullet_player = true;
     float player_radius = 0.15f;
     auto playerPos = _player.getPos();
+    static rl::Sound music = rl::Sound();
 
     for (auto &itblock : _blocks) {
         auto blockPos = itblock->getPos();
@@ -110,6 +111,7 @@ void GamePlay::collisionBulletWall()
             if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic)) {
                 it.isReal = false;
                 if (itblock->isBreakable) {
+                    music.playWallBreak();
                     _blocks.remove(itblock); // remove breakable block
                     return;
                 }
@@ -159,8 +161,6 @@ void GamePlay::updateLocal()
     _weapon->update(_player.getPos(), _player._rota);
     if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
         _bullet.push_back(_weapon->shoot(0));
-    
-
     //update camera
         auto ppos = this->_player.getPos();
         ACTIVE_CAMERA.updateCamera({ppos.x, ppos.y});

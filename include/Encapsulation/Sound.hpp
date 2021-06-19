@@ -10,29 +10,32 @@
 
 #include "include.hpp"
 
-class Sound
-{
-    public:
-        Sound();
-        ~Sound();
-        void init();
-        void playSniperShoot();
-        void playGunShoot();
-        void playRiffleShoot();
-        void playWallBreak();
-        void playTakeDamage();
-        void playMenuMusic();
-        void playGameMusic();
-        void playEndMusic();
-    private:
-        RAYLIB::Music _sniperShoot;
-        RAYLIB::Music _gunShoot;
-        RAYLIB::Music _riffleShoot;
-        RAYLIB::Music _wallBreak;
-        RAYLIB::Music _takeDamage;
-        RAYLIB::Music _menuMusic;
-        RAYLIB::Music _gameMusic;
-        RAYLIB::Music _endMusic;
-};
 
+namespace rl {
+    class Sound
+    {
+        public:
+            Sound();
+            ~Sound();
+            void playSniperShoot();
+            void playGunShoot();
+            void playRiffleShoot();
+            void playWallBreak();
+            void playTakeDamage();
+            void playMenuMusic();
+            void playGameMusic();
+            void playEndMusic();
+            void playDead();
+        private:
+            RAYLIB::Sound _sniperShoot;
+            RAYLIB::Sound _gunShoot;
+            RAYLIB::Sound _riffleShoot;
+            RAYLIB::Sound _wallBreak;
+            RAYLIB::Sound _takeDamage;
+            RAYLIB::Sound _menuMusic;
+            RAYLIB::Sound _gameMusic;
+            RAYLIB::Sound _endMusic;
+            RAYLIB::Sound _dead;
+    };
+}
 #endif /* !SOUND_HPP_ */

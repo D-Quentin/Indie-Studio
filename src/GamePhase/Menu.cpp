@@ -9,6 +9,7 @@
 #include "Server.hpp"
 #include "Game.hpp"
 #include "Pause.hpp"
+#include "Sound.hpp"
 
 Menu::Menu()
 {

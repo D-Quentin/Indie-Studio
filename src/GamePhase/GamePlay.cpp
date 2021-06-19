@@ -6,6 +6,7 @@
 */
 
 #include "GamePlay.hpp"
+#include "Sound.hpp"
 
 void GamePlay::nonToPoi(std::list<MapBlock> obj)
 {
@@ -45,7 +46,6 @@ GamePhase GamePlay::launch()
     auto texture = RAYLIB::LoadTexture(std::string("assets/texture/wall.png").c_str());
     auto model = rl::Models(mesh, texture);
     auto m = Map3D(charMap, model, size);
-
     placeItems(m._items);
     _spawns = m._spawns;
     _spawn = m._spawns.front();

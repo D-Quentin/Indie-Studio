@@ -13,6 +13,7 @@
 #include "Model.hpp"
 #include "Encapsulation/Text.hpp"
 #include <chrono>
+#include "Sound.hpp"
 
 #define TIMENOW std::chrono::high_resolution_clock::now()
 #define CHRONO(x) std::chrono::duration_cast<std::chrono::milliseconds>(TIMENOW - x).count()

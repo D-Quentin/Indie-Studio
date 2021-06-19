@@ -24,6 +24,7 @@
 #include "Encapsulation/Text.hpp"
 #include "Weapon.hpp"
 #include "PowerUp.hpp"
+#include "Sound.hpp"
 
 #define ACTIVE_CAMERA ((!this->_player.isAlive()) ? this->_FPCamera : this->_TopCamera)
 
@@ -97,7 +98,6 @@ class GamePlay{
         std::list<std::pair<float, float>> _spawns;
         RAYLIB::Texture2D _heart;
         RAYLIB::Texture2D _shield;
-
 };
 
 #endif /* !GAMEPLAY_HPP_ */
