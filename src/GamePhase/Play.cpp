@@ -26,7 +26,7 @@ GamePhase Play::launch(Client *&client, Lobby &lobby)
     this->_obj = lobby.getObj();
     this->_me = lobby.getMe();
     this->_phase = Play::JoinPhase;
-    this->_tHp = rl::Text("Hp ", 1, 2, 20, RAYLIB::LIGHTGRAY);
+    this->_tHp = rl::Text("Hp ", 1, 95, 20, RAYLIB::RED);
     return (this->restart(client, lobby));
 }
 
@@ -52,22 +52,24 @@ GamePhase Play::restart(Client *&client, Lobby &lobby)
 GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
 {
     GameObject::gestData(this->_obj, client->read(), client, *this);
+    for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
+        if (it->second->getObjType() == "Bullet") {
+            ((Player *)this->_obj[this->_me])->getBullet().push_back(*((Bullet *)it->second));
+            this->_obj.erase(it);
+        }
+    }
     ((Player *)this->_obj[this->_me])->gest(client, this->_blocks);
 
     this->_tHp.setText("Hp " + std::to_string(((Player *)this->_obj[this->_me])->getHealth()));
-
-    // ZD Drawing
-    this->_tHp.draw();
+    
 
     // 3D Drawing
     RAYLIB::BeginMode3D(this->_TopCamera.getCamera());
 
-    // Set Camera
-    RAYLIB::Vector2 pos = ((Player *)this->_obj[this->_me])->getPos();
-    _TopCamera.updateCamera({pos.x, pos.y});
-
     // Draw GameObject
     for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
+        if (it->second->getId() == (((Player *)this->_obj[this->_me])->getId() + 1) * 1000 || it->second->getId() == (((Player *)this->_obj[this->_me])->getId() + 1) * 1000 + 1)
+            continue;
         it->second->draw();
     }
 
@@ -79,9 +81,24 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
             it2->draw();
     }
 
-    RAYLIB::DrawGrid(1000, 10);
+    // Draw flor
+    RAYLIB::DrawPlane({ _mapSize.first / 2, -0.01, _mapSize.second / 2 }, { _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, GROUNDCOLOR);
+
+    for (auto it : this->_spawns)
+        RAYLIB::DrawPlane({ it.first, 0, it.second}, { 1, 1}, SPAWNCOLOR);
+    for (auto it : this->_items)
+        RAYLIB::DrawPlane({ it->getPos().x, 0, it->getPos().y}, { 1, 1}, ITEMCOLOR);
+
+    // Set Camera
+    RAYLIB::Vector2 pos = ((Player *)this->_obj[this->_me])->getPos();
+    _TopCamera.updateCamera({pos.x, pos.y});
+
     RAYLIB::EndMode3D();
 
+    // ZD Drawing
+    this->_tHp.draw();
+
+    ((Player *)this->_obj[this->_me])->getBullet().clear();
     return (gamePhase);
 }
 
@@ -155,16 +172,35 @@ GamePhase Play::joinPhase(GamePhase gamePhase, Client *&client, Lobby &lobby)
     // Creating 3D map
     float size = 1;
     RAYLIB::Mesh mesh = RAYLIB::GenMeshCube(size, size, size);
-    RAYLIB::Texture2D texture = RAYLIB::LoadTexture("");
+    RAYLIB::Texture2D texture = RAYLIB::LoadTexture("assets/texture/wall.png");
     rl::Models model(mesh, texture);
     Map3D map3D(this->_map, model, size);
+
+    this->_spawns = map3D._spawns;
+    this->placeItems(map3D._items);
     this->_mapSize = {this->_map.size(), this->_map.front().size()};
     for (auto it3 : map3D._mapBlocks)
         _blocks.push_back(new MapBlock(it3));
 
     for (int i = 0; i != this->_nbAi; i++)
         this->_ai.push_back(new Ai(this->_map));
+    ((Player *)this->_obj[this->_me])->createWeapon("PISTOL" , 1);
+    ((Player *)this->_obj[this->_me])->createWeapon("PISTOL" , 2);
     ((Player *)this->_obj[this->_me])->setWeaponUse(1);
     this->_phase = Play::MainPhase;
     return (gamePhase);
+}
+
+void Play::placeItems(std::list<std::pair<float, float>> itemsPos)
+{
+    int rand = 0;
+
+    for (auto it : itemsPos) {
+        rand = RAYLIB::GetRandomValue(0, enumToItem.size());
+        try {
+            auto obj = enumToItem.at((EnumItems)rand);
+            obj->setPos(RAYLIB::Vector2{it.first, it.second});
+            this->_items.push_back(obj);
+        } catch(...) {};
+    }
 }

@@ -31,6 +31,9 @@ void EntityObjects::draw()
     // Draw Bullets
     for (auto &it : this->_bullet) {
         it.update();
+    }
+    for (auto &it : this->_tmp_bullet) {
+        it.update();
         it.draw();
     }
 }
@@ -47,4 +50,23 @@ void EntityObjects::takeDamage(int damage)
 void EntityObjects::setWeaponUse(int weapon)
 {
     this->_weaponUse = weapon;
+}
+
+void EntityObjects::createWeapon(std::string weapon, int nb)
+{
+    if (nb == 1) {
+        if (weapon == "PISTOL")
+            this->_weapon1 = new Pistol((this->_id + 1) * 1000);
+        if (weapon == "RIFLE")
+            this->_weapon1 = new Pistol((this->_id + 1) * 1000);
+        if (weapon == "SNIP")
+            this->_weapon1 = new Pistol((this->_id + 1) * 1000);
+    } else {
+        if (weapon == "PISTOL")
+            this->_weapon2 = new Pistol((this->_id + 1) * 1000 + 1);
+        if (weapon == "RIFLE")
+            this->_weapon2 = new Pistol((this->_id + 1) * 1000 + 1);
+        if (weapon == "SNIP")
+            this->_weapon2 = new Pistol((this->_id + 1) * 1000 + 1);
+    }
 }

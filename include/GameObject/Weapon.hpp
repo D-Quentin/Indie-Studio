@@ -22,7 +22,7 @@
 class Bullet : public game_object::Item
 {
     public :
-        Bullet(RAYLIB::Vector3 pos, float rota, float cone, float damage, float speed);
+        Bullet(int id, RAYLIB::Vector3 pos, float rota, float cone, float damage, float speed);
         Bullet();
         ~Bullet() = default;
 
@@ -30,8 +30,8 @@ class Bullet : public game_object::Item
         void draw();
         int getDamage(){return _damage;};
 
-        std::string serialize() {return std::string("");};
-        void deserialize(std::string) {};
+        std::string serialize();
+        void deserialize(std::string);
 
         bool isReal = true;
     private :
@@ -53,7 +53,7 @@ class Weapon : public game_object::Item
     //     virtual void draw() = 0;
 
     //physical (like dl)
-        Bullet shoot();
+        Bullet shoot(int id_bullet);
         void take() {_wear = true;};
         void drop() {_wear = false;};
         void update(RAYLIB::Vector2 pos, float rota);
@@ -75,21 +75,21 @@ class Weapon : public game_object::Item
 class Pistol : public Weapon
 {
     public :
-        Pistol(RAYLIB::Vector2 pos = {0, 0});
+        Pistol(int id = -1, RAYLIB::Vector2 pos = {0, 0});
         ~Pistol() = default;
 };
 
 class Rifle : public Weapon
 {
     public :
-        Rifle(RAYLIB::Vector2 pos = {0, 0});
+        Rifle(int id = -1, RAYLIB::Vector2 pos = {0, 0});
         ~Rifle() = default;
 };
 
 class Snip : public Weapon
 {
     public :
-        Snip(RAYLIB::Vector2 pos = {0, 0});
+        Snip(int id = -1, RAYLIB::Vector2 pos = {0, 0});
         ~Snip() = default;
 };
 

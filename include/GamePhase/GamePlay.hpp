@@ -31,14 +31,13 @@
 #define SPAWNCOLOR {233,150,122, 255}
 #define ITEMCOLOR {42, 157, 244, 255}
 
-enum EnumItems {
+class GamePlay{
+    enum EnumItems {
     ITSpeed = 0,
     ITHealth,
     ITRifle,
     ITSnip
-};
-
-class GamePlay{
+    };
     public:
         const std::map<EnumItems, game_object::Item*> enumToItem = {
             {ITSpeed, (game_object::Item*) new Speed},

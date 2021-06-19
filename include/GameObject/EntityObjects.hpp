@@ -22,7 +22,9 @@ class EntityObjects : public GameObject {
         void setWeaponUse(int weapon);
         void takeDamage(int damage);
         bool isAlive() {return (_health > 0) ;};
+        void createWeapon(std::string weapon, int nb);
         void draw();
+        std::list<Bullet> &getBullet() {return this->_tmp_bullet;};
         float _rota;
         rl::Models _model;
 
@@ -31,9 +33,12 @@ class EntityObjects : public GameObject {
         float _scale;
         bool _shield = false;
         int _weaponUse = 0;
+        int _nbBullet = 1;
         Weapon *_weapon1;
         Weapon *_weapon2;
         std::list<Bullet> _bullet;
+        std::list<Bullet> _tmp_bullet;
+        std::map<int, bool> _hitten_bullet;
     };
 
 

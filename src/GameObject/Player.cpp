@@ -28,7 +28,7 @@ Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
     this->_rota = 0;
     this->_change = false;
     this->_id = id;
-    this->_weapon1 = new Pistol();
+    this->_objType = "GameObject";
 }
 
 void Player::move()
@@ -71,15 +71,15 @@ void Player::rotate()
     this->_change = true;
 }
 
-void Player::gestColision(std::list<BlockObject *> blocks, RAYLIB::Vector2 oldPlayerPos)
+void Player::gestColision(std::list<BlockObject *> &blocks, RAYLIB::Vector2 oldPlayerPos)
 {
     bool bullet_player = true;
 
-    for (auto it : blocks) {
+    for (auto itBlock : blocks) {
         // With Player
         RAYLIB::Vector2 playerPos = this->_pos;
         float player_radius = 0.15f;
-        RAYLIB::Vector2 blockPos = it->getPos();
+        RAYLIB::Vector2 blockPos = itBlock->getPos();
         RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
         bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
 
@@ -88,12 +88,28 @@ void Player::gestColision(std::list<BlockObject *> blocks, RAYLIB::Vector2 oldPl
 
         // With Bullets
         for (auto &it : _bullet) {
-            if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))
+            if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic)) {
                 it.isReal = false;
-            else if (bullet_player) {
-                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius)) {
+                if (itBlock->isBreakable) {
+                    blocks.remove(itBlock); // remove breakable block
+                    return;
+                }
+
+            }
+        }
+        for (auto &it : _tmp_bullet) {
+            if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic)) {
+                it.isReal = false;
+                if (itBlock->isBreakable) {
+                    blocks.remove(itBlock); // remove breakable block
+                    return;
+                }
+
+            } else if (bullet_player) {
+                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius) && this->_hitten_bullet.find(it.getId()) == this->_hitten_bullet.end()) {
                     it.isReal = false;
                     this->takeDamage(it.getDamage());
+                    this->_hitten_bullet[it.getId()] = true;
                 }
             }
         }
@@ -111,6 +127,16 @@ std::string Player::serialize()
 {
     std::string str;
 
+    // Weapon
+    if (this->_weaponUse == 1)
+        str += this->_weapon1->serialize();
+    else if (this->_weaponUse == 2)
+        str += this->_weapon2->serialize();
+
+    for (auto &it : _bullet)
+        str += it.serialize();
+
+    // Player
     str += "PLAYER;ID:" + std::to_string(this->_id);
     str += ";X:" + std::to_string(this->_pos.x);
     str += ";Y:" + std::to_string(this->_pos.y);
@@ -133,7 +159,7 @@ void Player::deserialize(std::string str)
     this->_rota = std::atof(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
 }
 
-void Player::gest(Client *&client, std::list<BlockObject *> blocks)
+void Player::gest(Client *&client, std::list<BlockObject *> &blocks)
 {
     RAYLIB::Vector2 oldPlayerPos = this->_pos;
 
@@ -142,16 +168,20 @@ void Player::gest(Client *&client, std::list<BlockObject *> blocks)
     this->gestColision(blocks, oldPlayerPos);
     if (this->_weaponUse == 1) {
         this->_weapon1->update(this->_pos, this->_rota);
-        if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
-            _bullet.push_back(this->_weapon1->shoot());
+        if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE)) {
+            _bullet.push_back(this->_weapon1->shoot((this->_id + 1) * 1000 + 2 + this->_nbBullet));
+            this->_nbBullet += 1;
+        }
     } else if (this->_weaponUse == 2) {
         this->_weapon2->update(this->_pos, this->_rota);
-        if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
-            _bullet.push_back(this->_weapon2->shoot());
+        if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE)) {
+            _bullet.push_back(this->_weapon2->shoot((this->_id + 1) * 1000 + 2 + this->_nbBullet));
+            this->_nbBullet += 1;
+        }
     }
 
-    if (this->_change) {
+    // if (this->_change) {
         client->send(this->serialize());
-        this->_change = false;
-    }
+    //     this->_change = false;
+    // }
 }

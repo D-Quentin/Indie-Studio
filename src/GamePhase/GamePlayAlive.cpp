@@ -154,7 +154,7 @@ void GamePlay::updateLocal()
     ///update weapon
     _weapon->update(_player.getPos(), _player._rota);
     if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
-        _bullet.push_back(_weapon->shoot());
+        _bullet.push_back(_weapon->shoot(0));
     
 
     //update camera

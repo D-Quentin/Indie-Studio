@@ -19,7 +19,7 @@ GamePlay::GamePlay()
     _player = Player();
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
-    this->_weapon = new Pistol(pos);
+    this->_weapon = new Pistol(-1, pos);
 }
 
 void GamePlay::placeItems(std::list<std::pair<float, float>> itemsPos)
@@ -114,12 +114,12 @@ void GamePlay::drawAll()
         it.update();
         it.draw(); // draw
     }
-    RAYLIB::DrawPlane((RAYLIB::Vector3){ _mapSize.first / 2, -0.01, _mapSize.second / 2 }, (RAYLIB::Vector2){ _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, GROUNDCOLOR); //draw flor
+    RAYLIB::DrawPlane({ _mapSize.first / 2, -0.01, _mapSize.second / 2 }, { _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, GROUNDCOLOR); //draw flor
 
     for (auto it : _spawns)
-        RAYLIB::DrawPlane((RAYLIB::Vector3){ it.first, 0, it.second}, (RAYLIB::Vector2){ 1, 1}, SPAWNCOLOR);
+        RAYLIB::DrawPlane({ it.first, 0, it.second}, { 1, 1}, SPAWNCOLOR);
     for (auto it : _items)
-        RAYLIB::DrawPlane((RAYLIB::Vector3){ it->getPos().x, 0, it->getPos().y}, (RAYLIB::Vector2){ 1, 1}, ITEMCOLOR);
+        RAYLIB::DrawPlane({ it->getPos().x, 0, it->getPos().y}, { 1, 1}, ITEMCOLOR);
 
     RAYLIB::EndMode3D();
 }
