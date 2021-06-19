@@ -12,6 +12,7 @@
 #include "Play.hpp"
 #include "Setting.hpp"
 #include "Pause.hpp"
+#include "End.hpp"
 
 static int signalStatus = 0;
 
@@ -38,6 +39,7 @@ void Game::launch(rl::Window win)
     std::pair<bool, Play> play = {false, Play()};
     std::pair<bool, Setting> setting = {false, Setting()};
     std::pair<bool, Pause> pause = {false, Pause()};
+    std::pair<bool, End> end = {false, End()};
 
     #if not defined(_WIN32)
         std::signal(SIGINT, signal_handler);
@@ -95,6 +97,13 @@ void Game::launch(rl::Window win)
             else {
                 statut = pause.second.launch();
                 pause.first = true;
+            }
+        case EndPhase:
+            if (end.first)
+                statut = end.second.restart();
+            else {
+                statut = end.second.launch();
+                end.first = true;
             }
         default:
             break;
