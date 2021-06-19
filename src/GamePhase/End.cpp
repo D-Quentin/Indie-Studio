@@ -17,7 +17,7 @@ End::~End()
 
 GamePhase End::launch()
 {
-    this->_tbackground = RAYLIB::LoadTexture("assets/texture/background.png");
+    this->_tbackground = RAYLIB::LoadTexture("assets/texture/endBack.png");
     return (this->restart());
 }
 

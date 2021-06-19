@@ -84,13 +84,6 @@ void Game::launch(rl::Window win)
                 play.first = true;
             }
             break;
-        case SettingPhase:
-            if (setting.first)
-                statut = setting.second.restart();
-            else {
-                statut = setting.second.launch();
-                setting.first = true;
-            }
         case PausePhase:
             if (pause.first)
                 statut = pause.second.restart();
@@ -105,6 +98,15 @@ void Game::launch(rl::Window win)
                 statut = end.second.launch();
                 end.first = true;
             }
+            break;
+        case SettingPhase:
+            if (setting.first)
+                statut = setting.second.restart();
+            else {
+                statut = setting.second.launch();
+                setting.first = true;
+            }
+            break;
         default:
             break;
         }
