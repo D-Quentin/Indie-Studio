@@ -3,6 +3,13 @@
 #include <cstdlib>
 #include <ctime>
 
+bool compareVector(RAYLIB::Vector2 first_vector, RAYLIB::Vector2 second_vector)
+{
+    if (first_vector.x == second_vector.x && first_vector.y == second_vector.y)
+        return true;
+    return false;
+}
+
 float Ai::Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2)
 {
     float result = atan2f(v2.y - v1.y, v2.x - v1.x) * (180.0f / PI);
@@ -23,7 +30,6 @@ Ai::Ai(std::vector<std::vector<char>> map)
     this->_weapon1 = new Pistol();
     this->targetPosition.x = 0;
     this->targetPosition.y = 0;
-    this->close = {{0, 0}, {0, 0}};
 }
 
 Target Ai::checkEnemy()
@@ -41,48 +47,133 @@ void Ai::rotate()
     this->_change = true;
 }
 
-double Ai::calculateDist(RAYLIB::Vector2 pos)
+double Ai::calculateDistObj(RAYLIB::Vector2 pos)
 {
-    int diff_x = abs(this->targetPosition.x - pos.x);
-    int diff_y = abs(this->targetPosition.y - pos.y);
+    int diff_x = this->targetPosition.x - pos.x;
+    int diff_y = this->targetPosition.y - pos.y;
 
-    double res = diff_x + diff_y;
-    //double res = sqrt(pow(diff_x, 2) + pow(diff_y, 2));
-    printf("Distances: %f\n", res);
-    return res;
+    return sqrt(pow(diff_x, 2) + pow(diff_y, 2));
 }
 
-void Ai::moveToNextTile() {
-    printf("MOVING TO NEXT TILE\n");
-    std::vector<RAYLIB::Vector2> tmp;
-    std::vector<RAYLIB::Vector2> open_pos;
-    std::vector<float> dist;
-    RAYLIB::Vector2 pos;
+double Ai::calculateDistStart(RAYLIB::Vector2 pos)
+{
+    int diff_x = this->close[0].position.x - pos.x;
+    int diff_y = this->close[0].position.y - pos.y;
 
-    this->close.first = this->close.second;
-    this->close.second = this->_pos;
-    for (int y = -1; y < 2; y++) {
-        pos.y = this->_pos.y + y;
-        for (int x = -1; x < 2; x++) {
-            pos.x = this->_pos.x + x;
-            if (this->map[pos.y][pos.x] == ' ' || this->map[pos.y][pos.x] == 'S')
-                tmp.push_back(pos);
-        }
+    return sqrt(pow(diff_x, 2) + pow(diff_y, 2));
+}
+
+node_t Ai::createNode(RAYLIB::Vector2 node_pos)
+{
+    node_t node;
+
+    node.position = node_pos;
+    node.h = calculateDistObj(node_pos);
+    node.g = calculateDistStart(node_pos);
+    node.f = node.h + node.g;
+
+    return node;
+}
+
+void Ai::getValidChildren(RAYLIB::Vector2 children_pos) {
+    node_t node;
+
+    for (unsigned int i = 0; i < this->close.size(); i++) {
+        if (compareVector(children_pos, this->close[i].position))
+            return;
     }
-    printf("Current coordinates: [%f::%f]\n", this->_pos.x, this->_pos.y);
-    printf("Target coordinates: [%f::%f]\n", this->targetPosition.x, this->targetPosition.y);
-    printf("Banned coordinates: [%f::%f], [%f::%f]\n", this->close.first.x, this->close.first.y, this->close.second.x, this->close.second.y);
-    for (unsigned long i = 0; i < tmp.size(); i++)
-        printf("Available coordinates [%f::%f]-> [%c]\n", tmp[i].x, tmp[i].y, this->map[tmp[i].y][tmp[i].x]);
-    for (unsigned int i = 0; i < tmp.size(); i++)
-        if (tmp[i].x != this->close.first.x || tmp[i].y != this->close.first.y || tmp[i].x != this->close.second.x || tmp[i].y != this->close.second.y)
-            open_pos.push_back(tmp[i]);
-    for (unsigned int i = 0; i < open_pos.size(); i++)
-        dist.push_back(calculateDist(open_pos[i]));
-    auto min_value = std::min_element(dist.begin(), dist.end());
-    setDirections(open_pos[min_value - dist.begin()]);
-    setPos(open_pos[min_value - dist.begin()]);
-    printf("Next coordinates: [%f::%f]\n", open_pos[min_value - dist.begin()].x, open_pos[min_value - dist.begin()].y);
+    node = createNode(children_pos);
+    for (unsigned int i = 0; i < this->open.size(); i++)
+        if (compareVector(node.position, this->open[i].position))
+            if (node.g > this->open[i].g)
+                return;
+    this->open.push_back(node);
+}
+
+void Ai::getAvailableTiles(RAYLIB::Vector2 pos)
+{
+    std::vector<RAYLIB::Vector2> children;
+
+    if (this->map[pos.y - 1][pos.x - 1] == ' ' || this->map[pos.y - 1][pos.x - 1] == 'S')
+        children.push_back({pos.y - 1, pos.x - 1});
+    if (this->map[pos.y - 1][pos.x] == ' ' || this->map[pos.y - 1][pos.x] == 'S')
+        children.push_back({pos.y - 1, pos.x});
+    if (this->map[pos.y - 1][pos.x + 1] == ' ' || this->map[pos.y - 1][pos.x + 1] == 'S')
+        children.push_back({pos.y - 1, pos.x + 1});
+    if (this->map[pos.y][pos.x - 1] == ' ' || this->map[pos.y][pos.x - 1] == 'S')
+        children.push_back({pos.y, pos.x - 1});
+    if (this->map[pos.y][pos.x + 1] == ' ' || this->map[pos.y][pos.x + 1] == 'S')
+        children.push_back({pos.y - 1, pos.x + 1});
+    if (this->map[pos.y + 1][pos.x - 1] == ' ' || this->map[pos.y - 1][pos.x - 1] == 'S')
+        children.push_back({pos.y + 1, pos.x - 1});
+    if (this->map[pos.y + 1][pos.x] == ' ' || this->map[pos.y - 1][pos.x] == 'S')
+        children.push_back({pos.y + 1, pos.x});
+    if (this->map[pos.y + 1][pos.x + 1] == ' ' || this->map[pos.y - 1][pos.x + 1] == 'S')
+        children.push_back({pos.y + 1, pos.x + 1});
+    for (unsigned int i = 0; i < children.size(); i++)
+        getValidChildren(children[i]);
+}
+
+std::pair<node_t, unsigned int> Ai::getSmallestF()
+{
+    std::pair<node_t, unsigned int> tmp;
+
+    tmp.first = this->open[0];
+    tmp.second = 0;
+    for (unsigned int i = 0; i < this->open.size(); i++)
+        if (this->open[i].f < tmp.first.f) {
+            tmp.first = this->open[i];
+            tmp.second = i;
+        }
+    return tmp;
+}
+
+
+void Ai::moveToNextTile() {
+    //std::vector<RAYLIB::Vector2> tmp;
+    std::pair<node_t, unsigned int> tmp;
+    RAYLIB::Vector2 current_pos = this->_pos;
+    //std::vector<float> dist;
+    //RAYLIB::Vector2 pos;
+
+    //this->close.first = this->close.second;
+    //this->close.second = this->_pos;
+    //for (int y = -1; y < 2; y++) {
+    //    pos.y = this->_pos.y + y;
+    //    for (int x = -1; x < 2; x++) {
+    //        pos.x = this->_pos.x + x;
+    //        if (this->map[pos.y][pos.x] == ' ' || this->map[pos.y][pos.x] == 'S')
+    //            tmp.push_back(pos);
+    //    }
+    //}
+    //printf("Current coordinates: [%f::%f]\n", this->_pos.x, this->_pos.y);
+    //printf("Target coordinates: [%f::%f]\n", this->targetPosition.x, this->targetPosition.y);
+    //printf("Banned coordinates: [%f::%f], [%f::%f]\n", this->close.first.x, this->close.first.y, this->close.second.x, this->close.second.y);
+//
+    //for (unsigned int i = 0; i < tmp.size(); i++)
+    //    if (!((tmp[i].x == this->close.first.x && tmp[i].y == this->close.first.y) || (tmp[i].x == this->close.second.x && tmp[i].y == this->close.second.y)))
+    //        open_pos.push_back(tmp[i]);
+    //for (unsigned long i = 0; i < open_pos.size(); i++)
+    //    printf("Available coordinates [%f::%f]-> [%c]\n", open_pos[i].x, open_pos[i].y, this->map[open_pos[i].y][open_pos[i].x]);
+    //for (unsigned int i = 0; i < open_pos.size(); i++)
+    //    dist.push_back(calculateDist(open_pos[i]));
+    //auto min_value = std::min_element(dist.begin(), dist.end());
+    //setDirections(open_pos[min_value - dist.begin()]);
+    //setPos(open_pos[min_value - dist.begin()]);
+    //printf("Next coordinates: [%f::%f]\n", open_pos[min_value - dist.begin()].x, open_pos[min_value - dist.begin()].y);
+    this->open.push_back({this->_pos, calculateDistObj(this->_pos), 0, 0});
+
+    while (this->open.size() != 0) {
+        tmp = getSmallestF();
+        this->open.erase(this->open.begin() + tmp.second);
+        this->close.push_back(tmp.first);
+        current_pos = this->close.back().position;
+        if (compareVector(this->targetPosition, current_pos))
+            break;
+        getAvailableTiles(current_pos);
+    }
+    for (unsigned int i = 0; i < this->close.size(); i++)
+        printf("Node: [%f::%f]\n", this->close[i].position.x, this->close[i].position.y);
 }
 
 std::vector<RAYLIB::KeyboardKey> Ai::getDirections()
