@@ -22,6 +22,7 @@ GamePhase End::launch(std::string winner)
     this->_tRocket = RAYLIB::LoadTexture("assets/texture/victory.png");
     this->_tReturn = rl::Text("Return", 9, 88, 29, RAYLIB::BLACK);
     this->_bReturn = Button("assets/texture/button.png", 3, 85, 21.4, 10);
+    this->_tVictory = RAYLIB::LoadTexture("assets/texture/victory-title-sm.png");
     return (this->restart(winner));
 }
 
@@ -33,6 +34,7 @@ GamePhase End::restart(std::string winner)
 GamePhase End::endPhase(GamePhase gamePhase, std::string winner)
 {
     static auto time = TIMENOW;
+    static int a = 100;
     static auto e = TIMENOW;
     static int i = 0;
     float aze = 0;
@@ -40,16 +42,20 @@ GamePhase End::endPhase(GamePhase gamePhase, std::string winner)
     winner = "Quentin";
     if (this->_bReturn.isClicked())
         gamePhase = MenuPhase;
-    if (CHRONO(time) >= 1000)
+    if (CHRONO(time) >= 1000 && i <= 1)
         i++;
     if (i != 0)
-        if (CHRONO(e) >= 200) {
+        if (CHRONO(e) >= a) {
+            if (a > 1)
+                a--;
             e = TIMENOW;
             i++;
         }
     aze = (i/11);
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     RAYLIB::DrawTextureEx(this->_tRocket, {600, (float)800-i}, -45, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    if (i >= 800)
+        RAYLIB::DrawTextureEx(this->_tVictory, {400, 200}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     this->_tName = rl::Text(winner, 45, (float)71-aze, 29, RAYLIB::BLACK);
     this->_bReturn.draw();
     this->_tReturn.draw();
