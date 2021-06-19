@@ -12,7 +12,6 @@
 Play::Play()
 {
     this->_TopCamera = rl::Camera({0, 6, 0});
-    this->_nbAi = 0;
 }
 
 Play::~Play()
@@ -162,8 +161,6 @@ GamePhase Play::joinPhase(GamePhase gamePhase, Client *&client, Lobby &lobby)
     for (auto it3 : map3D._mapBlocks)
         _blocks.push_back(new MapBlock(it3));
 
-    for (int i = 0; i != this->_nbAi; i++)
-        this->_ai.push_back(new Ai(this->_map));
     ((Player *)this->_obj[this->_me])->setWeaponUse(1);
     this->_phase = Play::MainPhase;
     return (gamePhase);

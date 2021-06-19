@@ -37,8 +37,6 @@ class Play {
         size_t _me;
         rl::Camera _TopCamera;
         int _renderDistance = 40;
-        std::vector<Ai *> _ai;
-        int _nbAi;
         std::vector<std::vector<char>> _map;
         std::pair<float, float> _mapSize;
         std::list<BlockObject *> _blocks;
