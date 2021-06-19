@@ -19,20 +19,23 @@ enum EnumPowerUp {
     PUNothing = 0,
     PUSpeed,
     PUShield,
-    PUDash
+    PUDash,
+    PUHealth
 };
 
 class PowerUp : public game_object::Item 
 {
     public:
-        const rl::Models speedModel = rl::Models("assets/weapons/Baretta/Beretta.obj");
-        const rl::Models shieldModel = rl::Models("assets/weapons/Baretta/Beretta.obj");
+        const rl::Models speedModel = rl::Models("assets/powerUp/chilli/chilli.glb");
+        const rl::Models shieldModel = rl::Models("assets/powerUp/shield/shield.glb");
         const rl::Models dashModel = rl::Models("assets/weapons/Baretta/Beretta.obj");
+        const rl::Models healthModel = rl::Models("assets/powerUp/Heart/heart.obj");
 
         const std::map<EnumPowerUp, rl::Models> powerUpModel = {
             {PUSpeed, speedModel},
             {PUShield, shieldModel},
-            {PUDash, dashModel}
+            {PUDash, dashModel},
+            {PUHealth, healthModel}
         };
         ~PowerUp() = default;
         void use() {_type = PUNothing;};
@@ -77,6 +80,13 @@ class Dash : public PowerUp
     public:
         Dash() {_type = PUDash; _time = 0; setModel();};
         ~Dash() = default;
+};
+
+class Health : public PowerUp
+{
+    public:
+        Health() {_type = PUHealth; _time = 0; setModel();};
+        ~Health() = default;
 };
 
 #endif /* !POWERUP_HPP_ */

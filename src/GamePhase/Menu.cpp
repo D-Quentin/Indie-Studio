@@ -8,6 +8,7 @@
 #include "Menu.hpp"
 #include "Server.hpp"
 #include "Game.hpp"
+#include "Pause.hpp"
 
 Menu::Menu()
 {
@@ -94,6 +95,8 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
     }
     if (this->_bSettings.isClicked())
         gamePhase = SettingPhase;
+    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_P))
+        gamePhase = PausePhase;
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     this->_bPlay.draw();
     this->_bSettings.draw();

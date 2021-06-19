@@ -21,6 +21,8 @@ class EntityObjects : public GameObject {
         void setShield() {_shield = true;};
         void setWeaponUse(int weapon);
         void takeDamage(int damage);
+        void heal() {_health = 100;};
+        bool getShield();
         bool isAlive() {return (_health > 0) ;};
         void createWeapon(std::string weapon, int nb);
         void draw();

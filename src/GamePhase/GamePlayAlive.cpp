@@ -83,6 +83,10 @@ void GamePlay::updatePowerUp()
                     it->use();
                 }
                 break;
+            case PUHealth:
+                _player.heal();
+                it->use();
+                break;
             case PUNothing:
                 break;
         }

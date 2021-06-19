@@ -38,11 +38,9 @@ void Player::move()
         return;
 
     std::pair<float, float> move(0, 0);
-    float speed = 5;
     RAYLIB::Vector2 pos = this->getPos();
 
-    if (RAYLIB::IsKeyDown(RAYLIB::KEY_LEFT_SHIFT))
-        speed += 1.5 + (_moreSpeed ? 2 : 0);
+    float speed = (_moreSpeed ? 10 : 5);
     if (move == std::make_pair(0.0f, 0.0f)) {
         move.first += RAYLIB::IsKeyDown(RAYLIB::KEY_W) - RAYLIB::IsKeyDown(RAYLIB::KEY_S);
         move.second += RAYLIB::IsKeyDown(RAYLIB::KEY_D) - RAYLIB::IsKeyDown(RAYLIB::KEY_A);
