@@ -31,10 +31,10 @@ Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
     this->_objType = "Player";
 }
 
-void Player::move()
+void Player::move(Setting setting)
 {
-    if (!RAYLIB::IsKeyDown(RAYLIB::KEY_W) && !RAYLIB::IsKeyDown(RAYLIB::KEY_S) &&
-    !RAYLIB::IsKeyDown(RAYLIB::KEY_D) && !RAYLIB::IsKeyDown(RAYLIB::KEY_A))
+    if (!RAYLIB::IsKeyDown(setting.getForward()) && !RAYLIB::IsKeyDown(setting.getBackward()) &&
+    !RAYLIB::IsKeyDown(setting.getRight()) && !RAYLIB::IsKeyDown(setting.getLeft()))
         return;
 
     std::pair<float, float> move(0, 0);
@@ -42,8 +42,8 @@ void Player::move()
 
     float speed = (_moreSpeed ? 10 : 5);
     if (move == std::make_pair(0.0f, 0.0f)) {
-        move.first += RAYLIB::IsKeyDown(RAYLIB::KEY_W) - RAYLIB::IsKeyDown(RAYLIB::KEY_S);
-        move.second += RAYLIB::IsKeyDown(RAYLIB::KEY_D) - RAYLIB::IsKeyDown(RAYLIB::KEY_A);
+        move.first += RAYLIB::IsKeyDown(setting.getForward()) - RAYLIB::IsKeyDown(setting.getBackward());
+        move.second += RAYLIB::IsKeyDown(setting.getRight()) - RAYLIB::IsKeyDown(setting.getLeft());
         move.first *= RAYLIB::GetFrameTime();
         move.second *= RAYLIB::GetFrameTime();
     }
@@ -72,7 +72,6 @@ void Player::rotate()
 void Player::gestColision(std::list<BlockObject *> &blocks, RAYLIB::Vector2 oldPlayerPos)
 {
     bool bullet_player = true;
-    static rl::Sound music = rl::Sound();
 
     for (auto itBlock : blocks) {
         // With Player
@@ -90,7 +89,6 @@ void Player::gestColision(std::list<BlockObject *> &blocks, RAYLIB::Vector2 oldP
             if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic)) {
                 it.isReal = false;
                 if (itBlock->isBreakable) {
-                    music.playWallBreak();
                     blocks.remove(itBlock); // remove breakable block
                     return;
                 }
@@ -106,7 +104,7 @@ void Player::gestColision(std::list<BlockObject *> &blocks, RAYLIB::Vector2 oldP
                 }
 
             } else if (bullet_player) {
-                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.06, playerPos, 0.22f) && this->_hitten_bullet.find(it.getId()) == this->_hitten_bullet.end()) {
+                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius) && this->_hitten_bullet.find(it.getId()) == this->_hitten_bullet.end()) {
                     it.isReal = false;
                     this->takeDamage(it.getDamage());
                     this->_hitten_bullet[it.getId()] = true;
@@ -159,33 +157,30 @@ void Player::deserialize(std::string str)
     this->_rota = std::atof(str.substr((pos + 2), str.find(";", pos) - pos).c_str());
 }
 
-void Player::gest(Client *&client, std::list<BlockObject *> &blocks)
+void Player::gest(Client *&client, std::list<BlockObject *> &blocks, Setting setting)
 {
     RAYLIB::Vector2 oldPlayerPos = this->_pos;
     static RAYLIB::Vector2 clear = {-1000, -1000};
-    static int i = 0;
 
-    this->move();
+    this->move(setting);
     this->rotate();
     this->gestColision(blocks, oldPlayerPos);
     if (RAYLIB::IsKeyPressed(RAYLIB::KEY_ONE))
         this->_weaponUse = 1;
     if (RAYLIB::IsKeyPressed(RAYLIB::KEY_TWO))
         this->_weaponUse = 2;
-    if (this->_health <= 0 && i == 0) {
+    if (this->_health <= 0) {
         this->setPos(clear);
-        client->send("###DEAD###");
-        i = 1;
     }
     if (this->_weaponUse == 1) {
         this->_weapon1->update(this->_pos, this->_rota);
-        if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE)) {
+        if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_LEFT_BUTTON)) {
             _bullet.push_back(this->_weapon1->shoot((this->_id + 1) * 1000 + 2 + this->_nbBullet));
             this->_nbBullet += 1;
         }
     } else if (this->_weaponUse == 2) {
         this->_weapon2->update(this->_pos, this->_rota);
-        if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE)) {
+        if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_LEFT_BUTTON)) {
             _bullet.push_back(this->_weapon2->shoot((this->_id + 1) * 1000 + 2 + this->_nbBullet));
             this->_nbBullet += 1;
         }

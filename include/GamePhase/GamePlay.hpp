@@ -25,6 +25,7 @@
 #include "Weapon.hpp"
 #include "PowerUp.hpp"
 #include "Sound.hpp"
+#include "Setting.hpp"
 
 #define ACTIVE_CAMERA ((!this->_player.isAlive()) ? this->_FPCamera : this->_TopCamera)
 
@@ -51,8 +52,8 @@ class GamePlay{
         GamePlay();
         ~GamePlay() = default;
 
-        GamePhase launch();
-        GamePhase restart();
+        GamePhase launch(Setting);
+        GamePhase restart(Setting);
 
     private: //methodes
         //set
@@ -64,8 +65,8 @@ class GamePlay{
         void collisionBulletWall();
         void lifeAndShield();
         //alive methode
-        void updateLocal();
-        void updatePowerUp();
+        void updateLocal(Setting);
+        void updatePowerUp(Setting);
         void testThings();
         void delFalseBullet();
         void reloadPower();
@@ -74,8 +75,8 @@ class GamePlay{
         //todo
 
         //other methods
-        void aliveCall();
-        void specCall();
+        void aliveCall(Setting);
+        void specCall(Setting);
         void drawAll();
 
     private: //attr

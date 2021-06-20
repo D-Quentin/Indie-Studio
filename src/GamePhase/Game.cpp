@@ -34,6 +34,7 @@ void Game::launch(rl::Window win)
 {
     static rl::Sound music = rl::Sound();
     GamePhase statut = MenuPhase;
+    GamePhase old = MenuPhase;
     std::pair<bool, Menu> menu = {false, Menu()};
     std::pair<bool, Lobby> lobby = {false, Lobby()};
     std::pair<bool, GamePlay> gameplay = {false, GamePlay()};
@@ -56,8 +57,10 @@ void Game::launch(rl::Window win)
             statut = GamePlayPhase;
         switch (statut) {
         case MenuPhase:
-            if (menu.first)
+            if (menu.first) {
                 statut = menu.second.restart();
+                old = MenuPhase;
+            }
             else {
                 music.stopAllMusic();
                 music.playMenuMusic();
@@ -67,55 +70,59 @@ void Game::launch(rl::Window win)
             break;
         case LobbyPhase:
             if (lobby.first)
-                statut = lobby.second.restart(this->_client, menu.second.getIp(), menu.second.getPort());
+                statut = lobby.second.restart(this->_client, menu.second.getIp(), menu.second.getPort(), setting.second);
             else {
                 music.stopAllMusic();
                 music.playGameMusic();
-                statut = lobby.second.launch(this->_client, menu.second.getIp(), menu.second.getPort());
+                statut = lobby.second.launch(this->_client, menu.second.getIp(), menu.second.getPort(), setting.second);
                 lobby.first = true;
             }
             break;
         case GamePlayPhase:
             if (gameplay.first)
-                statut = gameplay.second.restart();
+                statut = gameplay.second.restart(setting.second);
             else {
                 music.stopAllMusic();
                 music.playGameMusic();
-                statut = gameplay.second.launch();
+                statut = gameplay.second.launch(setting.second);
                 gameplay.first = true;
             }
             break;
         case PlayPhase:
             if (play.first)
-                statut = play.second.restart(this->_client, lobby.second);
+                statut = play.second.restart(this->_client, lobby.second, setting.second);
             else {
-                statut = play.second.launch(this->_client, lobby.second);
+                statut = play.second.launch(this->_client, lobby.second, setting.second);
                 play.first = true;
             }
             break;
         case PausePhase:
-            if (pause.first)
+            if (pause.first) {
                 statut = pause.second.restart();
+                old = PausePhase;
+            }
             else {
                 statut = pause.second.launch();
                 pause.first = true;
+                old = PausePhase;
             }
             break;
         case EndPhase:
             if (end.first)
-                statut = end.second.restart("name");
+                statut = end.second.restart();
             else {
                 music.stopAllMusic();
                 music.playEndMusic();
-                statut = end.second.launch("name");
+                statut = end.second.launch();
                 end.first = true;
             }
             break;
         case SettingPhase:
             if (setting.first)
-                statut = setting.second.restart();
+                statut = setting.second.restart(old);
             else {
-                statut = setting.second.launch();
+                printf("old = %d\n", old);
+                statut = setting.second.launch(old);
                 setting.first = true;
             }
             break;

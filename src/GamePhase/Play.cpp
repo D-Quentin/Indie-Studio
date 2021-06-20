@@ -20,7 +20,7 @@ Play::~Play()
 {
 }
 
-GamePhase Play::launch(Client *&client, Lobby &lobby)
+GamePhase Play::launch(Client *&client, Lobby &lobby, Setting setting)
 {
     this->_host = lobby.isHost();
     this->_player = lobby.getPlayer();
@@ -30,16 +30,16 @@ GamePhase Play::launch(Client *&client, Lobby &lobby)
     this->_tHp = rl::Text("Hp ", 1, 95, 20, RAYLIB::RED);
     this->_shield = RAYLIB::LoadTexture("assets/texture/shield.png");
     this->_heart = RAYLIB::LoadTexture("assets/texture/heart.png");
-    return (this->restart(client, lobby));
+    return (this->restart(client, lobby, setting));
 }
 
-GamePhase Play::restart(Client *&client, Lobby &lobby)
+GamePhase Play::restart(Client *&client, Lobby &lobby, Setting setting)
 {
     GamePhase gamePhase = PlayPhase;
 
     switch (this->_phase) {
     case Play::MainPhase:
-        gamePhase = this->mainPhase(gamePhase, client);
+        gamePhase = this->mainPhase(gamePhase, client, setting);
         break;
     case Play::JoinPhase:
         gamePhase = this->joinPhase(gamePhase, client, lobby);
@@ -52,7 +52,7 @@ GamePhase Play::restart(Client *&client, Lobby &lobby)
     return (gamePhase);
 }
 
-GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
+GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client, Setting setting)
 {
     GameObject::gestData(this->_obj, client->read(), client, *this, this->_dead);
     static RAYLIB::Vector2 clear = {-1000, -1000};
@@ -73,9 +73,9 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
         this->_obj.erase(to_delet[i]);
     }
     
-    ((Player *)this->_obj[this->_me])->gest(client, this->_blocks);
+    ((Player *)this->_obj[this->_me])->gest(client, this->_blocks, setting);
     this->reloadPower();
-    this->updatePowerUp();
+    this->updatePowerUp(setting);
     auto it_items = _items.begin();
     for (auto &it : _items) {
         bool col = RAYLIB::CheckCollisionCircles(it->getPos(), 0.15f, ((Player *)this->_obj[this->_me])->getPos(), 0.15f);
@@ -135,9 +135,9 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
     // Set Camera
     RAYLIB::Vector2 pos = ((Player *)this->_obj[this->_me])->getPos();
     if (((Player *)this->_obj[this->_me])->isAlive())
-        ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).updateCamera({pos.x, pos.y});
+        ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).updateCamera(setting, {pos.x, pos.y});
     else
-        ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).updateCamera();
+        ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).updateCamera(setting);
 
     RAYLIB::EndMode3D();
 
@@ -293,7 +293,7 @@ bool Play::compare(PowerUp *f, PowerUp *s)
     return f->getPower() == s->getPower();
 }
 
-void Play::updatePowerUp()
+void Play::updatePowerUp(Setting setting)
 {
     _power_up.unique(Play::compare);
     for (auto &it : _power_up)
@@ -306,7 +306,7 @@ void Play::updatePowerUp()
                 it->use();
                 break;
             case PUDash:
-                if (RAYLIB::IsKeyPressed(RAYLIB::KEY_ENTER)) {
+                if (RAYLIB::IsKeyPressed(setting.getDash())) {
                     ((Player *)this->_obj[this->_me])->dash();
                     it->use();
                 }

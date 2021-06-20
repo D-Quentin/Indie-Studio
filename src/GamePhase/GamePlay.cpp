@@ -37,7 +37,7 @@ void GamePlay::placeItems(std::list<std::pair<float, float>> itemsPos)
     }
 }
 
-GamePhase GamePlay::launch()
+GamePhase GamePlay::launch(Setting setting)
 {
     //SET ALL
     float size = 1;
@@ -54,7 +54,7 @@ GamePhase GamePlay::launch()
     _FPCamera.setPosition({_spawn.first, _FPCamera.getPosition().y, _spawn.second});
     this->_mapSize = {charMap.size(), charMap.front().size()};
     this->nonToPoi(m._mapBlocks);
-    return GamePlayPhase;
+    return this->restart(setting);
 }
 
 float convertSize(float x, int size)
@@ -83,15 +83,15 @@ void GamePlay::lifeAndShield()
         RAYLIB::DrawRectangle(convertSize(1121, RAYLIB::GetScreenWidth()), convertSize(976, RAYLIB::GetScreenHeight()), 48, 58, RAYLIB::BLUE);
 }
 
-GamePhase GamePlay::restart()
+GamePhase GamePlay::restart(Setting setting)
 {
     GamePhase gamePhase = GamePlayPhase;
     _oldPlayerPos = _player.getPos();
     //update attrib from server
     if (_player.isAlive()) {
-        this->aliveCall();
+        this->aliveCall(setting);
     } else {
-        this->specCall();
+        this->specCall(setting);
     }
     if (RAYLIB::IsKeyPressed(RAYLIB::KEY_P))
         gamePhase = PausePhase;
@@ -102,18 +102,18 @@ GamePhase GamePlay::restart()
     return gamePhase;
 }
 
-void GamePlay::aliveCall()
+void GamePlay::aliveCall(Setting setting)
 {
     this->reloadPower();
-    this->updatePowerUp();
-    this->updateLocal();
+    this->updatePowerUp(setting);
+    this->updateLocal(setting);
     this->testThings();
 }
 
-void GamePlay::specCall()
+void GamePlay::specCall(Setting setting)
 {
     //todo
-    ACTIVE_CAMERA.updateCamera();
+    ACTIVE_CAMERA.updateCamera(setting);
 }
 
 void GamePlay::drawAll()
