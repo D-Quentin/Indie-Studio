@@ -11,9 +11,9 @@ rl::Sound::Sound()
 {
     RAYLIB::InitAudioDevice();
     this->_sniperShoot = RAYLIB::LoadSound("assets/sound/sniper.mp3");
-    //this->_endMusic = RAYLIB::LoadSound("assets/sound/");
+    this->_endMusic = RAYLIB::LoadSound("assets/sound/end_music.mp3");
     this->_dead = RAYLIB::LoadSound("assets/sound/mort.mp3");
-    //this->_gameMusic = RAYLIB::LoadSound("assets/sound/");
+    this->_gameMusic = RAYLIB::LoadSound("assets/sound/game_music.mp3");
     this->_gunShoot = RAYLIB::LoadSound("assets/sound/pistolet.mp3");
     this->_menuMusic = RAYLIB::LoadSound("assets/sound/pnl_uranus.mp3");
     this->_riffleShoot = RAYLIB::LoadSound("assets/sound/m4.mp3");
