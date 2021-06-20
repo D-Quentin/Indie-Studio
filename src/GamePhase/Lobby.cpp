@@ -107,7 +107,7 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client, Setting setting
     }
     if (this->_readyPlayer == this->_player) {
         rl::Window::loading();
-        gamePhase = PlayPhase;
+        return(PlayPhase);
     }
     this->_tReady.setText("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player));
 

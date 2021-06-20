@@ -66,7 +66,7 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client, Setting setting)
     }
     if (this->_dead >= this->_player - 1) {
         rl::Window::loading();
-        gamePhase = EndPhase;
+        return (EndPhase);
     }
     for (size_t i = 0; i < to_delet.size(); i++) {
         this->_obj.erase(to_delet[i]);

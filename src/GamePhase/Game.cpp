@@ -46,6 +46,7 @@ void Game::launch(rl::Window win)
     #if not defined(_WIN32)
         std::signal(SIGINT, signal_handler);
     #endif
+    music.playMenuMusic();
     while (statut != QuitPhase && win.loop()) {
         if (statut == RestartPhase)
             break;
@@ -64,8 +65,6 @@ void Game::launch(rl::Window win)
                 old = MenuPhase;
             }
             else {
-                music.stopAllMusic();
-                music.playMenuMusic();
                 statut = menu.second.launch();
                 menu.first = true;
             }
@@ -74,8 +73,6 @@ void Game::launch(rl::Window win)
             if (lobby.first)
                 statut = lobby.second.restart(this->_client, menu.second.getIp(), menu.second.getPort(), setting.second);
             else {
-                music.stopAllMusic();
-                music.playGameMusic();
                 statut = lobby.second.launch(this->_client, menu.second.getIp(), menu.second.getPort(), setting.second);
                 lobby.first = true;
             }
@@ -84,8 +81,6 @@ void Game::launch(rl::Window win)
             if (gameplay.first)
                 statut = gameplay.second.restart(setting.second);
             else {
-                music.stopAllMusic();
-                music.playGameMusic();
                 statut = gameplay.second.launch(setting.second);
                 gameplay.first = true;
             }
@@ -113,8 +108,6 @@ void Game::launch(rl::Window win)
             if (end.first)
                 statut = end.second.restart();
             else {
-                music.stopAllMusic();
-                music.playEndMusic();
                 statut = end.second.launch();
                 end.first = true;
             }

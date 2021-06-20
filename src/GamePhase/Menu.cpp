@@ -42,7 +42,7 @@ GamePhase Menu::launch()
     this->_bReturn = Button("assets/texture/button.png", 3, 85, 21.4, 10);
     this->_tJoinGame = rl::Text("Join Game", 32, 38, 70, RAYLIB::BLACK);
     this->_tCreateGame = rl::Text("Create Game", 27, 63, 70, RAYLIB::BLACK);
-    this->_tSolo = rl::Text("Solo", 30, 13, 70, RAYLIB::BLACK);
+    this->_tSolo = rl::Text("Solo", 40, 13, 70, RAYLIB::BLACK);
     this->_tReturn = rl::Text("Return", 9, 88, 29, RAYLIB::BLACK);
     this->_tbackground2 = RAYLIB::LoadTexture("assets/texture/background2.png");
 
@@ -164,7 +164,7 @@ GamePhase Menu::playPhase(GamePhase gamePhase)
         this->_phase = JoinPhase;
     if (this->_bSolo.isClicked()) {
         rl::Window::loading();
-        gamePhase = GamePlayPhase;
+        return(GamePlayPhase);
     }
     if (this->_bReturn.isClicked())
         this->_phase = MainPhase;
