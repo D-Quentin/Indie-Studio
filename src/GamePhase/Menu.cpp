@@ -133,6 +133,9 @@ GamePhase Menu::createPhase(GamePhase gamePhase)
     if (this->_bReturn.isClicked())
         this->_phase = PlayPhase;
     if (this->_bCreate.isClicked()) {
+        int port = std::atoi(this->_iServPort.getText().c_str());
+        if (port < 2000 || port > 65535)
+            return (MenuPhase);
         Server::launch(std::atoi(this->_iServPort.getText().c_str()));
         return (LobbyPhase);
     }

@@ -16,11 +16,14 @@ static const int WIN_WIDTH = RAYLIB::GetScreenWidth();
 
 void launchServer(int port)
 {
+    if (port < 2000 || port > 65535) {
+        std::cout << "Server failed: port is invalid" << std::endl;
+        return;
+    }
     std::cout << "Launching server..." << std::endl;
     boost::asio::io_service io_service;
     udp::resolver resolver(io_service);
     Server server(io_service, port);
-
     std::cout << "Server is up and running at port " << std::to_string(port) << std::endl;
     std::cout << "You can close this whenever you don't need the server anymore." << std::endl;
     io_service.run();
