@@ -19,20 +19,23 @@ enum EnumPowerUp {
     PUNothing = 0,
     PUSpeed,
     PUShield,
-    PUDash
+    PUDash,
+    PUHealth
 };
 
 class PowerUp : public game_object::Item 
 {
     public:
-        const rl::Models speedModel = rl::Models("assets/weapons/Baretta/Beretta.obj");
-        const rl::Models shieldModel = rl::Models("assets/weapons/Baretta/Beretta.obj");
+        const rl::Models speedModel = rl::Models("assets/powerUp/chilli/chilli.glb");
+        const rl::Models shieldModel = rl::Models("assets/powerUp/shield/shield.glb");
         const rl::Models dashModel = rl::Models("assets/weapons/Baretta/Beretta.obj");
+        const rl::Models healthModel = rl::Models("assets/powerUp/Heart/heart.obj");
 
         const std::map<EnumPowerUp, rl::Models> powerUpModel = {
             {PUSpeed, speedModel},
             {PUShield, shieldModel},
-            {PUDash, dashModel}
+            {PUDash, dashModel},
+            {PUHealth, healthModel}
         };
         ~PowerUp() = default;
         void use() {_type = PUNothing;};
@@ -61,22 +64,29 @@ class PowerUp : public game_object::Item
 class Speed : public PowerUp
 {
     public:
-        Speed() {_type = PUSpeed; _time = 15; setModel();};
+        Speed() {_type = PUSpeed; _time = 15; setModel(); this->_objType = "Speed";};
         ~Speed() = default;
 };
 
 class Shield : public PowerUp
 {
     public:
-        Shield() {_type = PUShield; _time = 0; setModel();};
+        Shield() {_type = PUShield; _time = 0; setModel(); this->_objType = "Shield";};
         ~Shield() = default;
 };
 
 class Dash : public PowerUp
 {
     public:
-        Dash() {_type = PUDash; _time = 0; setModel();};
+        Dash() {_type = PUDash; _time = 0; setModel(); this->_objType = "Dash";};
         ~Dash() = default;
+};
+
+class Health : public PowerUp
+{
+    public:
+        Health() {_type = PUHealth; _time = 0; setModel(); this->_objType = "Health";};
+        ~Health() = default;
 };
 
 #endif /* !POWERUP_HPP_ */

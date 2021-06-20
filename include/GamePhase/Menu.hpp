@@ -19,7 +19,7 @@ class Menu {
         MainPhase,
         PlayPhase,
         CreatePhase,
-        JoinPhase
+        JoinPhase,
     };
     public:
         Menu();
@@ -28,11 +28,15 @@ class Menu {
         GamePhase restart();
         GamePhase mainPhase(GamePhase);
         GamePhase playPhase(GamePhase);
+        GamePhase settingPhase(GamePhase);
         GamePhase createPhase(GamePhase);
         GamePhase joinPhase(GamePhase);
+        GamePhase pausePhase(GamePhase);
         std::string getIp();
         std::string getPort();
         std::string getYourName();
+        void checkButtonclick();
+        void draw_touch();
 
     protected:
     private:
@@ -58,6 +62,15 @@ class Menu {
         rl::Text _tCreateGame;
         rl::Text _tReturn;
         RAYLIB::Texture2D _tbackground2;
+
+        // SettingPhase
+        Button _bUp;
+        Button _bDown;
+        Button _bUpFram;
+        Button _bDownFram;
+        Button _bChange;
+        std::vector<Button> _bInput;
+        std::vector<int> _ikey;
 
         // JoinPhase
         InputButton _iIp;
