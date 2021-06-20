@@ -36,11 +36,13 @@ GamePhase Menu::launch()
     this->_tbackground = RAYLIB::LoadTexture("assets/texture/background.png");
 
     // PlayPhase
-    this->_bJoinGame = Button("assets/texture/button_second_page.png", 15, 30, 67.68, 17.1);
-    this->_bCreateGame = Button("assets/texture/button_second_page.png", 15, 55, 67.65, 17.1);
+    this->_bJoinGame = Button("assets/texture/button_second_page.png", 15, 35, 67.68, 17.1);
+    this->_bCreateGame = Button("assets/texture/button_second_page.png", 15, 60, 67.65, 17.1);
+    this->_bSolo = Button("assets/texture/button_second_page.png", 15, 10, 67.65, 17.1);
     this->_bReturn = Button("assets/texture/button.png", 3, 85, 21.4, 10);
-    this->_tJoinGame = rl::Text("Join Game", 32, 33, 70, RAYLIB::BLACK);
-    this->_tCreateGame = rl::Text("Create Game", 27, 58, 70, RAYLIB::BLACK);
+    this->_tJoinGame = rl::Text("Join Game", 32, 38, 70, RAYLIB::BLACK);
+    this->_tCreateGame = rl::Text("Create Game", 27, 63, 70, RAYLIB::BLACK);
+    this->_tSolo = rl::Text("Solo", 30, 13, 70, RAYLIB::BLACK);
     this->_tReturn = rl::Text("Return", 9, 88, 29, RAYLIB::BLACK);
     this->_tbackground2 = RAYLIB::LoadTexture("assets/texture/background2.png");
 
@@ -162,15 +164,19 @@ GamePhase Menu::playPhase(GamePhase gamePhase)
         this->_phase = CreatePhase;
     if (this->_bJoinGame.isClicked())
         this->_phase = JoinPhase;
+    if (this->_bSolo.isClicked())
+        gamePhase = GamePlayPhase;
     if (this->_bReturn.isClicked())
         this->_phase = MainPhase;
     RAYLIB::DrawTextureEx(this->_tbackground2, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     this->_bJoinGame.draw();
     this->_bCreateGame.draw();
     this->_bReturn.draw();
+    this->_bSolo.draw();
     this->_tCreateGame.draw();
     this->_tJoinGame.draw();
     this->_tReturn.draw();
+    this->_tSolo.draw();
     return (gamePhase);
 }
 

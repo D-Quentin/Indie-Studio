@@ -60,9 +60,11 @@ class Menu {
         Button _bJoinGame;
         Button _bCreateGame;
         Button _bReturn;
+        Button _bSolo;
         rl::Text _tJoinGame;
         rl::Text _tCreateGame;
         rl::Text _tReturn;
+        rl::Text _tSolo;
         RAYLIB::Texture2D _tbackground2;
 
         // SettingPhase
