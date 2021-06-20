@@ -103,11 +103,11 @@ void Game::launch(rl::Window win)
             break;
         case EndPhase:
             if (end.first)
-                statut = end.second.restart("name");
+                statut = end.second.restart();
             else {
                 music.stopAllMusic();
                 music.playEndMusic();
-                statut = end.second.launch("name");
+                statut = end.second.launch();
                 end.first = true;
             }
             break;

@@ -16,7 +16,14 @@ End::~End()
 {
 }
 
-GamePhase End::launch(std::string winner)
+float convertSizes(float x, int size)
+{
+    x = (x * 100) / size;
+    x = (x * size) / 100;
+    return (x);
+}
+
+GamePhase End::launch()
 {
     this->_tbackground = RAYLIB::LoadTexture("assets/texture/EndBackground.png");
     this->_tRocket = RAYLIB::LoadTexture("assets/texture/victory.png");
@@ -24,16 +31,16 @@ GamePhase End::launch(std::string winner)
     this->_bReturn = Button("assets/texture/button.png", 3, 85, 21.4, 10);
     this->_tVictory = RAYLIB::LoadTexture("assets/texture/victory-title-sm.png");
     this->_bAgain = Button("assets/texture/button.png", 76, 85, 21.4, 10);
-    this->_tAgain = rl::Text("Play again", 79, 88, 29, RAYLIB::BLACK);
-    return (this->restart(winner));
+    this->_tAgain = rl::Text("Quitter", 82, 88, 29, RAYLIB::BLACK);
+    return (this->restart());
 }
 
-GamePhase End::restart(std::string winner)
+GamePhase End::restart()
 {
-    return (endPhase(EndPhase, winner));
+    return (endPhase(EndPhase));
 }
 
-GamePhase End::endPhase(GamePhase gamePhase, std::string winner)
+GamePhase End::endPhase(GamePhase gamePhase)
 {
     static auto time = TIMENOW;
     static int a = 100;
@@ -57,7 +64,7 @@ GamePhase End::endPhase(GamePhase gamePhase, std::string winner)
             i++;
         }
     aze = (i/11);
-    RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1820), RAYLIB::WHITE);
+    RAYLIB::DrawTextureEx(this->_tbackground, {0, convertSizes(0, RAYLIB::GetScreenHeight())}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     if (i < 2000)
         RAYLIB::DrawTextureEx(this->_tRocket, {600, (float)800-i}, -45, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     if (i >= 800) {
@@ -65,11 +72,9 @@ GamePhase End::endPhase(GamePhase gamePhase, std::string winner)
         u++;
        RAYLIB::DrawTexture(this->_tVictory, 400, 250, { 255, 255, 255, (unsigned char)u});
     }
-    this->_tName = rl::Text(winner, 45, (float)71-aze, 29, RAYLIB::BLACK);
     this->_bAgain.draw();
     this->_tAgain.draw();
     this->_bReturn.draw();
     this->_tReturn.draw();
-    this->_tName.draw();
     return (gamePhase); 
 }
