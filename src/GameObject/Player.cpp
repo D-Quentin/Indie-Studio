@@ -72,6 +72,7 @@ void Player::rotate()
 void Player::gestColision(std::list<BlockObject *> &blocks, RAYLIB::Vector2 oldPlayerPos)
 {
     bool bullet_player = true;
+    static rl::Sound music = rl::Sound();
 
     for (auto itBlock : blocks) {
         // With Player
@@ -89,6 +90,7 @@ void Player::gestColision(std::list<BlockObject *> &blocks, RAYLIB::Vector2 oldP
             if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic)) {
                 it.isReal = false;
                 if (itBlock->isBreakable) {
+                    music.playWallBreak();
                     blocks.remove(itBlock); // remove breakable block
                     return;
                 }
