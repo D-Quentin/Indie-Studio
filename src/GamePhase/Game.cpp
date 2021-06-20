@@ -98,6 +98,7 @@ void Game::launch(rl::Window win)
                 statut = pause.second.launch();
                 pause.first = true;
             }
+            break;
         case EndPhase:
             if (end.first)
                 statut = end.second.restart("name");
