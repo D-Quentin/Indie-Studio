@@ -13,6 +13,7 @@
 Play::Play()
 {
     this->_TopCamera = rl::Camera({0, 6, 0});
+    this->_FPCamera =  rl::Camera({ 0, 10, 0 }, RAYLIB::CAMERA_FIRST_PERSON);
     this->_nbAi = 0;
 }
 
@@ -57,11 +58,21 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
     GameObject::gestData(this->_obj, client->read(), client, *this);
     static RAYLIB::Vector2 clear = {-1000, -1000};
     std::vector<std::map<int, GameObject *>::iterator> to_delet;
+    int dead = 0;
     for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
         if (it->second->getObjType() == "Bullet") {
             ((Player *)this->_obj[this->_me])->getBullet().push_back(*((Bullet *)it->second));
             to_delet.push_back(it);
         }
+        if (it->second->getObjType() == "Player") {
+            if (((Player *)it->second)->isAlive() == false)
+                dead += 1;
+        }
+    }
+    if (dead >= this->_player - 1) {
+        std::cout << this->_player << std::endl;
+        std::cout << dead << std::endl;
+        gamePhase = EndPhase;
     }
     for (size_t i = 0; i < to_delet.size(); i++) {
         this->_obj.erase(to_delet[i]);
@@ -86,17 +97,18 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
             _power_up.push_back((PowerUp *)it);
             it->isWear = true;
         }
-        std::cout << "It: " << it->getObjType() << std::endl;
-        // std::cout << "Items: " << it_items.getObjType() << std::endl;
         _items.erase(it_items);
         break;
     }
-    
+    if (RAYLIB::IsKeyDown(RAYLIB::KEY_F7)) {
+        ((Player *)this->_obj[this->_me])->takeDamage(100);
+        ((Player *)this->_obj[this->_me])->takeDamage(100);
+    }
     this->_tHp.setText("Hp " + std::to_string(((Player *)this->_obj[this->_me])->getHealth()));
     
 
     // 3D Drawing
-    RAYLIB::BeginMode3D(this->_TopCamera.getCamera());
+    RAYLIB::BeginMode3D(ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).getCamera());
 
     // Draw GameObject
     for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
@@ -108,7 +120,7 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
     }
 
     // Draw Blocks
-    RAYLIB::Vector3 campos = this->_TopCamera.getPosition();
+    RAYLIB::Vector3 campos = ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).getPosition();
     for (auto it2 : this->_blocks) {
         auto pos = it2->getPos();
         if ((pos.y < campos.z + _renderDistance && pos.y > campos.z - _renderDistance) && (pos.x < campos.x + _renderDistance && pos.x > campos.x - _renderDistance))
@@ -116,7 +128,7 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
     }
 
     // Draw flor
-    RAYLIB::DrawPlane({ _mapSize.first / 2, -0.01, _mapSize.second / 2 }, { _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, GROUNDCOLOR);
+    RAYLIB::DrawPlane({ _mapSize.first / 2, -0.01, _mapSize.second / 2 }, { (_mapSize.first + _mapSize.second) * 10, (_mapSize.second + _mapSize.first) * 10}, GROUNDCOLOR);
 
     for (auto it : this->_items)
         it->draw();
@@ -127,7 +139,10 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
 
     // Set Camera
     RAYLIB::Vector2 pos = ((Player *)this->_obj[this->_me])->getPos();
-    _TopCamera.updateCamera({pos.x, pos.y});
+    if (((Player *)this->_obj[this->_me])->isAlive())
+        ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).updateCamera({pos.x, pos.y});
+    else
+        ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).updateCamera();
 
     RAYLIB::EndMode3D();
 
@@ -241,17 +256,24 @@ void Play::placeItems(std::list<std::pair<float, float>> itemsPos)
     }
 }
 
+float converttsize(float x, int size)
+{
+    x = (x * 100) / size;
+    x = (x * size) / 100;
+    return (x);
+}
+
 void Play::lifeAndShield()
 {
-    RAYLIB::DrawTextureEx(this->_heart, {785, 975}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
-    RAYLIB::DrawTextureEx(this->_shield, {1055, 975}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
-    RAYLIB::DrawRectangleLines(850, 975, 200, 60, RAYLIB::BLACK);
-    RAYLIB::DrawRectangle(851, 976, 198, 58, RAYLIB::GRAY);
-    RAYLIB::DrawRectangle(851, 976, (((Player *)this->_obj[this->_me])->getHealth() * 2) - 2, 58, RAYLIB::RED);
-    RAYLIB::DrawRectangleLines(1120, 975, 50, 60, RAYLIB::BLACK);
-    RAYLIB::DrawRectangle(1121, 976, 48, 58, RAYLIB::GRAY);
+    RAYLIB::DrawTextureEx(this->_heart, {converttsize(785, RAYLIB::GetScreenWidth()), converttsize(975, RAYLIB::GetScreenHeight())}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    RAYLIB::DrawTextureEx(this->_shield, {converttsize(1055, RAYLIB::GetScreenWidth()), converttsize(975, RAYLIB::GetScreenHeight())}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    RAYLIB::DrawRectangleLines(converttsize(850, RAYLIB::GetScreenWidth()), converttsize(975, RAYLIB::GetScreenHeight()), 200, 60, RAYLIB::BLACK);
+    RAYLIB::DrawRectangle(converttsize(851, RAYLIB::GetScreenWidth()), converttsize(976, RAYLIB::GetScreenHeight()), 198, 58, RAYLIB::GRAY);
+    RAYLIB::DrawRectangle(converttsize(851, RAYLIB::GetScreenWidth()), converttsize(976, RAYLIB::GetScreenHeight()), (((Player *)this->_obj[this->_me])->getHealth() * 2) - 2, 58, RAYLIB::RED);
+    RAYLIB::DrawRectangleLines(converttsize(1120, RAYLIB::GetScreenWidth()), converttsize(975, RAYLIB::GetScreenHeight()), 50, 60, RAYLIB::BLACK);
+    RAYLIB::DrawRectangle(converttsize(1121, RAYLIB::GetScreenWidth()), converttsize(976, RAYLIB::GetScreenHeight()), 48, 58, RAYLIB::GRAY);
     if (((Player *)this->_obj[this->_me])->getShield() == 1)
-        RAYLIB::DrawRectangle(1121, 976, 48, 58, RAYLIB::BLUE);
+        RAYLIB::DrawRectangle(converttsize(1121, RAYLIB::GetScreenWidth()), converttsize(976, RAYLIB::GetScreenHeight()), 48, 58, RAYLIB::BLUE);
 }
 
 void Play::reloadPower()

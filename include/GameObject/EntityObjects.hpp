@@ -23,7 +23,7 @@ class EntityObjects : public GameObject {
         void takeDamage(int damage);
         void heal() {_health = 100;};
         bool getShield();
-        bool isAlive() {return (_health > 0) ;};
+        bool isAlive() {return this->_alive;};
         void createWeapon(std::string weapon, int nb);
         void draw();
         std::list<Bullet> &getBullet() {return this->_tmp_bullet;};
@@ -34,6 +34,7 @@ class EntityObjects : public GameObject {
         int _health = 100;
         float _scale;
         bool _shield = false;
+        bool _alive = true;
         int _weaponUse = 0;
         int _nbBullet = 1;
         Weapon *_weapon1;

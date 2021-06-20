@@ -40,6 +40,7 @@ int main(int ac, char **av)
         return (0);
     }
     rl::Window win(WIN_WIDTH, WIN_HEIGHT, "Indie Studio");
+    RAYLIB::InitAudioDevice();
     Game game;
 
     win.fullscreen();

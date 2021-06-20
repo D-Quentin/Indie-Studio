@@ -56,7 +56,7 @@ class Lobby {
         std::string _port;
         std::string _localIp;
         std::string _publicIp;
-
+        
         Button _bReady;
         rl::Text _tReady;
         rl::Text _tIps;

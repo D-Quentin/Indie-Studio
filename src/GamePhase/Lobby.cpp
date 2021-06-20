@@ -71,8 +71,8 @@ GamePhase Lobby::launch(Client *&client, std::string ip, std::string port)
 {
     this->_phase = JoinPhase;
 
-    this->_bReady = Button(" ", 65, 80, 30, 15);
-    this->_tReady = rl::Text("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player), 67, 82, 50, RAYLIB::LIGHTGRAY);
+    this->_bReady = Button("assets/texture/button.png", 70, 85, 21.4, 10);
+    this->_tReady = rl::Text("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player), 72, 88, 30, RAYLIB::BLACK);
     this->_tIps = rl::Text("", 1, 2, 20, RAYLIB::LIGHTGRAY);
 
     return (this->restart(client, ip, port));
@@ -109,11 +109,6 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
             gamePhase = PlayPhase;
     this->_tReady.setText("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player));
 
-    // 2D Drawing
-    this->_bReady.draw();
-    this->_tReady.draw();
-    this->_tIps.draw();
-
     // 3D Drawing
     RAYLIB::BeginMode3D(this->_TopCamera.getCamera());
     RAYLIB::Vector2 pos = ((Player *)this->_obj[this->_me])->getPos();
@@ -122,7 +117,13 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
         it->second->draw();
     }
     RAYLIB::DrawGrid(1000, 10);
+    RAYLIB::DrawPlane({500, -0.01, 500}, { 500, 500}, {119,136,153, 255}); //draw flor
     RAYLIB::EndMode3D();
+
+        // 2D Drawing
+    this->_bReady.draw();
+    this->_tReady.draw();
+    this->_tIps.draw();
 
     return (gamePhase);
 }

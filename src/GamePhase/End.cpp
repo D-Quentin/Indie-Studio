@@ -18,7 +18,7 @@ End::~End()
 
 GamePhase End::launch(std::string winner)
 {
-    this->_tbackground = RAYLIB::LoadTexture("assets/texture/endBack.png");
+    this->_tbackground = RAYLIB::LoadTexture("assets/texture/EndBackground.png");
     this->_tRocket = RAYLIB::LoadTexture("assets/texture/victory.png");
     this->_tReturn = rl::Text("Menu", 9, 88, 29, RAYLIB::BLACK);
     this->_bReturn = Button("assets/texture/button.png", 3, 85, 21.4, 10);
@@ -42,10 +42,11 @@ GamePhase End::endPhase(GamePhase gamePhase, std::string winner)
     float aze = 0;
     static int u = 0;
 
-    if (this->_bReturn.isClicked())
-        gamePhase = MenuPhase;
+    if (this->_bReturn.isClicked()) {
+        gamePhase = RestartPhase;
+    }
     if (this->_bAgain.isClicked())
-        gamePhase = LobbyPhase;
+        gamePhase = QuitPhase;
     if (CHRONO(time) >= 1000 && i <= 1)
         i++;
     if (i != 0 && i < 2000)
@@ -56,7 +57,7 @@ GamePhase End::endPhase(GamePhase gamePhase, std::string winner)
             i++;
         }
     aze = (i/11);
-    RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1820), RAYLIB::WHITE);
     if (i < 2000)
         RAYLIB::DrawTextureEx(this->_tRocket, {600, (float)800-i}, -45, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     if (i >= 800) {

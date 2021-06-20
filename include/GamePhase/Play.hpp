@@ -16,6 +16,8 @@
 #include "Map3D.hpp"
 #include "PowerUp.hpp"
 
+#define ACTIVE_CAMERA(x) ((!x) ? this->_FPCamera : this->_TopCamera)
+
 #define GROUNDCOLOR {119,136,153, 255}
 #define SPAWNCOLOR {233,150,122, 255}
 #define ITEMCOLOR {42, 157, 244, 255}
@@ -60,6 +62,7 @@ class Play {
         bool _host;
         size_t _me;
         rl::Camera _TopCamera;
+        rl::Camera _FPCamera;
         int _renderDistance = 40;
         std::vector<std::vector<char>> _map;
         std::pair<float, float> _mapSize;
