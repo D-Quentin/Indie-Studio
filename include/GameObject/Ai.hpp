@@ -18,6 +18,7 @@ public:
     std::vector<RAYLIB::KeyboardKey> getDirections();
     bool isTileValid(RAYLIB::Vector2 tile);
     bool isInMap(RAYLIB::Vector2 tile);
+    bool isIndexValid(int x, int y);
     void getAvailableTiles();
     void setDirections(RAYLIB::Vector2 newPosition);
     void getPriority();

@@ -42,7 +42,6 @@ void Ai::getPriority()
         setRandomTarget();
     moveToNextTile();
     printf("TARGET: [%f::%f]\n", this->targetPosition.x, this->targetPosition.y);
-    //rotate();
 }
 
 void Ai::setRandomTarget()
@@ -84,6 +83,7 @@ void Ai::moveToNextTile()
     printf("Current Position: [%f::%f] -> '%c'\n", this->_pos.x, this->_pos.y, this->map[this->_pos.x][this->_pos.y]);
     this->last_pos = this->_pos;
     this->_pos = {this->_pos.x + move.first * speed, this->_pos.y + move.second * speed };
+    rotate();
 }
 
 Target Ai::checkEnemy()
@@ -93,12 +93,31 @@ Target Ai::checkEnemy()
 
 void Ai::rotate()
 {
-    float newRota = -Vector2Angle({(float)RAYLIB::GetScreenWidth() / 2, (float)RAYLIB::GetScreenHeight() / 2}, this->targetPosition);
+    std::pair<int ,int> look;
 
-    if (this->_rota == newRota)
-        return;
-    this->_rota = newRota;
-    printf("New Rotation: %f\n", newRota);
+    look.first = int(this->targetPosition.x) - int(this->_pos.x);
+    look.second = int(this->targetPosition.y) - int(this->_pos.y);
+    if (look.first == -1)
+        look.first = 270;
+    else if (look.first == 0)
+        look.first = -1;
+    else if ( look.first == 1)
+        look.first = 90;
+    if (look.second == -1)
+        look.second = 180;
+    else if (look.second == 0)
+        look.second = -1;
+    else if (look.second == 1)
+        look.second = 0;
+    if (look.first == -1)
+        this->_rota = look.second;
+    else if (look.second == -1)
+        this->_rota = look.first;
+    else
+        this->_rota = (look.first + look.second) / 2;
+
+    printf("Pair: [%d::%d]\n", look.first, look.second);
+
 }
 
 int Ai::calculateDistObj(unsigned int axis)
@@ -125,21 +144,21 @@ void Ai::getAvailableTiles()
     printf("Tile: [%f::%f] -> '%c'\n", this->_pos.x + 1, this->_pos.y, this->map[this->_pos.x + 1][this->_pos.y]);
     printf("Tile: [%f::%f] -> '%c'\n", this->_pos.x + 1, this->_pos.y + 1, this->map[this->_pos.x + 1][this->_pos.y + 1]);
 
-    if (this->_pos.x - 1 < this->map.size() && this->_pos.y - 1 < this->map[0].size())
+    if (isIndexValid(-1, -1))
         children.push_back({this->_pos.x - 1, this->_pos.y - 1});
-    if (this->_pos.x - 1 < this->map.size() && this->_pos.y < this->map[0].size())
+    if (isIndexValid(-1, 0))
         children.push_back({this->_pos.x - 1, this->_pos.y});
-    if (this->_pos.x - 1 < this->map.size() && this->_pos.y + 1 < this->map[0].size())
+    if (isIndexValid(-1, 1))
         children.push_back({this->_pos.x - 1, this->_pos.y + 1});
-    if (this->_pos.x < this->map.size() && this->_pos.y - 1 < this->map[0].size())
+    if (isIndexValid(0, -1))
         children.push_back({this->_pos.x, this->_pos.y - 1});
-    if (this->_pos.x < this->map.size() && this->_pos.y + 1 < this->map[0].size())
+    if (isIndexValid(0, 1))
         children.push_back({this->_pos.x, this->_pos.y + 1});
-    if (this->_pos.x + 1 < this->map.size() && this->_pos.y - 1 < this->map[0].size())
+    if (isIndexValid(1, -1))
         children.push_back({this->_pos.x + 1, this->_pos.y - 1});
-    if (this->_pos.x + 1 < this->map.size() && this->_pos.y < this->map[0].size())
+    if (isIndexValid(1, 0))
         children.push_back({this->_pos.x + 1, this->_pos.y});
-    if (this->_pos.x + 1 < this->map.size() && this->_pos.y + 1 < this->map[0].size())
+    if (isIndexValid(1, 1))
         children.push_back({this->_pos.x + 1, this->_pos.y + 1});
     for (unsigned int i = 0; i < children.size(); i++) {
         printf("Tile: [%f::%f] -> %c\n", children[i].x, children[i].y, this->map[children[i].x][children[i].y]);
@@ -147,6 +166,15 @@ void Ai::getAvailableTiles()
             this->open.push_back(children[i]);
         }
     }
+}
+
+bool Ai::isIndexValid(int x, int y)
+{
+    if (!(this->_pos.x + x < this->map.size() && this->_pos.x + x > 0))
+        return false;
+    if (!(this->_pos.y + y < this->map[0].size() && this->_pos.y + y > 0))
+        return false;
+    return true;
 }
 
 bool Ai::isInMap(RAYLIB::Vector2 tile)
