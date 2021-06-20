@@ -28,7 +28,7 @@ Player::Player(RAYLIB::Vector2 pos, int id, bool me) : _me(me)
     this->_rota = 0;
     this->_change = false;
     this->_id = id;
-    this->_objType = "GameObject";
+    this->_objType = "Player";
 }
 
 void Player::move()
@@ -160,6 +160,7 @@ void Player::deserialize(std::string str)
 void Player::gest(Client *&client, std::list<BlockObject *> &blocks)
 {
     RAYLIB::Vector2 oldPlayerPos = this->_pos;
+    static RAYLIB::Vector2 clear = {-1000, -1000};
 
     this->move();
     this->rotate();
@@ -168,6 +169,9 @@ void Player::gest(Client *&client, std::list<BlockObject *> &blocks)
         this->_weaponUse = 1;
     if (RAYLIB::IsKeyPressed(RAYLIB::KEY_TWO))
         this->_weaponUse = 2;
+    if (this->_health <= 0) {
+        this->setPos(clear);
+    }
     if (this->_weaponUse == 1) {
         this->_weapon1->update(this->_pos, this->_rota);
         if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE)) {

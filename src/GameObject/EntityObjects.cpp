@@ -47,6 +47,8 @@ void EntityObjects::takeDamage(int damage)
         return;
     }
     this->_health -= damage;
+    if (this->_health <= 0)
+        this->_alive = false;
 }
 
 void EntityObjects::setWeaponUse(int weapon)

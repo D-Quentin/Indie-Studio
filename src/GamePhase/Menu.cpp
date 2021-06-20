@@ -67,6 +67,7 @@ GamePhase Menu::launch()
 GamePhase Menu::restart()
 {
     GamePhase gamePhase = MenuPhase;
+    RAYLIB::ShowCursor();
 
     switch (this->_phase) {
     case Menu::MainPhase:
