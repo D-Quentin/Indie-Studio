@@ -162,8 +162,10 @@ GamePhase Menu::playPhase(GamePhase gamePhase)
         this->_phase = CreatePhase;
     if (this->_bJoinGame.isClicked())
         this->_phase = JoinPhase;
-    if (this->_bSolo.isClicked())
+    if (this->_bSolo.isClicked()) {
+        rl::Window::loading();
         gamePhase = GamePlayPhase;
+    }
     if (this->_bReturn.isClicked())
         this->_phase = MainPhase;
     RAYLIB::DrawTextureEx(this->_tbackground2, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
@@ -190,6 +192,7 @@ GamePhase Menu::createPhase(GamePhase gamePhase)
         int port = std::atoi(this->_iServPort.getText().c_str());
         if (port < 2000 || port > 65535)
             return (MenuPhase);
+        rl::Window::loading();
         Server::launch(std::atoi(this->_iServPort.getText().c_str()));
         return (LobbyPhase);
     }
@@ -213,8 +216,10 @@ GamePhase Menu::joinPhase(GamePhase gamePhase)
         this->_iPort.writeChar(); // GESTION ERREUR
     if (this->_iYourName.isSelected())
         this->_iYourName.writeChar(); // GESTION ERREUR
-    if (this->_bJoin.isClicked())
+    if (this->_bJoin.isClicked()) {
+        rl::Window::loading();
         return (LobbyPhase);
+    }
     if (this->_bReturn.isClicked())
         this->_phase = PlayPhase;
     RAYLIB::DrawTextureEx(this->_tbackground2, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);

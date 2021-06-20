@@ -30,10 +30,10 @@ GamePhase Play::launch(Client *&client, Lobby &lobby, Setting setting)
     this->_tHp = rl::Text("Hp ", 1, 95, 20, RAYLIB::RED);
     this->_shield = RAYLIB::LoadTexture("assets/texture/shield.png");
     this->_heart = RAYLIB::LoadTexture("assets/texture/heart.png");
-    return (this->restart(client, lobby, setting));
+    return (this->restart(client, setting));
 }
 
-GamePhase Play::restart(Client *&client, Lobby &lobby, Setting setting)
+GamePhase Play::restart(Client *&client, Setting setting)
 {
     GamePhase gamePhase = PlayPhase;
 
@@ -42,7 +42,7 @@ GamePhase Play::restart(Client *&client, Lobby &lobby, Setting setting)
         gamePhase = this->mainPhase(gamePhase, client, setting);
         break;
     case Play::JoinPhase:
-        gamePhase = this->joinPhase(gamePhase, client, lobby);
+        gamePhase = this->joinPhase(gamePhase, client);
         break;
 
     default:
@@ -54,7 +54,7 @@ GamePhase Play::restart(Client *&client, Lobby &lobby, Setting setting)
 
 GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client, Setting setting)
 {
-    GameObject::gestData(this->_obj, client->read(), client, *this, this->_dead);
+    GameObject::gestData(this->_obj, client->read(), this->_dead);
     static RAYLIB::Vector2 clear = {-1000, -1000};
     std::vector<std::map<int, GameObject *>::iterator> to_delet;
 
@@ -65,8 +65,7 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client, Setting setting)
         }
     }
     if (this->_dead >= this->_player - 1) {
-        std::cout << this->_player << std::endl;
-        std::cout << this->_dead << std::endl;
+        rl::Window::loading();
         gamePhase = EndPhase;
     }
     for (size_t i = 0; i < to_delet.size(); i++) {
@@ -103,7 +102,7 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client, Setting setting)
     
 
     // 3D Drawing
-    RAYLIB::BeginMode3D(ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).getCamera());
+    RAYLIB::BeginMode3D(ACTIVE_CAM(((Player *)this->_obj[this->_me])->isAlive()).getCamera());
 
     // Draw GameObject
     for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
@@ -115,7 +114,7 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client, Setting setting)
     }
 
     // Draw Blocks
-    RAYLIB::Vector3 campos = ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).getPosition();
+    RAYLIB::Vector3 campos = ACTIVE_CAM(((Player *)this->_obj[this->_me])->isAlive()).getPosition();
     for (auto it2 : this->_blocks) {
         auto pos = it2->getPos();
         if ((pos.y < campos.z + _renderDistance && pos.y > campos.z - _renderDistance) && (pos.x < campos.x + _renderDistance && pos.x > campos.x - _renderDistance))
@@ -135,9 +134,9 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client, Setting setting)
     // Set Camera
     RAYLIB::Vector2 pos = ((Player *)this->_obj[this->_me])->getPos();
     if (((Player *)this->_obj[this->_me])->isAlive())
-        ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).updateCamera(setting, {pos.x, pos.y});
+        ACTIVE_CAM(((Player *)this->_obj[this->_me])->isAlive()).updateCamera(setting, {pos.x, pos.y});
     else
-        ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).updateCamera(setting);
+        ACTIVE_CAM(((Player *)this->_obj[this->_me])->isAlive()).updateCamera(setting);
 
     RAYLIB::EndMode3D();
 
@@ -148,9 +147,8 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client, Setting setting)
     return (gamePhase);
 }
 
-GamePhase Play::joinPhase(GamePhase gamePhase, Client *&client, Lobby &lobby)
+GamePhase Play::joinPhase(GamePhase gamePhase, Client *&client)
 {
-    rl::Window::loading();
     std::string tmp = "";
 
     if (this->_host) { // Loading and sending map
@@ -213,7 +211,7 @@ GamePhase Play::joinPhase(GamePhase gamePhase, Client *&client, Lobby &lobby)
             sleep(2);
         #endif
     }
-    GameObject::gestData(this->_obj, client->read(), client, *this, this->_dead);
+    GameObject::gestData(this->_obj, client->read(), this->_dead);
 
     // Creating 3D map
     float size = 1;

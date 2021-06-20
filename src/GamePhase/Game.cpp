@@ -53,8 +53,10 @@ void Game::launch(rl::Window win)
         win.clear({255, 255, 255, 255});
         if (signalStatus != 0)
             statut = QuitPhase;
-        if (RAYLIB::IsKeyPressed(RAYLIB::KEY_F6))
+        if (RAYLIB::IsKeyPressed(RAYLIB::KEY_F6)) {
+            rl::Window::loading();
             statut = GamePlayPhase;
+        }
         switch (statut) {
         case MenuPhase:
             if (menu.first) {
@@ -90,7 +92,7 @@ void Game::launch(rl::Window win)
             break;
         case PlayPhase:
             if (play.first)
-                statut = play.second.restart(this->_client, lobby.second, setting.second);
+                statut = play.second.restart(this->_client, setting.second);
             else {
                 statut = play.second.launch(this->_client, lobby.second, setting.second);
                 play.first = true;

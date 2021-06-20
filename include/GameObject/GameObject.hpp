@@ -26,7 +26,7 @@ class GameObject : public IGameObject {
         void setPos(RAYLIB::Vector3);
         void setId(int);
         static void gestData(std::map<int, GameObject *> &, std::string, Client *&, Lobby &);
-        static void gestData(std::map<int, GameObject *> &, std::string, Client *&, Play &, int &);
+        static void gestData(std::map<int, GameObject *> &, std::string, int &);
         std::string getObjType() {return(this->_objType);};
 
     protected:

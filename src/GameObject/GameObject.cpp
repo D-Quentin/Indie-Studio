@@ -73,7 +73,7 @@ void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Cli
     }
 }
 
-void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Client *&client, Play &play, int &dead)
+void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, int &dead)
 {
     size_t id = 0;
     size_t pos = 0;

@@ -46,7 +46,6 @@ GamePhase End::endPhase(GamePhase gamePhase)
     static int a = 100;
     static auto e = TIMENOW;
     static int i = 0;
-    float aze = 0;
     static int u = 0;
 
     if (this->_bReturn.isClicked()) {
@@ -63,7 +62,6 @@ GamePhase End::endPhase(GamePhase gamePhase)
             e = TIMENOW;
             i++;
         }
-    aze = (i/11);
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1820), RAYLIB::WHITE);
     if (i < 2000)
         RAYLIB::DrawTextureEx(this->_tRocket, {600, (float)800-i}, -45, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);

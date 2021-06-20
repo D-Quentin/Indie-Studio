@@ -16,7 +16,7 @@
 #include "Map3D.hpp"
 #include "PowerUp.hpp"
 
-#define ACTIVE_CAMERA(x) ((!x) ? this->_FPCamera : this->_TopCamera)
+#define ACTIVE_CAM(x) ((!x) ? this->_FPCamera : this->_TopCamera)
 
 #define GROUNDCOLOR {119,136,153, 255}
 #define SPAWNCOLOR {233,150,122, 255}
@@ -45,9 +45,9 @@ class Play {
         Play();
         ~Play();
         GamePhase launch(Client *&, Lobby &, Setting);
-        GamePhase restart(Client *&, Lobby &, Setting);
+        GamePhase restart(Client *&, Setting);
         GamePhase mainPhase(GamePhase, Client *&, Setting);
-        GamePhase joinPhase(GamePhase, Client *&, Lobby &);
+        GamePhase joinPhase(GamePhase, Client *&);
         void placeItems(std::list<std::pair<float, float>>);
         void lifeAndShield();
         void reloadPower();

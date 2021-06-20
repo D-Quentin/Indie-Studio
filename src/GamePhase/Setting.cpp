@@ -141,7 +141,6 @@ GamePhase Setting::settingPhase(GamePhase gamePhase, GamePhase old)
     static int f = 60;
     rl::Text sound;
     rl::Text fram;
-    int select = 0;
     static int musp = 0;
     static int musd = 0;
 
@@ -163,7 +162,7 @@ GamePhase Setting::settingPhase(GamePhase gamePhase, GamePhase old)
         }
         else
             musd++;
-            RAYLIB::SetMasterVolume((float)i/100);
+        RAYLIB::SetMasterVolume((float)i/100);
     }
     if (this->_bUpFram.isPressed() && f < 144) {
         f++;

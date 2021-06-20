@@ -105,8 +105,10 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client, Setting setting
         this->_ready = true;
         client->send("READY;\n");
     }
-    if (this->_readyPlayer == this->_player)
-            gamePhase = PlayPhase;
+    if (this->_readyPlayer == this->_player) {
+        rl::Window::loading();
+        gamePhase = PlayPhase;
+    }
     this->_tReady.setText("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player));
 
     // 3D Drawing
