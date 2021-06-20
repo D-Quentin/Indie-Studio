@@ -161,6 +161,7 @@ void Player::gest(Client *&client, std::list<BlockObject *> &blocks, Setting set
 {
     RAYLIB::Vector2 oldPlayerPos = this->_pos;
     static RAYLIB::Vector2 clear = {-1000, -1000};
+    static int i = 0;
 
     this->move(setting);
     this->rotate();
@@ -171,6 +172,10 @@ void Player::gest(Client *&client, std::list<BlockObject *> &blocks, Setting set
         this->_weaponUse = 2;
     if (this->_health <= 0) {
         this->setPos(clear);
+        if (i == 0) {
+            client->send("###DEAD###");
+            i = 1;
+        }
     }
     if (this->_weaponUse == 1) {
         this->_weapon1->update(this->_pos, this->_rota);
