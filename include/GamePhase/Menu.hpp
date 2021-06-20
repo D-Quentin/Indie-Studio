@@ -20,7 +20,8 @@ class Menu {
         PlayPhase,
         CreatePhase,
         JoinPhase,
-        WeaponsPhase
+        WeaponsPhase,
+        HowToPlayPhase
     };
     public:
         Menu();
@@ -33,6 +34,7 @@ class Menu {
         GamePhase createPhase(GamePhase);
         GamePhase joinPhase(GamePhase);
         GamePhase weaponsPhase(GamePhase);
+        GamePhase howToPlayPhase(GamePhase);
         std::string getIp();
         std::string getPort();
         std::string getYourName();
@@ -94,6 +96,12 @@ class Menu {
         RAYLIB::Texture2D _tBackGroundWeapons;
         rl::Text _tWeaponsReturn;
         Button _bWeaponsReturn;
+
+        // HowToPlayPhase
+        RAYLIB::Texture2D _tBackGroundHtp;
+        Button _bHtpReturn;
+        rl::Text _tHtpReturn;
+    
 
 };
 
