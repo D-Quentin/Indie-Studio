@@ -15,7 +15,7 @@ rl::Sound::Sound()
     this->_dead = RAYLIB::LoadSound("assets/sound/mort.mp3");
     //this->_gameMusic = RAYLIB::LoadSound("assets/sound/");
     this->_gunShoot = RAYLIB::LoadSound("assets/sound/pistolet.mp3");
-    //this->_menuMusic = RAYLIB::LoadSound("assets/sound/");
+    this->_menuMusic = RAYLIB::LoadSound("assets/sound/pnl_uranus.mp3");
     this->_riffleShoot = RAYLIB::LoadSound("assets/sound/m4.mp3");
     this->_takeDamage = RAYLIB::LoadSound("assets/sound/damage.mp3");
     this->_wallBreak = RAYLIB::LoadSound("assets/sound/explosion.mp3");
@@ -69,4 +69,11 @@ void rl::Sound::playWallBreak()
 void rl::Sound::playDead()
 {
     RAYLIB::PlaySound(this->_dead);
+}
+
+void rl::Sound::stopAllMusic()
+{
+    RAYLIB::StopSound(this->_menuMusic);
+    RAYLIB::StopSound(this->_gameMusic);
+    RAYLIB::StopSound(this->_endMusic);
 }

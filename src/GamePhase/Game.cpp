@@ -32,6 +32,7 @@ void signal_handler(int signal)
 
 void Game::launch(rl::Window win)
 {
+    static rl::Sound music = rl::Sound();
     GamePhase statut = MenuPhase;
     std::pair<bool, Menu> menu = {false, Menu()};
     std::pair<bool, Lobby> lobby = {false, Lobby()};
@@ -56,6 +57,8 @@ void Game::launch(rl::Window win)
             if (menu.first)
                 statut = menu.second.restart();
             else {
+                music.stopAllMusic();
+                music.playMenuMusic();
                 statut = menu.second.launch();
                 menu.first = true;
             }
@@ -64,6 +67,8 @@ void Game::launch(rl::Window win)
             if (lobby.first)
                 statut = lobby.second.restart(this->_client, menu.second.getIp(), menu.second.getPort());
             else {
+                music.stopAllMusic();
+                music.playGameMusic();
                 statut = lobby.second.launch(this->_client, menu.second.getIp(), menu.second.getPort());
                 lobby.first = true;
             }
@@ -72,6 +77,8 @@ void Game::launch(rl::Window win)
             if (gameplay.first)
                 statut = gameplay.second.restart();
             else {
+                music.stopAllMusic();
+                music.playGameMusic();
                 statut = gameplay.second.launch();
                 gameplay.first = true;
             }
@@ -95,6 +102,8 @@ void Game::launch(rl::Window win)
             if (end.first)
                 statut = end.second.restart("name");
             else {
+                music.stopAllMusic();
+                music.playEndMusic();
                 statut = end.second.launch("name");
                 end.first = true;
             }

@@ -26,6 +26,7 @@ namespace rl {
             void playGameMusic();
             void playEndMusic();
             void playDead();
+            void stopAllMusic();
         private:
             RAYLIB::Sound _sniperShoot;
             RAYLIB::Sound _gunShoot;
