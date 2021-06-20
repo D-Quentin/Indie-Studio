@@ -140,7 +140,7 @@ void GamePlay::drawAll()
         it.update();
         it.draw(); // draw
     }
-    RAYLIB::DrawPlane({ _mapSize.first / 2, -0.01, _mapSize.second / 2 }, { _mapSize.first + _mapSize.second, _mapSize.second + _mapSize.first}, GROUNDCOLOR); //draw flor
+    RAYLIB::DrawPlane({ _mapSize.first / 2, -0.01, _mapSize.second / 2 }, { (_mapSize.first + _mapSize.second) * 10, (_mapSize.second + _mapSize.first) * 10}, GROUNDCOLOR); //draw flor
     for (auto it : _spawns)
         RAYLIB::DrawPlane({ it.first, 0, it.second}, { 1, 1}, SPAWNCOLOR);
     for (auto it : _items)

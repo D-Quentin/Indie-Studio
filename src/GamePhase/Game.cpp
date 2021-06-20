@@ -46,6 +46,8 @@ void Game::launch(rl::Window win)
         std::signal(SIGINT, signal_handler);
     #endif
     while (statut != QuitPhase && win.loop()) {
+        if (statut == RestartPhase)
+            break;
         RAYLIB::BeginDrawing();
         win.clear({255, 255, 255, 255});
         if (signalStatus != 0)
@@ -129,4 +131,6 @@ void Game::launch(rl::Window win)
     #if defined (DEBUG)
         std::cout << "Quiting" << std::endl;
     #endif
+    if (statut == RestartPhase)
+        this->launch(win);
 }
