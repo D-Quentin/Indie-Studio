@@ -164,6 +164,10 @@ void Player::gest(Client *&client, std::list<BlockObject *> &blocks)
     this->move();
     this->rotate();
     this->gestColision(blocks, oldPlayerPos);
+    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_ONE))
+        this->_weaponUse = 1;
+    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_TWO))
+        this->_weaponUse = 2;
     if (this->_weaponUse == 1) {
         this->_weapon1->update(this->_pos, this->_rota);
         if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE)) {

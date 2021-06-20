@@ -45,24 +45,15 @@ void GamePlay::testThings()
 void GamePlay::reloadPower()
 {
     static auto timeDash = TIMENOW;
-    static auto timeShield = TIMENOW;
     static bool boolDash = true;
-    static bool boolShield = true;
 
     boolDash = std::find(_power_up, PUDash) ? true : false;
-    boolShield = std::find(_power_up, PUShield) ? true : false;
-    if (!boolDash && CHRONO(timeDash) >= 10000) {
+    if (!boolDash && CHRONO(timeDash) >= 4000) {
         boolDash = false;
         timeDash = TIMENOW;
         _power_up.push_back(new Dash);
     } else if (boolDash)
         timeDash = TIMENOW;
-    if (!boolShield && CHRONO(timeShield) >= 5000) {
-        boolShield = false;
-        timeShield = TIMENOW;
-        _power_up.push_back(new Shield);
-    } else if (boolShield)
-        timeShield = TIMENOW;
 }
 
 void GamePlay::updatePowerUp()

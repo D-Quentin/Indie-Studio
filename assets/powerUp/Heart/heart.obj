@@ -1,6 +1,6 @@
 # Blender v2.92.0 OBJ File: 'uploads_files_1987427_heart_by_gustavo_belemmi.blend'
 # www.blender.org
-mtllib uploads_files_1987427_heart_by_gustavo_belemmi.mtl
+mtllib heart.mtl
 o Sphere
 v 0.000000 11.118673 -7.516859
 v 0.000000 9.028222 -7.690588

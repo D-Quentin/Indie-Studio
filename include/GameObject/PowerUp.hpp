@@ -64,28 +64,28 @@ class PowerUp : public game_object::Item
 class Speed : public PowerUp
 {
     public:
-        Speed() {_type = PUSpeed; _time = 15; setModel();};
+        Speed() {_type = PUSpeed; _time = 15; setModel(); this->_objType = "Speed";};
         ~Speed() = default;
 };
 
 class Shield : public PowerUp
 {
     public:
-        Shield() {_type = PUShield; _time = 0; setModel();};
+        Shield() {_type = PUShield; _time = 0; setModel(); this->_objType = "Shield";};
         ~Shield() = default;
 };
 
 class Dash : public PowerUp
 {
     public:
-        Dash() {_type = PUDash; _time = 0; setModel();};
+        Dash() {_type = PUDash; _time = 0; setModel(); this->_objType = "Dash";};
         ~Dash() = default;
 };
 
 class Health : public PowerUp
 {
     public:
-        Health() {_type = PUHealth; _time = 0; setModel();};
+        Health() {_type = PUHealth; _time = 0; setModel(); this->_objType = "Health";};
         ~Health() = default;
 };
 

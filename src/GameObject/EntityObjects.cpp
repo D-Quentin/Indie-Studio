@@ -55,19 +55,19 @@ void EntityObjects::setWeaponUse(int weapon)
 void EntityObjects::createWeapon(std::string weapon, int nb)
 {
     if (nb == 1) {
-        if (weapon == "PISTOL")
+        if (weapon == "Pistol")
             this->_weapon1 = new Pistol((this->_id + 1) * 1000);
-        if (weapon == "RIFLE")
-            this->_weapon1 = new Pistol((this->_id + 1) * 1000);
-        if (weapon == "SNIP")
-            this->_weapon1 = new Pistol((this->_id + 1) * 1000);
+        if (weapon == "Rifle")
+            this->_weapon1 = new Rifle((this->_id + 1) * 1000);
+        if (weapon == "Snip")
+            this->_weapon1 = new Snip((this->_id + 1) * 1000);
     } else {
-        if (weapon == "PISTOL")
+        if (weapon == "Pistol")
             this->_weapon2 = new Pistol((this->_id + 1) * 1000 + 1);
-        if (weapon == "RIFLE")
-            this->_weapon2 = new Pistol((this->_id + 1) * 1000 + 1);
-        if (weapon == "SNIP")
-            this->_weapon2 = new Pistol((this->_id + 1) * 1000 + 1);
+        if (weapon == "Rifle")
+            this->_weapon2 = new Rifle((this->_id + 1) * 1000 + 1);
+        if (weapon == "Snip")
+            this->_weapon2 = new Snip((this->_id + 1) * 1000 + 1);
     }
 }
 
