@@ -56,7 +56,7 @@ void GamePlay::reloadPower()
         timeDash = TIMENOW;
 }
 
-void GamePlay::updatePowerUp()
+void GamePlay::updatePowerUp(Setting setting)
 {
     _power_up.unique(compare);
     for (auto &it : _power_up)
@@ -69,7 +69,7 @@ void GamePlay::updatePowerUp()
                 it->use();
                 break;
             case PUDash:
-                if (RAYLIB::IsKeyPressed(RAYLIB::KEY_ENTER)) {
+                if (RAYLIB::IsKeyPressed(setting.getDash())) {
                     _player.dash();
                     it->use();
                 }
@@ -118,13 +118,13 @@ void GamePlay::collisionBulletWall()
     }
 }
 
-void GamePlay::updateLocal()
+void GamePlay::updateLocal(Setting setting)
 {
     float player_radius = 0.15f;
     auto it_items = _items.begin();
     auto playerPos = _player.getPos();
 
-    this->_player.move();
+    this->_player.move(setting);
 
     for (auto &it : _items) {
         bool col = RAYLIB::CheckCollisionCircles(it->getPos(), player_radius, playerPos, player_radius);
@@ -150,11 +150,11 @@ void GamePlay::updateLocal()
     this->_player.rotate();
     ///update weapon
     _weapon->update(_player.getPos(), _player._rota);
-    if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
+    if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_LEFT_BUTTON))
         _bullet.push_back(_weapon->shoot(0));
     //update camera
         auto ppos = this->_player.getPos();
-        ACTIVE_CAMERA.updateCamera({ppos.x, ppos.y});
+        ACTIVE_CAMERA.updateCamera(setting, {ppos.x, ppos.y});
 }
 
 void GamePlay::delFalseBullet()

@@ -15,7 +15,6 @@ rl::Sound::~Sound()
 {
 }
 
-
 void rl::Sound::playSniperShoot()
 {
     static int i =0;

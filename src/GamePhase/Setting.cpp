@@ -9,6 +9,7 @@
 
 Setting::Setting()
 {
+    this->_ikey = {'W', 'S', 'A', 'D', 32};
 }
 
 Setting::~Setting()
@@ -25,12 +26,12 @@ int Setting::getBackward()
     return (this->_ikey[1]);
 }
 
-int Setting::getRight()
+int Setting::getLeft()
 {
     return (this->_ikey[2]);
 }
 
-int Setting::getLeft()
+int Setting::getRight()
 {
     return (this->_ikey[3]);
 }
@@ -40,15 +41,16 @@ int Setting::getDash()
     return (this->_ikey[4]);
 }
 
-GamePhase Setting::launch()
+GamePhase Setting::launch(GamePhase gamePhase)
 {
     init();
-    return (this->restart());
+    this->phase = gamePhase;
+    return (this->restart(gamePhase));
 }
 
-GamePhase Setting::restart()
+GamePhase Setting::restart(GamePhase gamePhase)
 {
-    return (settingPhase(SettingPhase));
+    return (settingPhase(SettingPhase, gamePhase));
 }
 
 void Setting::init()
@@ -59,7 +61,7 @@ void Setting::init()
     this->_bDownFram = Button("assets/texture/litlebutton.png", 10, 60, 9.2, 9);
     for (int i = 0, a = 20; i != 5; i++, a += 13)
     this->_bInput.push_back(Button("assets/texture/litlebutton.png", 85, a, 9.2, 9));
-    this->_ikey = {'z', 's', 'q', 'd', 32, 0};
+    this->_ikey = {'W', 'S', 'A', 'D', 32};
     this->_bChange = Button("assets/texture/button.png", 3, 85, 21.4, 10);
     this->_bReturn = Button("assets/texture/button.png", 3, 85, 21.4, 10);
     this->_tReturn = rl::Text("Return", 9, 88, 29, RAYLIB::BLACK);
@@ -76,7 +78,7 @@ void Setting::checkButtonclick()
             a = i * -1;
     if (a > 0)
         return;
-    b = RAYLIB::GetCharPressed();
+    b = RAYLIB::GetKeyPressed();
     if (b <= 0)
         return;
     for (int i = 0; i != 5; i++)
@@ -133,7 +135,7 @@ void printTouch()
     touch.draw();
 }
 
-GamePhase Setting::settingPhase(GamePhase gamePhase)
+GamePhase Setting::settingPhase(GamePhase gamePhase, GamePhase old)
 {
     static int i = 50;
     static int f = 60;
@@ -144,7 +146,7 @@ GamePhase Setting::settingPhase(GamePhase gamePhase)
     static int musd = 0;
 
     if (this->_bReturn.isClicked())
-        gamePhase = MenuPhase;
+        gamePhase = old;
     if (this->_bUp.isPressed() && i < 100) {
         if (musp == 4) {
             musp = 0;
@@ -152,7 +154,7 @@ GamePhase Setting::settingPhase(GamePhase gamePhase)
         }
         else
             musp++;
-        RAYLIB::SetMasterVolume(i);
+        RAYLIB::SetMasterVolume((float)i/100);
     }
     if (this->_bDown.isPressed() && i > 0) {
         if (musd == 4) {
@@ -161,7 +163,7 @@ GamePhase Setting::settingPhase(GamePhase gamePhase)
         }
         else
             musd++;
-        RAYLIB::SetMasterVolume(i);
+            RAYLIB::SetMasterVolume((float)i/100);
     }
     if (this->_bUpFram.isPressed() && f < 144) {
         f++;

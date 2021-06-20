@@ -21,9 +21,9 @@ public:
     ~Setting();
     void checkButtonclick();
     void drawTouch();
-    GamePhase settingPhase(GamePhase gamePhase);
-    GamePhase launch();
-    GamePhase restart();
+    GamePhase settingPhase(GamePhase gamePhase, GamePhase old);
+    GamePhase launch(GamePhase);
+    GamePhase restart(GamePhase);
     int getForward();
     int getBackward();
     int getLeft();
@@ -42,6 +42,7 @@ private:
     std::vector<Button> _bInput;
     std::vector<int> _ikey;
     RAYLIB::Texture2D _tbackground;
+    GamePhase phase;
 };
 
 #endif

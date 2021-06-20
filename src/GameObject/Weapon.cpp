@@ -100,18 +100,18 @@ void Bullet::deserialize(std::string str)
 Bullet Weapon::shoot(int id_bullet)
 {
     
-    static rl::Sound music = rl::Sound();
+    //static rl::Sound music = rl::Sound();
     static auto lastShoot = TIMENOW;
     static bool first = true;
     if (first);
     else if (!this->_wear || !this->_nbBullet || CHRONO(lastShoot) < this->_time_shoot)
         return Bullet();
-    if (this->getObjType() == "Rifle")
+    /*if (this->getObjType() == "Rifle")
         music.playRiffleShoot();
     else if (this->getObjType() == "Pistol")
         music.playGunShoot();
     else if (this->getObjType() == "Snip")
-        music.playSniperShoot();
+        music.playSniperShoot();*/
     first = false;
     lastShoot = TIMENOW;
     this->_nbBullet -= 1;

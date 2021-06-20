@@ -9,6 +9,7 @@
 #include <iostream>
 #include <raylib.h>
 #include <MyRayMath.hpp>
+#include "Setting.hpp"
 
 std::pair<float, float> rl::Camera::getpr(float x, float z)
 {
@@ -47,11 +48,11 @@ RAYLIB::Vector2 axToMouse(std::pair<float, float> ax)
 }
 
 // RAYMATH
-void rl::Camera::updateCamera(std::pair<float, float> gmpAxisLeft, std::pair<float, float> gmpAxisRight)
+void rl::Camera::updateCamera(Setting setting, std::pair<float, float> gmpAxisLeft, std::pair<float, float> gmpAxisRight)
 {
     switch (this->_mode) {
         case RAYLIB::CAMERA_FIRST_PERSON:
-            __fpUpdateCamera(gmpAxisLeft, gmpAxisRight);
+            __fpUpdateCamera(setting, gmpAxisLeft, gmpAxisRight);
             return;
         case RAYLIB::CAMERA_FREE:
             __freeUpdateCamera(gmpAxisLeft, gmpAxisRight);
@@ -69,12 +70,12 @@ void rl::Camera::__freeUpdateCamera(std::pair<float, float> pos, std::pair<float
     (void)false_rota;
 }
 
-void rl::Camera::__fpUpdateCamera(std::pair<float, float> gmpAxisLeft, std::pair<float, float> gmpAxisRight)
+void rl::Camera::__fpUpdateCamera(Setting setting, std::pair<float, float> gmpAxisLeft, std::pair<float, float> gmpAxisRight)
 {
     //udate pos cam from left axis gamepad
         // add keyboard
         if (gmpAxisLeft == std::make_pair(0.0f, 0.0f))
-            gmpAxisLeft = {RAYLIB::IsKeyDown(RAYLIB::KEY_D) - RAYLIB::IsKeyDown(RAYLIB::KEY_A), RAYLIB::IsKeyDown(RAYLIB::KEY_S) - RAYLIB::IsKeyDown(RAYLIB::KEY_W)};
+            gmpAxisLeft = {RAYLIB::IsKeyDown(setting.getRight()) - RAYLIB::IsKeyDown(setting.getLeft()), RAYLIB::IsKeyDown(setting.getBackward()) - RAYLIB::IsKeyDown(setting.getForward())};
         if (gmpAxisLeft != std::make_pair(0.0f, 0.0f)) {
             gmpAxisLeft.second *= (1 + RAYLIB::IsKeyDown(RAYLIB::KEY_LEFT_SHIFT));
             gmpAxisLeft.first *= (1 + RAYLIB::IsKeyDown(RAYLIB::KEY_LEFT_SHIFT));

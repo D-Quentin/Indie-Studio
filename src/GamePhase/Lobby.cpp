@@ -67,7 +67,7 @@ std::map<int, GameObject *> Lobby::getObj()
     return (this->_obj);
 }
 
-GamePhase Lobby::launch(Client *&client, std::string ip, std::string port)
+GamePhase Lobby::launch(Client *&client, std::string ip, std::string port, Setting setting)
 {
     this->_phase = JoinPhase;
 
@@ -75,16 +75,16 @@ GamePhase Lobby::launch(Client *&client, std::string ip, std::string port)
     this->_tReady = rl::Text("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player), 72, 88, 30, RAYLIB::BLACK);
     this->_tIps = rl::Text("", 1, 2, 20, RAYLIB::LIGHTGRAY);
 
-    return (this->restart(client, ip, port));
+    return (this->restart(client, ip, port, setting));
 }
 
-GamePhase Lobby::restart(Client *&client, std::string ip, std::string port)
+GamePhase Lobby::restart(Client *&client, std::string ip, std::string port, Setting setting)
 {
     GamePhase gamePhase = LobbyPhase;
 
     switch (this->_phase) {
     case Lobby::MainPhase:
-        gamePhase = this->mainPhase(gamePhase, client);
+        gamePhase = this->mainPhase(gamePhase, client, setting);
         break;
     case Lobby::JoinPhase:
         gamePhase = this->joinPhase(gamePhase, client, ip, port);
@@ -96,10 +96,10 @@ GamePhase Lobby::restart(Client *&client, std::string ip, std::string port)
     return (gamePhase);
 }
 
-GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
+GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client, Setting setting)
 {
     GameObject::gestData(this->_obj, this->_client->read(), this->_client, *this);
-    ((Player *)this->_obj[this->_me])->gest(client, this->_blocks);
+    ((Player *)this->_obj[this->_me])->gest(client, this->_blocks, setting);
     // rl::Text(std::to_string(((Player *)this->_obj[this->_me])->_rota), 10, 10, 15, {255, 0, 0, 255}).draw();
     if (!this->_ready && this->_bReady.isClicked()) {
         this->_ready = true;
@@ -112,7 +112,7 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client)
     // 3D Drawing
     RAYLIB::BeginMode3D(this->_TopCamera.getCamera());
     RAYLIB::Vector2 pos = ((Player *)this->_obj[this->_me])->getPos();
-    _TopCamera.updateCamera({pos.x, pos.y});
+    _TopCamera.updateCamera(setting, {pos.x, pos.y});
     for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
         it->second->draw();
     }
