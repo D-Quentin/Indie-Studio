@@ -57,6 +57,13 @@ GamePhase GamePlay::launch()
     return GamePlayPhase;
 }
 
+float convertSize(float x, int size)
+{
+    x = (x * 100) / size;
+    x = (x * size) / 100;
+    return (x);
+}
+
 void GamePlay::lifeAndShield()
 {
     static int i = 0;
@@ -65,15 +72,15 @@ void GamePlay::lifeAndShield()
         this->_heart = RAYLIB::LoadTexture(std::string("assets/texture/heart.png").c_str());
         i++;
     }
-    RAYLIB::DrawTextureEx(this->_heart, {785, 975}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
-    RAYLIB::DrawTextureEx(this->_shield, {1055, 975}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
-    RAYLIB::DrawRectangleLines(850, 975, 200, 60, RAYLIB::BLACK);
-    RAYLIB::DrawRectangle(851, 976, 198, 58, RAYLIB::GRAY);
-    RAYLIB::DrawRectangle(851, 976, (this->_player.getHealth() * 2) - 2, 58, RAYLIB::RED);
-    RAYLIB::DrawRectangleLines(1120, 975, 50, 60, RAYLIB::BLACK);
-    RAYLIB::DrawRectangle(1121, 976, 48, 58, RAYLIB::GRAY);
+    RAYLIB::DrawTextureEx(this->_heart, {convertSize(785, RAYLIB::GetScreenWidth()), convertSize(975, RAYLIB::GetScreenHeight())}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    RAYLIB::DrawTextureEx(this->_shield, {convertSize(1055, RAYLIB::GetScreenWidth()), convertSize(975, RAYLIB::GetScreenHeight())}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    RAYLIB::DrawRectangleLines(convertSize(850, RAYLIB::GetScreenWidth()), convertSize(975, RAYLIB::GetScreenHeight()), 200, 60, RAYLIB::BLACK);
+    RAYLIB::DrawRectangle(convertSize(851, RAYLIB::GetScreenWidth()), convertSize(976, RAYLIB::GetScreenHeight()), 198, 58, RAYLIB::GRAY);
+    RAYLIB::DrawRectangle(convertSize(851, RAYLIB::GetScreenWidth()), convertSize(976, RAYLIB::GetScreenHeight()), (this->_player.getHealth() * 2) - 2, 58, RAYLIB::RED);
+    RAYLIB::DrawRectangleLines(convertSize(1120, RAYLIB::GetScreenWidth()), convertSize(975, RAYLIB::GetScreenHeight()), 50, 60, RAYLIB::BLACK);
+    RAYLIB::DrawRectangle(convertSize(1121, RAYLIB::GetScreenWidth()), convertSize(976, RAYLIB::GetScreenHeight()), 48, 58, RAYLIB::GRAY);
     if (this->_player.getShield() == 1)
-        RAYLIB::DrawRectangle(1121, 976, 48, 58, RAYLIB::BLUE);
+        RAYLIB::DrawRectangle(convertSize(1121, RAYLIB::GetScreenWidth()), convertSize(976, RAYLIB::GetScreenHeight()), 48, 58, RAYLIB::BLUE);
     RAYLIB::EndDrawing();
     RAYLIB::ClearBackground({255, 255, 255, 255});
 }

@@ -71,8 +71,8 @@ GamePhase Lobby::launch(Client *&client, std::string ip, std::string port)
 {
     this->_phase = JoinPhase;
 
-    this->_bReady = Button(" ", 65, 80, 30, 15);
-    this->_tReady = rl::Text("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player), 67, 82, 50, RAYLIB::LIGHTGRAY);
+    this->_bReady = Button("assets/texture/button.png", 70, 85, 21.4, 10);
+    this->_tReady = rl::Text("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player), 72, 88, 30, RAYLIB::BLACK);
     this->_tIps = rl::Text("", 1, 2, 20, RAYLIB::LIGHTGRAY);
 
     return (this->restart(client, ip, port));
@@ -139,7 +139,12 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     #else
         sleep(1);
     #endif
-    client = new Client(ip, std::atoi(port.c_str()));
+    try {
+        client = new Client(ip, std::atoi(port.c_str()));
+    }
+    catch (std::exception &e) {
+        return (MenuPhase);
+    }
     this->_client = client;
     this->_client->launch();
     this->_client->send(INCOMMING_CONNECTION);
@@ -150,8 +155,8 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     #endif
     std::string str = client->read();
     if (str == "") { // GESTION ERREUR
-        std::cout << "First connexion time out" << std::endl;
-        return (QuitPhase);
+        std::cerr << "First connexion time out" << std::endl;
+        return (LobbyPhase);
     }
     GameObject::gestData(this->_obj, str, client, *this);
 
@@ -183,8 +188,8 @@ GamePhase Lobby::joinPhase(GamePhase gamePhase, Client *&client, std::string ip,
     #endif
     str = client->read();
     if (str == "") { // GESTION ERREUR
-        std::cout << "Getting info time out" << std::endl;
-        return (QuitPhase);
+        std::cerr << "Getting info time out" << std::endl;
+        return (LobbyPhase);
     }
     GameObject::gestData(this->_obj, str, client, *this);
 
