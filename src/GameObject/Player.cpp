@@ -106,7 +106,7 @@ void Player::gestColision(std::list<BlockObject *> &blocks, RAYLIB::Vector2 oldP
                 }
 
             } else if (bullet_player) {
-                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius) && this->_hitten_bullet.find(it.getId()) == this->_hitten_bullet.end()) {
+                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.06, playerPos, 0.22f) && this->_hitten_bullet.find(it.getId()) == this->_hitten_bullet.end()) {
                     it.isReal = false;
                     this->takeDamage(it.getDamage());
                     this->_hitten_bullet[it.getId()] = true;
@@ -163,6 +163,7 @@ void Player::gest(Client *&client, std::list<BlockObject *> &blocks)
 {
     RAYLIB::Vector2 oldPlayerPos = this->_pos;
     static RAYLIB::Vector2 clear = {-1000, -1000};
+    static int i = 0;
 
     this->move();
     this->rotate();
@@ -171,8 +172,10 @@ void Player::gest(Client *&client, std::list<BlockObject *> &blocks)
         this->_weaponUse = 1;
     if (RAYLIB::IsKeyPressed(RAYLIB::KEY_TWO))
         this->_weaponUse = 2;
-    if (this->_health <= 0) {
+    if (this->_health <= 0 && i == 0) {
         this->setPos(clear);
+        client->send("###DEAD###");
+        i = 1;
     }
     if (this->_weaponUse == 1) {
         this->_weapon1->update(this->_pos, this->_rota);

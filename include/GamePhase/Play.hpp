@@ -64,6 +64,9 @@ class Play {
         rl::Camera _TopCamera;
         rl::Camera _FPCamera;
         int _renderDistance = 40;
+        std::vector<Ai *> _ai;
+        int _nbAi;
+        int _dead = 0;
         std::vector<std::vector<char>> _map;
         std::pair<float, float> _mapSize;
         std::list<BlockObject *> _blocks;
