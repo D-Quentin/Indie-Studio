@@ -4,14 +4,7 @@
 #include <utility>
 #include "EntityObjects.hpp"
 
-enum Target {IN_RANGE, TOO_FAR, ABSENT, RANDOM, UNDEFINED};
-
-typedef struct {
-    RAYLIB::Vector2 position;
-    double h; // distance to objective
-    unsigned int g; // distance from start
-    double f; // result
-} node_t;
+enum Target {IN_RANGE, ABSENT, MOVING, UNDEFINED};
 
 class Ai : public EntityObjects {
 public:
@@ -20,17 +13,14 @@ public:
 
     Target checkEnemy();
     RAYLIB::Vector2 getEnemyPosition();
-    double calculateDistObj(RAYLIB::Vector2 pos);
-    double calculateDistStart(RAYLIB::Vector2 pos);
+    int calculateDistObj(unsigned int axis);
     float Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2);
     std::vector<RAYLIB::KeyboardKey> getDirections();
-    node_t createNode(RAYLIB::Vector2 node_pos);
-    std::pair<node_t, unsigned int> getSmallestF();
-    void getAvailableTiles(RAYLIB::Vector2 pos);
-    void getValidChildren(RAYLIB::Vector2 children_pos);
+    bool isTileValid(RAYLIB::Vector2 tile);
+    bool isInMap(RAYLIB::Vector2 tile);
+    void getAvailableTiles();
     void setDirections(RAYLIB::Vector2 newPosition);
     void getPriority();
-    void moveToEnemy();
     void attackEnemy();
     void setRandomTarget();
     void moveToNextTile();
@@ -44,8 +34,8 @@ protected:
     Target targetStatus;
     std::vector<RAYLIB::KeyboardKey> directions;
     std::vector<std::vector<char>> map;
-    std::vector<node_t> close;
-    std::vector<node_t> open;
+    RAYLIB::Vector2 last_pos;
+    std::vector<RAYLIB::Vector2> open;
     //std::pair<RAYLIB::Vector2, RAYLIB::Vector2> close;
 };
 
