@@ -154,7 +154,7 @@ GamePhase Setting::settingPhase(GamePhase gamePhase, GamePhase old)
         }
         else
             musp++;
-        RAYLIB::SetMasterVolume(i);
+        RAYLIB::SetMasterVolume((float)i/100);
     }
     if (this->_bDown.isPressed() && i > 0) {
         if (musd == 4) {
@@ -163,7 +163,7 @@ GamePhase Setting::settingPhase(GamePhase gamePhase, GamePhase old)
         }
         else
             musd++;
-        RAYLIB::SetMasterVolume(i);
+            RAYLIB::SetMasterVolume((float)i/100);
     }
     if (this->_bUpFram.isPressed() && f < 144) {
         f++;
