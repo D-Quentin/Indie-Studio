@@ -137,7 +137,7 @@ void printTouch()
 
 GamePhase Setting::settingPhase(GamePhase gamePhase, GamePhase old)
 {
-    static int i = 50;
+    static int i = 10;
     static int f = 60;
     rl::Text sound;
     rl::Text fram;
