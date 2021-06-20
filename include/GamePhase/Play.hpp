@@ -51,7 +51,7 @@ class Play {
         void placeItems(std::list<std::pair<float, float>>);
         void lifeAndShield();
         void reloadPower();
-        void updatePowerUp();
+        void updatePowerUp(Setting);
         static bool compare(PowerUp *f, PowerUp *s);
 
     protected:

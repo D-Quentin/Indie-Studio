@@ -76,7 +76,7 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client, Setting setting)
     
     ((Player *)this->_obj[this->_me])->gest(client, this->_blocks, setting);
     this->reloadPower();
-    this->updatePowerUp();
+    this->updatePowerUp(setting);
     auto it_items = _items.begin();
     for (auto &it : _items) {
         bool col = RAYLIB::CheckCollisionCircles(it->getPos(), 0.15f, ((Player *)this->_obj[this->_me])->getPos(), 0.15f);
@@ -136,9 +136,9 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client, Setting setting)
     // Set Camera
     RAYLIB::Vector2 pos = ((Player *)this->_obj[this->_me])->getPos();
     if (((Player *)this->_obj[this->_me])->isAlive())
-        ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).updateCamera({pos.x, pos.y});
+        ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).updateCamera(setting, {pos.x, pos.y});
     else
-        ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).updateCamera();
+        ACTIVE_CAMERA(((Player *)this->_obj[this->_me])->isAlive()).updateCamera(setting);
 
     RAYLIB::EndMode3D();
 
@@ -296,7 +296,7 @@ bool Play::compare(PowerUp *f, PowerUp *s)
     return f->getPower() == s->getPower();
 }
 
-void Play::updatePowerUp()
+void Play::updatePowerUp(Setting setting)
 {
     _power_up.unique(Play::compare);
     for (auto &it : _power_up)
@@ -309,7 +309,7 @@ void Play::updatePowerUp()
                 it->use();
                 break;
             case PUDash:
-                if (RAYLIB::IsKeyPressed(RAYLIB::KEY_ENTER)) {
+                if (RAYLIB::IsKeyPressed(setting.getDash())) {
                     ((Player *)this->_obj[this->_me])->dash();
                     it->use();
                 }

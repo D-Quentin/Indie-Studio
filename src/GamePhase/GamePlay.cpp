@@ -91,7 +91,7 @@ GamePhase GamePlay::restart(Setting setting)
     if (_player.isAlive()) {
         this->aliveCall(setting);
     } else {
-        this->specCall();
+        this->specCall(setting);
     }
     if (RAYLIB::IsKeyPressed(RAYLIB::KEY_P))
         gamePhase = PausePhase;
@@ -105,15 +105,15 @@ GamePhase GamePlay::restart(Setting setting)
 void GamePlay::aliveCall(Setting setting)
 {
     this->reloadPower();
-    this->updatePowerUp();
+    this->updatePowerUp(setting);
     this->updateLocal(setting);
     this->testThings();
 }
 
-void GamePlay::specCall()
+void GamePlay::specCall(Setting setting)
 {
     //todo
-    ACTIVE_CAMERA.updateCamera();
+    ACTIVE_CAMERA.updateCamera(setting);
 }
 
 void GamePlay::drawAll()

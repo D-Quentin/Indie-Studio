@@ -174,13 +174,13 @@ void Player::gest(Client *&client, std::list<BlockObject *> &blocks, Setting set
     }
     if (this->_weaponUse == 1) {
         this->_weapon1->update(this->_pos, this->_rota);
-        if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE)) {
+        if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_LEFT_BUTTON)) {
             _bullet.push_back(this->_weapon1->shoot((this->_id + 1) * 1000 + 2 + this->_nbBullet));
             this->_nbBullet += 1;
         }
     } else if (this->_weaponUse == 2) {
         this->_weapon2->update(this->_pos, this->_rota);
-        if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE)) {
+        if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_LEFT_BUTTON)) {
             _bullet.push_back(this->_weapon2->shoot((this->_id + 1) * 1000 + 2 + this->_nbBullet));
             this->_nbBullet += 1;
         }

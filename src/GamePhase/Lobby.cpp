@@ -112,7 +112,7 @@ GamePhase Lobby::mainPhase(GamePhase gamePhase, Client *&client, Setting setting
     // 3D Drawing
     RAYLIB::BeginMode3D(this->_TopCamera.getCamera());
     RAYLIB::Vector2 pos = ((Player *)this->_obj[this->_me])->getPos();
-    _TopCamera.updateCamera({pos.x, pos.y});
+    _TopCamera.updateCamera(setting, {pos.x, pos.y});
     for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
         it->second->draw();
     }

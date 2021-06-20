@@ -66,7 +66,7 @@ class GamePlay{
         void lifeAndShield();
         //alive methode
         void updateLocal(Setting);
-        void updatePowerUp();
+        void updatePowerUp(Setting);
         void testThings();
         void delFalseBullet();
         void reloadPower();
@@ -76,7 +76,7 @@ class GamePlay{
 
         //other methods
         void aliveCall(Setting);
-        void specCall();
+        void specCall(Setting);
         void drawAll();
 
     private: //attr
