@@ -241,17 +241,24 @@ void Play::placeItems(std::list<std::pair<float, float>> itemsPos)
     }
 }
 
+float converttsize(float x, int size)
+{
+    x = (x * 100) / size;
+    x = (x * size) / 100;
+    return (x);
+}
+
 void Play::lifeAndShield()
 {
-    RAYLIB::DrawTextureEx(this->_heart, {785, 975}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
-    RAYLIB::DrawTextureEx(this->_shield, {1055, 975}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
-    RAYLIB::DrawRectangleLines(850, 975, 200, 60, RAYLIB::BLACK);
-    RAYLIB::DrawRectangle(851, 976, 198, 58, RAYLIB::GRAY);
-    RAYLIB::DrawRectangle(851, 976, (((Player *)this->_obj[this->_me])->getHealth() * 2) - 2, 58, RAYLIB::RED);
-    RAYLIB::DrawRectangleLines(1120, 975, 50, 60, RAYLIB::BLACK);
-    RAYLIB::DrawRectangle(1121, 976, 48, 58, RAYLIB::GRAY);
+    RAYLIB::DrawTextureEx(this->_heart, {converttsize(785, RAYLIB::GetScreenWidth()), converttsize(975, RAYLIB::GetScreenHeight())}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    RAYLIB::DrawTextureEx(this->_shield, {converttsize(1055, RAYLIB::GetScreenWidth()), converttsize(975, RAYLIB::GetScreenHeight())}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    RAYLIB::DrawRectangleLines(converttsize(850, RAYLIB::GetScreenWidth()), converttsize(975, RAYLIB::GetScreenHeight()), 200, 60, RAYLIB::BLACK);
+    RAYLIB::DrawRectangle(converttsize(851, RAYLIB::GetScreenWidth()), converttsize(976, RAYLIB::GetScreenHeight()), 198, 58, RAYLIB::GRAY);
+    RAYLIB::DrawRectangle(converttsize(851, RAYLIB::GetScreenWidth()), converttsize(976, RAYLIB::GetScreenHeight()), (((Player *)this->_obj[this->_me])->getHealth() * 2) - 2, 58, RAYLIB::RED);
+    RAYLIB::DrawRectangleLines(converttsize(1120, RAYLIB::GetScreenWidth()), converttsize(975, RAYLIB::GetScreenHeight()), 50, 60, RAYLIB::BLACK);
+    RAYLIB::DrawRectangle(converttsize(1121, RAYLIB::GetScreenWidth()), converttsize(976, RAYLIB::GetScreenHeight()), 48, 58, RAYLIB::GRAY);
     if (((Player *)this->_obj[this->_me])->getShield() == 1)
-        RAYLIB::DrawRectangle(1121, 976, 48, 58, RAYLIB::BLUE);
+        RAYLIB::DrawRectangle(converttsize(1121, RAYLIB::GetScreenWidth()), converttsize(976, RAYLIB::GetScreenHeight()), 48, 58, RAYLIB::BLUE);
 }
 
 void Play::reloadPower()
