@@ -21,6 +21,7 @@ namespace rl {
             ~Models() = default;
             void draw();
             void setPos(RAYLIB::Vector3 pos) {_pos = pos;};
+            RAYLIB::Model &getModel() {return _model;};
             RAYLIB::Model _model;
 
         private:

@@ -81,27 +81,25 @@ void GamePlay::lifeAndShield()
     RAYLIB::DrawRectangle(convertSize(1121, RAYLIB::GetScreenWidth()), convertSize(976, RAYLIB::GetScreenHeight()), 48, 58, RAYLIB::GRAY);
     if (this->_player.getShield() == 1)
         RAYLIB::DrawRectangle(convertSize(1121, RAYLIB::GetScreenWidth()), convertSize(976, RAYLIB::GetScreenHeight()), 48, 58, RAYLIB::BLUE);
-    RAYLIB::EndDrawing();
-    RAYLIB::ClearBackground({255, 255, 255, 255});
 }
 
 GamePhase GamePlay::restart()
 {
-    while (!RAYLIB::WindowShouldClose()) {
-        _oldPlayerPos = _player.getPos();
-    //updtae attrib from server
-        RAYLIB::BeginDrawing();
-        if (_player.isAlive()) {
-            this->aliveCall();
-        } else {
-            this->specCall();
-        }
-        this->drawAll();
-        RAYLIB::DrawFPS(10, 10);
-        lifeAndShield();
+    GamePhase gamePhase = GamePlayPhase;
+    _oldPlayerPos = _player.getPos();
+    //update attrib from server
+    if (_player.isAlive()) {
+        this->aliveCall();
+    } else {
+        this->specCall();
     }
+    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_P))
+        gamePhase = PausePhase;
+    this->drawAll();
+    RAYLIB::DrawFPS(10, 10);
+    lifeAndShield();
     // RAYLIB::ShowCursor();
-    return MenuPhase;
+    return gamePhase;
 }
 
 void GamePlay::aliveCall()
