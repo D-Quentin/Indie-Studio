@@ -94,7 +94,7 @@ void rl::Camera::__fpUpdateCamera(std::pair<float, float> gmpAxisLeft, std::pair
         gmpAxisRight.first -= (previousMousePosition.x - mouspos.x); 
         gmpAxisRight.second -= (previousMousePosition.y - mouspos.y);
         static RAYLIB::Vector2 previousAxisRightPosition = axToMouse(gmpAxisRight);
-        static const int mouseSensivity = 600;
+        static const int mouseSensivity = 5;
         static const float minimumY = -65.0f;
         static const float maximumY = 89.0f;
         static RAYLIB::Vector2 angle = {0, 0};
@@ -107,11 +107,11 @@ void rl::Camera::__fpUpdateCamera(std::pair<float, float> gmpAxisLeft, std::pair
         previousAxisRightPosition = axToMouse(gmpAxisRight);
 
         if (turnRotation != 0)
-            angle.x -= turnRotation * DEG2RAD;
+            angle.x -= turnRotation * DEG2RAD / mouseSensivity;
         else
             angle.x += AxisRightPositionDelta.x / -mouseSensivity;
         if (tiltRotation)
-            angle.y += tiltRotation * DEG2RAD;
+            angle.y += tiltRotation * DEG2RAD / mouseSensivity;
         else
             angle.y += AxisRightPositionDelta.y / -mouseSensivity;
 

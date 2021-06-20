@@ -24,6 +24,7 @@
 #include "Encapsulation/Text.hpp"
 #include "Weapon.hpp"
 #include "PowerUp.hpp"
+#include "Sound.hpp"
 
 #define ACTIVE_CAMERA ((!this->_player.isAlive()) ? this->_FPCamera : this->_TopCamera)
 
@@ -32,7 +33,21 @@
 #define ITEMCOLOR {42, 157, 244, 255}
 
 class GamePlay{
+    enum EnumItems {
+    ITSpeed = 0,
+    ITHealth,
+    ITShield,
+    ITRifle,
+    ITSnip
+    };
     public:
+        const std::map<EnumItems, game_object::Item*> enumToItem = {
+            {ITSpeed, (game_object::Item*) new Speed},
+            {ITHealth, (game_object::Item*) new Health},
+            {ITShield, (game_object::Item*) new Shield},
+            {ITRifle, (game_object::Item*) new Rifle},
+            {ITSnip, (game_object::Item*)new  Snip}
+        };
         GamePlay();
         ~GamePlay() = default;
 
@@ -41,11 +56,13 @@ class GamePlay{
 
     private: //methodes
         //set
+        void placeItems(std::list<std::pair<float, float>> poslist);
         void setBlocks(std::list<BlockObject*> obj) {_blocks = obj;};
         void setEnemies(std::list<EntityObjects*> obj) {_enemies = obj;};
         void setItems(std::list<game_object::Item*> obj) {_items = obj;};
         void nonToPoi(std::list<MapBlock>);
-
+        void collisionBulletWall();
+        void lifeAndShield();
         //alive methode
         void updateLocal();
         void updatePowerUp();
@@ -79,6 +96,8 @@ class GamePlay{
         std::pair<float, float> _mapSize;
         std::pair<float, float> _spawn;
         std::list<std::pair<float, float>> _spawns;
+        RAYLIB::Texture2D _heart;
+        RAYLIB::Texture2D _shield;
 };
 
 #endif /* !GAMEPLAY_HPP_ */

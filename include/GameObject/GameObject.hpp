@@ -27,8 +27,10 @@ class GameObject : public IGameObject {
         void setId(int);
         static void gestData(std::map<int, GameObject *> &, std::string, Client *&, Lobby &);
         static void gestData(std::map<int, GameObject *> &, std::string, Client *&, Play &);
+        std::string getObjType() {return(this->_objType);};
 
     protected:
+        std::string _objType;
         RAYLIB::Vector2 _pos;
         int _id;
         bool _change;

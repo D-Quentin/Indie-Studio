@@ -14,7 +14,10 @@ enum GamePhase {
     SettingsPhase,
     LobbyPhase,
     GamePlayPhase,
-    PlayPhase
+    PlayPhase,
+    SettingPhase,
+    PausePhase,
+    EndPhase
 };
 
 #endif /* !GAMEPHASE_HPP_ */

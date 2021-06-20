@@ -19,7 +19,7 @@ class MapBlock : public BlockObject
 {
     public:
         MapBlock() = default;
-        MapBlock(rl::Models model, RAYLIB::Vector3 pos, float size = 1);// : _model(model), _pos(pos), _size(size) {};
+        MapBlock(rl::Models model, RAYLIB::Vector3 pos, float size = 1, bool breakable = false);// : _model(model), _pos(pos), _size(size) {};
         ~MapBlock() = default;
 
         RAYLIB::Vector2 getPos()  {return {_pos.x, _pos.z};};
@@ -30,7 +30,6 @@ class MapBlock : public BlockObject
         std::string serialize() {return ("");};
         void deserialize(std::string) {};
         rl::Models getModel() const {return _model;};
-
 
     private:
         rl::Models _model;
@@ -49,6 +48,7 @@ class Map3D {
 
         std::list<MapBlock> _mapBlocks;
         std::list<std::pair<float, float>> _spawns;
+        std::list<std::pair<float, float>> _items;
 };
 
 #endif /* !Map3D_HPP_ */

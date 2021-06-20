@@ -21,6 +21,7 @@ class BlockObject : public GameObject {
         virtual void setPos(RAYLIB::Vector2 newPosition) = 0;
         virtual void setId(int) = 0;
         virtual rl::Models getModel() const = 0;
+        bool isBreakable = false;
     protected:
     private:
 };

@@ -20,6 +20,7 @@ class IGameObject {
         virtual void draw() = 0;
         virtual std::string serialize() = 0;
         virtual void deserialize(std::string) = 0;
+        virtual std::string getObjType() = 0;
 
     protected:
     private:

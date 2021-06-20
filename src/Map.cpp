@@ -363,6 +363,10 @@ void map::create_weapons()
     int z = 0, c = 0;
 
     for (std::size_t x = 0; x != this->plan_char.size(); x++) {
+        if (x % (this->size * 11) == 0) {
+            pos_x.clear();
+            pos_y.clear();
+        }
         for (std::size_t y = 0; y != this->plan_char[x].size();) {
             if (x % (this->size * 11) == 0 && y % (this->size * 11) == 0) {
                 pos_x.push_back(1 + std::rand()/((RAND_MAX + 1u)/(this->size * 9)));
@@ -379,8 +383,6 @@ void map::create_weapons()
             y = y + this->size;
             z++;
         }
-        pos_x.clear();
-        pos_y.clear();
         z = 0;
         c++;
     }

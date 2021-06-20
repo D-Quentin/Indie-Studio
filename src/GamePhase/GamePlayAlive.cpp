@@ -36,7 +36,7 @@ void GamePlay::testThings()
         _power_up.push_back(new Shield);
     else if (RAYLIB::IsKeyPressed(RAYLIB::KEY_KP_5))
         _power_up.push_back(new Speed);
-    else if (RAYLIB::IsKeyDown(RAYLIB::KEY_K) && RAYLIB::IsKeyDown(RAYLIB::KEY_I) && RAYLIB::IsKeyDown(RAYLIB::KEY_L)) {
+    else if (RAYLIB::IsKeyDown(RAYLIB::KEY_F7)) {
         _player.takeDamage(100);
         _player.takeDamage(100);
     }
@@ -45,24 +45,15 @@ void GamePlay::testThings()
 void GamePlay::reloadPower()
 {
     static auto timeDash = TIMENOW;
-    static auto timeShield = TIMENOW;
     static bool boolDash = true;
-    static bool boolShield = true;
 
     boolDash = std::find(_power_up, PUDash) ? true : false;
-    boolShield = std::find(_power_up, PUShield) ? true : false;
-    if (!boolDash && CHRONO(timeDash) >= 10000) {
+    if (!boolDash && CHRONO(timeDash) >= 4000) {
         boolDash = false;
         timeDash = TIMENOW;
         _power_up.push_back(new Dash);
     } else if (boolDash)
         timeDash = TIMENOW;
-    if (!boolShield && CHRONO(timeShield) >= 5000) {
-        boolShield = false;
-        timeShield = TIMENOW;
-        _power_up.push_back(new Shield);
-    } else if (boolShield)
-        timeShield = TIMENOW;
 }
 
 void GamePlay::updatePowerUp()
@@ -83,19 +74,57 @@ void GamePlay::updatePowerUp()
                     it->use();
                 }
                 break;
+            case PUHealth:
+                _player.heal();
+                it->use();
+                break;
             case PUNothing:
                 break;
         }
 }
 
-void GamePlay::updateLocal()
+void GamePlay::collisionBulletWall()
 {
     bool bullet_player = true;
     float player_radius = 0.15f;
+    auto playerPos = _player.getPos();
+    static rl::Sound music = rl::Sound();
+
+    for (auto &itblock : _blocks) {
+        auto blockPos = itblock->getPos();
+        RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
+        bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
+
+        if (col)
+            _player.setPos(_oldPlayerPos);
+        //check collision bullet  /walls
+        for (auto &it : _bullet) {
+            if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic)) {
+                it.isReal = false;
+                if (itblock->isBreakable) {
+                    music.playWallBreak();
+                    _blocks.remove(itblock); // remove breakable block
+                    return;
+                }
+            }
+            else if (bullet_player) {
+                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius)) {
+                    it.isReal = false;
+                    _player.takeDamage(it.getDamage());
+                }
+            }
+        }
+        bullet_player = false;
+    }
+}
+
+void GamePlay::updateLocal()
+{
+    float player_radius = 0.15f;
     auto it_items = _items.begin();
+    auto playerPos = _player.getPos();
 
     this->_player.move();
-    auto playerPos = _player.getPos();
 
     for (auto &it : _items) {
         bool col = RAYLIB::CheckCollisionCircles(it->getPos(), player_radius, playerPos, player_radius);
@@ -115,35 +144,14 @@ void GamePlay::updateLocal()
         break;
     }
     // handle player / block colision
-    for (auto it : _blocks) {
-        auto blockPos = it->getPos();
-        RAYLIB::Rectangle blockPhysic = {blockPos.x, blockPos.y, 1, 1};
-        bool col = RAYLIB::CheckCollisionCircleRec(playerPos, player_radius, blockPhysic);
-
-        if (col)
-            _player.setPos(_oldPlayerPos);
-        //check collision bullet  /walls
-        for (auto &it : _bullet) {
-            if (RAYLIB::CheckCollisionCircleRec(it.getPos(), 0.05, blockPhysic))
-                it.isReal = false;
-            else if (bullet_player) {
-                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius)) {
-                    it.isReal = false;
-                    _player.takeDamage(it.getDamage());
-                }
-            }
-        }
-        bullet_player = false;
-    }
+    collisionBulletWall();
     this->delFalseBullet();
     //end collision
     this->_player.rotate();
     ///update weapon
     _weapon->update(_player.getPos(), _player._rota);
     if (RAYLIB::IsKeyDown(RAYLIB::KEY_SPACE))
-        _bullet.push_back(_weapon->shoot());
-    
-
+        _bullet.push_back(_weapon->shoot(0));
     //update camera
         auto ppos = this->_player.getPos();
         ACTIVE_CAMERA.updateCamera({ppos.x, ppos.y});

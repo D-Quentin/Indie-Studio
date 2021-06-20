@@ -8,6 +8,8 @@
 #include "Menu.hpp"
 #include "Server.hpp"
 #include "Game.hpp"
+#include "Pause.hpp"
+#include "Sound.hpp"
 
 Menu::Menu()
 {
@@ -59,6 +61,12 @@ GamePhase Menu::launch()
     this->_tName = rl::Text("Choose your name :", 21, 49, 37, RAYLIB::BLACK);
     this->_bCreate = Button("assets/texture/button.png", 60, 70, 21.4, 10);
     this->_tCreate = rl::Text("Create", 65, 73, 29, RAYLIB::BLACK);
+
+    //WeaponsPhase
+    this->_tBackGroundWeapons = RAYLIB::LoadTexture("assets/texture/weapons.png");
+    this->_bWeaponsReturn = Button("assets/texture/button.png", 5, 87, 21.4, 10);
+    this->_tWeaponsReturn = rl::Text("Return", 10, 90, 30, RAYLIB::BLACK);
+
     return (this->restart());
 }
 
@@ -79,7 +87,9 @@ GamePhase Menu::restart()
     case Menu::JoinPhase:
         gamePhase = this->joinPhase(gamePhase);
         break;
-    
+    case Menu::WeaponsPhase:
+        gamePhase = this->weaponsPhase(gamePhase);
+        break;
     default:
         break;
     }
@@ -93,6 +103,13 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
     if (this->_bPlay.isClicked()) {
         this->_phase = Menu::PlayPhase;
     }
+    if (this->_bSettings.isClicked())
+        gamePhase = SettingPhase;
+    if (this->_bWeapon.isClicked()) {
+        this->_phase = WeaponsPhase;
+    }
+    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_P))
+        gamePhase = PausePhase;
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     this->_bPlay.draw();
     this->_bSettings.draw();
@@ -103,6 +120,17 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
     this->_tHtp.draw();
     this->_tWeapon.draw();
     this->_tQuit.draw();
+    return (gamePhase);
+}
+
+GamePhase Menu::weaponsPhase(GamePhase gamePhase)
+{
+    if (this->_bWeaponsReturn.isClicked()) {
+        this->_phase = MainPhase;
+    }
+    RAYLIB::DrawTextureEx(this->_tBackGroundWeapons, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    this->_bWeaponsReturn.draw();
+    this->_tWeaponsReturn.draw();
     return (gamePhase);
 }
 
@@ -133,6 +161,9 @@ GamePhase Menu::createPhase(GamePhase gamePhase)
     if (this->_bReturn.isClicked())
         this->_phase = PlayPhase;
     if (this->_bCreate.isClicked()) {
+        int port = std::atoi(this->_iServPort.getText().c_str());
+        if (port < 2000 || port > 65535)
+            return (MenuPhase);
         Server::launch(std::atoi(this->_iServPort.getText().c_str()));
         return (LobbyPhase);
     }

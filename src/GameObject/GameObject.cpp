@@ -15,6 +15,7 @@
 GameObject::GameObject(RAYLIB::Vector2 pos, int id) : _pos(pos), _id(id)
 {
     this->_change = false;
+    this->_objType = "GameObject";
 }
 
 RAYLIB::Vector2 GameObject::getPos()
@@ -61,12 +62,12 @@ void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Cli
         if (pos == std::string::npos)
             continue;
         id = std::atoi(strs[i].substr((pos + 3), strs[i].find(";", pos) - pos).c_str());
-        if (id < obj.size())
+        if (obj.find(id) != obj.end())
             obj.at(id)->deserialize(strs[i]);
         else {
             if (strs[i].find("PLAYER;") != std::string::npos) {
-                obj.insert(std::pair<int, GameObject *>(obj.size(), new Player({0, 0}, -1, false)));
-                obj.at(obj.size() - 1)->deserialize(strs[i]);
+                obj[id] = new Player();
+                obj[id]->deserialize(strs[i]);
             }
         }
     }
@@ -84,12 +85,26 @@ void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Cli
         if (pos == std::string::npos)
             continue;
         id = std::atoi(strs[i].substr((pos + 3), strs[i].find(";", pos) - pos).c_str());
-        if (id < obj.size())
+        if (obj.find(id) != obj.end())
             obj.at(id)->deserialize(strs[i]);
         else {
             if (strs[i].find("PLAYER;") != std::string::npos) {
-                obj.insert(std::pair<int, GameObject *>(obj.size(), new Player({0, 0}, -1, false)));
-                obj.at(obj.size() - 1)->deserialize(strs[i]);
+                obj[id] = new Player();
+                obj[id]->deserialize(strs[i]);
+            } else if (strs[i].find("WEAPON;") != std::string::npos) {
+                if (strs[i].find("PISTOL;") != std::string::npos) {
+                    obj[id] = new Pistol();
+                    obj[id]->deserialize(strs[i]);
+                } else if (strs[i].find("RIFLE;") != std::string::npos) {
+                    obj[id] = new Rifle();
+                    obj[id]->deserialize(strs[i]);
+                } else if (strs[i].find("SNIP;") != std::string::npos) {
+                    obj[id] = new Snip();
+                    obj[id]->deserialize(strs[i]);
+                }
+            } else if (strs[i].find("BULLET;") != std::string::npos) {
+                obj[id] = new Bullet(0, {0, 0, 0}, 0, 0, 0, 0);
+                obj[id]->deserialize(strs[i]);
             }
         }
     }
