@@ -32,20 +32,26 @@ void launchServer(int port)
 
 int main(int ac, char **av)
 {
-    int WIN_HEIGHT = RAYLIB::GetScreenHeight();
-    int WIN_WIDTH = RAYLIB::GetScreenWidth();
+    try {
+        int WIN_HEIGHT = RAYLIB::GetScreenHeight();
+        int WIN_WIDTH = RAYLIB::GetScreenWidth();
 
-    if (ac == 3 && std::string(av[1]) == "--server") {
-        launchServer(std::atoi(av[2]));
-        return (0);
+        if (ac == 3 && std::string(av[1]) == "--server") {
+            launchServer(std::atoi(av[2]));
+            return (0);
+        }
+        rl::Window win(WIN_WIDTH, WIN_HEIGHT, "Indie Studio");
+        win.fullscreen();
+        rl::Window::loading();
+        RAYLIB::InitAudioDevice();
+        Game game;
+
+        game.launch(win);
+        win.destroy();
+        return 0;
     }
-    rl::Window win(WIN_WIDTH, WIN_HEIGHT, "Indie Studio");
-    win.fullscreen();
-    rl::Window::loading();
-    RAYLIB::InitAudioDevice();
-    Game game;
-
-    game.launch(win);
-    win.destroy();
-    return 0;
+    catch (...) {
+        std::cout << "Oops ! Something went wrong..." << std::endl;
+        return 84;
+    }
 }
