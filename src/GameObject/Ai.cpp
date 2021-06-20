@@ -41,12 +41,10 @@ void Ai::getPriority()
     else if (status == ABSENT && (this->targetStatus == UNDEFINED || this->targetStatus == ABSENT))
         setRandomTarget();
     moveToNextTile();
-    printf("TARGET: [%f::%f]\n", this->targetPosition.x, this->targetPosition.y);
 }
 
 void Ai::setRandomTarget()
 {
-    printf("In setRandomTarget\n");
     this->open.clear();
     std::srand(std::time(nullptr));
     getAvailableTiles();
@@ -79,8 +77,6 @@ void Ai::moveToNextTile()
         move.first *= RAYLIB::GetFrameTime();
         move.second *= RAYLIB::GetFrameTime();
     }
-    printf("Last Position: [%f::%f]\n", this->last_pos.x, this->last_pos.y);
-    printf("Current Position: [%f::%f] -> '%c'\n", this->_pos.x, this->_pos.y, this->map[this->_pos.x][this->_pos.y]);
     this->last_pos = this->_pos;
     this->_pos = {this->_pos.x + move.first * speed, this->_pos.y + move.second * speed };
     rotate();
@@ -115,9 +111,6 @@ void Ai::rotate()
         this->_rota = look.first;
     else
         this->_rota = (look.first + look.second) / 2;
-
-    printf("Pair: [%d::%d]\n", look.first, look.second);
-
 }
 
 int Ai::calculateDistObj(unsigned int axis)
@@ -130,19 +123,7 @@ int Ai::calculateDistObj(unsigned int axis)
 
 void Ai::getAvailableTiles()
 {
-    printf("In getAvailableTiles\n");
     std::vector<RAYLIB::Vector2> children;
-
-    printf("Map size x: %ld\n", this->map.size());
-    printf("Map size y: %ld\n", this->map[0].size());
-    printf("Tile: [%f::%f] -> '%c'\n", this->_pos.x - 1, this->_pos.y - 1, this->map[this->_pos.x - 1][this->_pos.y - 1]);
-    printf("Tile: [%f::%f] -> '%c'\n", this->_pos.x - 1, this->_pos.y, this->map[this->_pos.x - 1][this->_pos.y]);
-    printf("Tile: [%f::%f] -> '%c'\n", this->_pos.x - 1, this->_pos.y + 1, this->map[this->_pos.x - 1][this->_pos.y + 1]);
-    printf("Tile: [%f::%f] -> '%c'\n", this->_pos.x, this->_pos.y - 1, this->map[this->_pos.x][this->_pos.y - 1]);
-    printf("Tile: [%f::%f] -> '%c'\n", this->_pos.x, this->_pos.y + 1, this->map[this->_pos.x][this->_pos.y + 1]);
-    printf("Tile: [%f::%f] -> '%c'\n", this->_pos.x + 1, this->_pos.y - 1, this->map[this->_pos.x + 1][this->_pos.y - 1]);
-    printf("Tile: [%f::%f] -> '%c'\n", this->_pos.x + 1, this->_pos.y, this->map[this->_pos.x + 1][this->_pos.y]);
-    printf("Tile: [%f::%f] -> '%c'\n", this->_pos.x + 1, this->_pos.y + 1, this->map[this->_pos.x + 1][this->_pos.y + 1]);
 
     if (isIndexValid(-1, -1))
         children.push_back({this->_pos.x - 1, this->_pos.y - 1});
@@ -160,12 +141,9 @@ void Ai::getAvailableTiles()
         children.push_back({this->_pos.x + 1, this->_pos.y});
     if (isIndexValid(1, 1))
         children.push_back({this->_pos.x + 1, this->_pos.y + 1});
-    for (unsigned int i = 0; i < children.size(); i++) {
-        printf("Tile: [%f::%f] -> %c\n", children[i].x, children[i].y, this->map[children[i].x][children[i].y]);
-        if (!compareVector(children[i], last_pos) && isTileValid({children[i].x, children[i].y})) {
+    for (unsigned int i = 0; i < children.size(); i++)
+        if (!compareVector(children[i], last_pos) && isTileValid({children[i].x, children[i].y}))
             this->open.push_back(children[i]);
-        }
-    }
 }
 
 bool Ai::isIndexValid(int x, int y)

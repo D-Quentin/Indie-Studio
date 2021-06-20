@@ -37,7 +37,6 @@ protected:
     std::vector<std::vector<char>> map;
     RAYLIB::Vector2 last_pos;
     std::vector<RAYLIB::Vector2> open;
-    //std::pair<RAYLIB::Vector2, RAYLIB::Vector2> close;
 };
 
 
