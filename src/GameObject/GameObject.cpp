@@ -73,7 +73,7 @@ void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Cli
     }
 }
 
-void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Client *&client, Play &play)
+void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Client *&client, Play &play, int &dead)
 {
     size_t id = 0;
     size_t pos = 0;
@@ -81,6 +81,8 @@ void GameObject::gestData(std::map<int, GameObject *> &obj, std::string str, Cli
 
     boost::split(strs, str, boost::is_any_of("\n"));
     for (size_t i = 0; i != strs.size(); i++) {
+        if (strs[i].find("###DEAD###") != std::string::npos)
+            dead += 1;
         pos = strs[i].find("ID:");
         if (pos == std::string::npos)
             continue;

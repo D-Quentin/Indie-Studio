@@ -163,6 +163,7 @@ void Player::gest(Client *&client, std::list<BlockObject *> &blocks)
 {
     RAYLIB::Vector2 oldPlayerPos = this->_pos;
     static RAYLIB::Vector2 clear = {-1000, -1000};
+    static int i = 0;
 
     this->move();
     this->rotate();
@@ -171,8 +172,10 @@ void Player::gest(Client *&client, std::list<BlockObject *> &blocks)
         this->_weaponUse = 1;
     if (RAYLIB::IsKeyPressed(RAYLIB::KEY_TWO))
         this->_weaponUse = 2;
-    if (this->_health <= 0) {
+    if (this->_health <= 0 && i == 0) {
         this->setPos(clear);
+        client->send("###DEAD###");
+        i = 1;
     }
     if (this->_weaponUse == 1) {
         this->_weapon1->update(this->_pos, this->_rota);

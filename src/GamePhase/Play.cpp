@@ -55,23 +55,19 @@ GamePhase Play::restart(Client *&client, Lobby &lobby)
 
 GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
 {
-    GameObject::gestData(this->_obj, client->read(), client, *this);
+    GameObject::gestData(this->_obj, client->read(), client, *this, this->_dead);
     static RAYLIB::Vector2 clear = {-1000, -1000};
     std::vector<std::map<int, GameObject *>::iterator> to_delet;
-    int dead = 0;
+
     for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
         if (it->second->getObjType() == "Bullet") {
             ((Player *)this->_obj[this->_me])->getBullet().push_back(*((Bullet *)it->second));
             to_delet.push_back(it);
         }
-        if (it->second->getObjType() == "Player") {
-            if (((Player *)it->second)->isAlive() == false)
-                dead += 1;
-        }
     }
-    if (dead >= this->_player - 1) {
+    if (this->_dead >= this->_player - 1) {
         std::cout << this->_player << std::endl;
-        std::cout << dead << std::endl;
+        std::cout << this->_dead << std::endl;
         gamePhase = EndPhase;
     }
     for (size_t i = 0; i < to_delet.size(); i++) {
@@ -218,7 +214,7 @@ GamePhase Play::joinPhase(GamePhase gamePhase, Client *&client, Lobby &lobby)
             sleep(2);
         #endif
     }
-    GameObject::gestData(this->_obj, client->read(), client, *this);
+    GameObject::gestData(this->_obj, client->read(), client, *this, this->_dead);
 
     // Creating 3D map
     float size = 1;
