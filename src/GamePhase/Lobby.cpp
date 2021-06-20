@@ -71,8 +71,8 @@ GamePhase Lobby::launch(Client *&client, std::string ip, std::string port)
 {
     this->_phase = JoinPhase;
 
-    this->_bReady = Button(" ", 65, 80, 30, 15);
-    this->_tReady = rl::Text("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player), 67, 82, 50, RAYLIB::LIGHTGRAY);
+    this->_bReady = Button("assets/texture/button.png", 70, 85, 21.4, 10);
+    this->_tReady = rl::Text("Ready  " + std::to_string(this->_readyPlayer) + "/" + std::to_string(this->_player), 72, 88, 30, RAYLIB::BLACK);
     this->_tIps = rl::Text("", 1, 2, 20, RAYLIB::LIGHTGRAY);
 
     return (this->restart(client, ip, port));
