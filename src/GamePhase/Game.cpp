@@ -93,9 +93,9 @@ void Game::launch(rl::Window win)
             }
         case EndPhase:
             if (end.first)
-                statut = end.second.restart();
+                statut = end.second.restart("name");
             else {
-                statut = end.second.launch();
+                statut = end.second.launch("name");
                 end.first = true;
             }
             break;
