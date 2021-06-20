@@ -29,6 +29,7 @@ class Bullet : public game_object::Item
 
         void update(float radius = std::nanf("0"));
         void draw();
+        RAYLIB::Model &getModel() {return (this->_model.getModel());};
         int getDamage(){return _damage;};
 
         std::string serialize();

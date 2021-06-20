@@ -44,7 +44,7 @@ GamePhase Pause::restart()
     if (this->_bQuitgame.isClicked())
         return (QuitPhase);
     if (this->_bResume.isClicked()) {
-        gamePhase = MenuPhase;
+        gamePhase = GamePlayPhase;
     }
     RAYLIB::DrawTextureEx(this->_tpausebackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     this->_bQuitgame.draw();

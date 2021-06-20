@@ -106,7 +106,7 @@ void Player::gestColision(std::list<BlockObject *> &blocks, RAYLIB::Vector2 oldP
                 }
 
             } else if (bullet_player) {
-                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.05, playerPos, player_radius) && this->_hitten_bullet.find(it.getId()) == this->_hitten_bullet.end()) {
+                if (RAYLIB::CheckCollisionCircles(it.getPos(), 0.06, playerPos, 0.22f) && this->_hitten_bullet.find(it.getId()) == this->_hitten_bullet.end()) {
                     it.isReal = false;
                     this->takeDamage(it.getDamage());
                     this->_hitten_bullet[it.getId()] = true;
