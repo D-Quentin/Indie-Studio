@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2021
+** B-YEP-400-PAR-4-1-indiestudio-quentin.daville
+** File description:
+** Ai
+*/
+
 #ifndef BOMBERMAN_AI_HPP
 #define BOMBERMAN_AI_HPP
 
@@ -15,12 +22,10 @@ public:
     RAYLIB::Vector2 getEnemyPosition();
     int calculateDistObj(unsigned int axis);
     float Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2);
-    std::vector<RAYLIB::KeyboardKey> getDirections();
     bool isTileValid(RAYLIB::Vector2 tile);
     bool isInMap(RAYLIB::Vector2 tile);
     bool isIndexValid(int x, int y);
     void getAvailableTiles();
-    void setDirections(RAYLIB::Vector2 newPosition);
     void getPriority();
     void attackEnemy();
     void setRandomTarget();

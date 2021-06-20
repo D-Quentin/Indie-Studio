@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2021
+** B-YEP-400-PAR-4-1-indiestudio-quentin.daville
+** File description:
+** Ai
+*/
+
 #include "Ai.hpp"
 #include <string>
 #include <cstdlib>
@@ -8,13 +15,6 @@ bool compareVector(RAYLIB::Vector2 first_vector, RAYLIB::Vector2 second_vector)
     if (int(first_vector.x) == int(second_vector.x) && int(first_vector.y) == int(second_vector.y))
         return true;
     return false;
-}
-
-float Ai::Vector2Angle(RAYLIB::Vector2 v1, RAYLIB::Vector2 v2)
-{
-    float result = atan2f(v2.y - v1.y, v2.x - v1.x) * (180.0f / PI);
-    if (result < 0) result += 360.0f;
-    return result;
 }
 
 Ai::Ai(std::vector<std::vector<char>> map)
@@ -36,8 +36,6 @@ void Ai::getPriority()
 {
     Target status = checkEnemy();
 
-    printf("Current Position: [%f::%f] -> '%c'\n", this->_pos.x, this->_pos.y, this->map[this->_pos.x][this->_pos.y]);
-    printf("Target Position: [%f::%f] -> '%c'\n", this->targetPosition.x, this->targetPosition.y, this->map[this->targetPosition.x][this->targetPosition.y]);
     if (status == IN_RANGE && this->targetStatus != IN_RANGE)
         attackEnemy();
     else if (status == ABSENT && (this->targetStatus == UNDEFINED || this->targetStatus == ABSENT))
@@ -166,24 +164,6 @@ bool Ai::isTileValid(RAYLIB::Vector2 tile)
         if (valid_types[i] == this->map[tile.x][tile.y])
             return true;
     return false;
-}
-
-std::vector<RAYLIB::KeyboardKey> Ai::getDirections()
-{
-    return this->directions;
-}
-
-void Ai::setDirections(RAYLIB::Vector2 newTarget)
-{
-    this->directions.clear();
-    if (newTarget.x < this->_pos.x)
-        this->directions.push_back(RAYLIB::KEY_A);
-    else if (newTarget.x > this->_pos.x)
-        this->directions.push_back(RAYLIB::KEY_D);
-    if (newTarget.y < this->_pos.y)
-        this->directions.push_back(RAYLIB::KEY_S);
-    else if (newTarget.y > this->_pos.y)
-        this->directions.push_back(RAYLIB::KEY_W);
 }
 
 RAYLIB::Vector2 Ai::getEnemyPosition()
