@@ -371,6 +371,10 @@ void map::create_weapons()
             }
             y = y + this->size;
             for (int v = 0; v != this->size * 9; v++) {
+                if (z >= pos_y.size() || z >= pos_x.size()) {
+                    y++;
+                    continue;
+                }
                 if (v == pos_x[z] && c == pos_y[z] && this->plan_char[x][y] == ' ') {
                     this->plan_char[x][y] = 'P';
                 }

@@ -56,12 +56,17 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
 {
     GameObject::gestData(this->_obj, client->read(), client, *this);
     static RAYLIB::Vector2 clear = {-1000, -1000};
+    std::vector<std::map<int, GameObject *>::iterator> to_delet;
     for (auto it = this->_obj.begin(); it != this->_obj.end() ; it++) {
         if (it->second->getObjType() == "Bullet") {
             ((Player *)this->_obj[this->_me])->getBullet().push_back(*((Bullet *)it->second));
-            this->_obj.erase(it);
+            to_delet.push_back(it);
         }
     }
+    for (size_t i = 0; i < to_delet.size(); i++) {
+        this->_obj.erase(to_delet[i]);
+    }
+    
     ((Player *)this->_obj[this->_me])->gest(client, this->_blocks);
     this->reloadPower();
     this->updatePowerUp();

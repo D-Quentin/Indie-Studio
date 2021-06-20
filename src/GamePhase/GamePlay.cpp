@@ -16,7 +16,7 @@ void GamePlay::nonToPoi(std::list<MapBlock> obj)
 
 GamePlay::GamePlay()
 {
-    _FPCamera =  rl::Camera((RAYLIB::Vector3) { 0, 10, 0 },(RAYLIB::CameraMode) RAYLIB::CAMERA_FIRST_PERSON);
+    _FPCamera =  rl::Camera({ 0, 10, 0 }, RAYLIB::CAMERA_FIRST_PERSON);
     _player = Player();
     auto pos = _player.getPos();
     _TopCamera = rl::Camera({pos.x, 6, pos.y});
