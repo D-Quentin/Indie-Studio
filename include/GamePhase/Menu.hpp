@@ -20,6 +20,7 @@ class Menu {
         PlayPhase,
         CreatePhase,
         JoinPhase,
+        WeaponsPhase
     };
     public:
         Menu();
@@ -31,13 +32,12 @@ class Menu {
         GamePhase settingPhase(GamePhase);
         GamePhase createPhase(GamePhase);
         GamePhase joinPhase(GamePhase);
-        GamePhase pausePhase(GamePhase);
+        GamePhase weaponsPhase(GamePhase);
         std::string getIp();
         std::string getPort();
         std::string getYourName();
         void checkButtonclick();
         void draw_touch();
-
     protected:
     private:
         Phase _phase;
@@ -82,7 +82,6 @@ class Menu {
         Button _bJoin;
         rl::Text _tJoin;
 
-
         // CreatePhase
         InputButton _iServPort;
         InputButton _iName;
@@ -90,6 +89,12 @@ class Menu {
         rl::Text _tCreate;
         rl::Text _tName;
         Button _bCreate;
+
+        // WeaponsPhase
+        RAYLIB::Texture2D _tBackGroundWeapons;
+        rl::Text _tWeaponsReturn;
+        Button _bWeaponsReturn;
+
 };
 
 #endif /* !MENU_HPP_ */
