@@ -40,15 +40,17 @@ int Setting::getDash()
     return (this->_ikey[4]);
 }
 
-GamePhase Setting::launch()
+GamePhase Setting::launch(GamePhase gamePhase)
 {
     init();
-    return (this->restart());
+    printf("la\n");
+    this->phase = gamePhase;
+    return (this->restart(gamePhase));
 }
 
-GamePhase Setting::restart()
+GamePhase Setting::restart(GamePhase gamePhase)
 {
-    return (settingPhase(SettingPhase));
+    return (settingPhase(SettingPhase, gamePhase));
 }
 
 void Setting::init()
@@ -133,7 +135,7 @@ void printTouch()
     touch.draw();
 }
 
-GamePhase Setting::settingPhase(GamePhase gamePhase)
+GamePhase Setting::settingPhase(GamePhase gamePhase, GamePhase old)
 {
     static int i = 50;
     static int f = 60;
@@ -144,7 +146,7 @@ GamePhase Setting::settingPhase(GamePhase gamePhase)
     static int musd = 0;
 
     if (this->_bReturn.isClicked())
-        gamePhase = MenuPhase;
+        gamePhase = old;
     if (this->_bUp.isPressed() && i < 100) {
         if (musp == 4) {
             musp = 0;

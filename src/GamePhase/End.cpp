@@ -64,7 +64,7 @@ GamePhase End::endPhase(GamePhase gamePhase)
             i++;
         }
     aze = (i/11);
-    RAYLIB::DrawTextureEx(this->_tbackground, {0, convertSizes(0, RAYLIB::GetScreenHeight())}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
+    RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1820), RAYLIB::WHITE);
     if (i < 2000)
         RAYLIB::DrawTextureEx(this->_tRocket, {600, (float)800-i}, -45, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     if (i >= 800) {

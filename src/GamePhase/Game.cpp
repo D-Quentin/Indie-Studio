@@ -34,6 +34,7 @@ void Game::launch(rl::Window win)
 {
     static rl::Sound music = rl::Sound();
     GamePhase statut = MenuPhase;
+    GamePhase old = MenuPhase;
     std::pair<bool, Menu> menu = {false, Menu()};
     std::pair<bool, Lobby> lobby = {false, Lobby()};
     std::pair<bool, GamePlay> gameplay = {false, GamePlay()};
@@ -56,8 +57,10 @@ void Game::launch(rl::Window win)
             statut = GamePlayPhase;
         switch (statut) {
         case MenuPhase:
-            if (menu.first)
+            if (menu.first) {
                 statut = menu.second.restart();
+                old = MenuPhase;
+            }
             else {
                 music.stopAllMusic();
                 music.playMenuMusic();
@@ -94,11 +97,14 @@ void Game::launch(rl::Window win)
             }
             break;
         case PausePhase:
-            if (pause.first)
+            if (pause.first) {
                 statut = pause.second.restart();
+                old = PausePhase;
+            }
             else {
                 statut = pause.second.launch();
                 pause.first = true;
+                old = PausePhase;
             }
             break;
         case EndPhase:
@@ -113,9 +119,10 @@ void Game::launch(rl::Window win)
             break;
         case SettingPhase:
             if (setting.first)
-                statut = setting.second.restart();
+                statut = setting.second.restart(old);
             else {
-                statut = setting.second.launch();
+                printf("old = %d\n", old);
+                statut = setting.second.launch(old);
                 setting.first = true;
             }
             break;
