@@ -36,6 +36,8 @@ void Ai::getPriority()
 {
     Target status = checkEnemy();
 
+    printf("Current Position: [%f::%f] -> '%c'\n", this->_pos.x, this->_pos.y, this->map[this->_pos.x][this->_pos.y]);
+    printf("Target Position: [%f::%f] -> '%c'\n", this->targetPosition.x, this->targetPosition.y, this->map[this->targetPosition.x][this->targetPosition.y]);
     if (status == IN_RANGE && this->targetStatus != IN_RANGE)
         attackEnemy();
     else if (status == ABSENT && (this->targetStatus == UNDEFINED || this->targetStatus == ABSENT))
@@ -49,12 +51,6 @@ void Ai::setRandomTarget()
     std::srand(std::time(nullptr));
     getAvailableTiles();
 
-    for (unsigned int i = 0; i < this->open.size(); i++)
-        if (this->map[this->open[i].x][this->open[i].y] == 'P') {
-            this->targetPosition = this->open[i];
-            this->targetStatus = MOVING;
-            return;
-        }
     if (open.size() == 0)
         this->targetPosition = this->_pos;
     else
@@ -78,7 +74,7 @@ void Ai::moveToNextTile()
         move.second *= RAYLIB::GetFrameTime();
     }
     this->last_pos = this->_pos;
-    this->_pos = {this->_pos.x + move.first * speed, this->_pos.y + move.second * speed };
+    this->_pos = {this->_pos.x + move.first * speed, this->_pos.y + move.second * speed};
     rotate();
 }
 

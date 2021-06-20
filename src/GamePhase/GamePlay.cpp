@@ -6,6 +6,7 @@
 */
 
 #include "GamePlay.hpp"
+#include "Ai.hpp"
 #include "Sound.hpp"
 
 void GamePlay::nonToPoi(std::list<MapBlock> obj)
@@ -50,6 +51,8 @@ GamePhase GamePlay::launch()
     _spawns = m._spawns;
     _spawn = m._spawns.front();
     _player.setPos(RAYLIB::Vector2{_spawn.first, _spawn.second});
+    _enemies.push_back(new Ai(charMap));
+    _enemies.back()->setPos(RAYLIB::Vector2{_spawns.back().first, _spawns.back().second});
     _TopCamera.setPosition({_spawn.first, _TopCamera.getPosition().y, _spawn.second});
     _FPCamera.setPosition({_spawn.first, _FPCamera.getPosition().y, _spawn.second});
     this->_mapSize = {charMap.size(), charMap.front().size()};
@@ -88,8 +91,10 @@ void GamePlay::lifeAndShield()
 GamePhase GamePlay::restart()
 {
     while (!RAYLIB::WindowShouldClose()) {
+        for (auto it: _enemies)
+            ((Ai *)(it))->getPriority();
         _oldPlayerPos = _player.getPos();
-    //updtae attrib from server
+    //update attrib from server
         RAYLIB::BeginDrawing();
         if (_player.isAlive()) {
             this->aliveCall();
@@ -132,9 +137,9 @@ void GamePlay::drawAll()
         if ((pos.y < campos.z + _renderDistance && pos.y > campos.z - _renderDistance) && (pos.x < campos.x + _renderDistance && pos.x > campos.x - _renderDistance))
             it->draw();
     }
-//     for (auto it : this->_enemies)
-//         it->draw();
     for (auto it : this->_items)
+        it->draw();
+    for (auto it : this->_enemies)
         it->draw();
     for (auto &it : _bullet) {
         it.update();
