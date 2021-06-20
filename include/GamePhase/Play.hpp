@@ -44,9 +44,9 @@ class Play {
         };
         Play();
         ~Play();
-        GamePhase launch(Client *&, Lobby &);
-        GamePhase restart(Client *&, Lobby &);
-        GamePhase mainPhase(GamePhase, Client *&);
+        GamePhase launch(Client *&, Lobby &, Setting);
+        GamePhase restart(Client *&, Lobby &, Setting);
+        GamePhase mainPhase(GamePhase, Client *&, Setting);
         GamePhase joinPhase(GamePhase, Client *&, Lobby &);
         void placeItems(std::list<std::pair<float, float>>);
         void lifeAndShield();

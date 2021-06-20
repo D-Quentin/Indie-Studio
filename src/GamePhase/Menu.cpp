@@ -119,8 +119,6 @@ GamePhase Menu::mainPhase(GamePhase gamePhase)
     if (this->_bHtp.isClicked()) {
         this->_phase = HowToPlayPhase;
     }
-    if (RAYLIB::IsKeyPressed(RAYLIB::KEY_P))
-        gamePhase = PausePhase;
     RAYLIB::DrawTextureEx(this->_tbackground, {0, 0}, 0, ((float)RAYLIB::GetScreenHeight() / 1080), RAYLIB::WHITE);
     this->_bPlay.draw();
     this->_bSettings.draw();

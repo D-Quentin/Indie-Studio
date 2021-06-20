@@ -27,9 +27,9 @@ class Lobby {
     public:
         Lobby();
         ~Lobby();
-        GamePhase launch(Client *&, std::string, std::string);
-        GamePhase restart(Client *&, std::string, std::string);
-        GamePhase mainPhase(GamePhase, Client *&);
+        GamePhase launch(Client *&, std::string, std::string, Setting);
+        GamePhase restart(Client *&, std::string, std::string, Setting);
+        GamePhase mainPhase(GamePhase, Client *&, Setting);
         GamePhase joinPhase(GamePhase, Client *&, std::string, std::string);
 
         int getMe(void);

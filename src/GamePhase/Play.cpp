@@ -21,7 +21,7 @@ Play::~Play()
 {
 }
 
-GamePhase Play::launch(Client *&client, Lobby &lobby)
+GamePhase Play::launch(Client *&client, Lobby &lobby, Setting setting)
 {
     this->_host = lobby.isHost();
     this->_player = lobby.getPlayer();
@@ -31,16 +31,16 @@ GamePhase Play::launch(Client *&client, Lobby &lobby)
     this->_tHp = rl::Text("Hp ", 1, 95, 20, RAYLIB::RED);
     this->_shield = RAYLIB::LoadTexture("assets/texture/shield.png");
     this->_heart = RAYLIB::LoadTexture("assets/texture/heart.png");
-    return (this->restart(client, lobby));
+    return (this->restart(client, lobby, setting));
 }
 
-GamePhase Play::restart(Client *&client, Lobby &lobby)
+GamePhase Play::restart(Client *&client, Lobby &lobby, Setting setting)
 {
     GamePhase gamePhase = PlayPhase;
 
     switch (this->_phase) {
     case Play::MainPhase:
-        gamePhase = this->mainPhase(gamePhase, client);
+        gamePhase = this->mainPhase(gamePhase, client, setting);
         break;
     case Play::JoinPhase:
         gamePhase = this->joinPhase(gamePhase, client, lobby);
@@ -53,7 +53,7 @@ GamePhase Play::restart(Client *&client, Lobby &lobby)
     return (gamePhase);
 }
 
-GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
+GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client, Setting setting)
 {
     GameObject::gestData(this->_obj, client->read(), client, *this, this->_dead);
     static RAYLIB::Vector2 clear = {-1000, -1000};
@@ -74,7 +74,7 @@ GamePhase Play::mainPhase(GamePhase gamePhase, Client *&client)
         this->_obj.erase(to_delet[i]);
     }
     
-    ((Player *)this->_obj[this->_me])->gest(client, this->_blocks);
+    ((Player *)this->_obj[this->_me])->gest(client, this->_blocks, setting);
     this->reloadPower();
     this->updatePowerUp();
     auto it_items = _items.begin();

@@ -118,13 +118,13 @@ void GamePlay::collisionBulletWall()
     }
 }
 
-void GamePlay::updateLocal()
+void GamePlay::updateLocal(Setting setting)
 {
     float player_radius = 0.15f;
     auto it_items = _items.begin();
     auto playerPos = _player.getPos();
 
-    this->_player.move();
+    this->_player.move(setting);
 
     for (auto &it : _items) {
         bool col = RAYLIB::CheckCollisionCircles(it->getPos(), player_radius, playerPos, player_radius);

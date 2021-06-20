@@ -70,29 +70,29 @@ void Game::launch(rl::Window win)
             break;
         case LobbyPhase:
             if (lobby.first)
-                statut = lobby.second.restart(this->_client, menu.second.getIp(), menu.second.getPort());
+                statut = lobby.second.restart(this->_client, menu.second.getIp(), menu.second.getPort(), setting.second);
             else {
                 music.stopAllMusic();
                 music.playGameMusic();
-                statut = lobby.second.launch(this->_client, menu.second.getIp(), menu.second.getPort());
+                statut = lobby.second.launch(this->_client, menu.second.getIp(), menu.second.getPort(), setting.second);
                 lobby.first = true;
             }
             break;
         case GamePlayPhase:
             if (gameplay.first)
-                statut = gameplay.second.restart();
+                statut = gameplay.second.restart(setting.second);
             else {
                 music.stopAllMusic();
                 music.playGameMusic();
-                statut = gameplay.second.launch();
+                statut = gameplay.second.launch(setting.second);
                 gameplay.first = true;
             }
             break;
         case PlayPhase:
             if (play.first)
-                statut = play.second.restart(this->_client, lobby.second);
+                statut = play.second.restart(this->_client, lobby.second, setting.second);
             else {
-                statut = play.second.launch(this->_client, lobby.second);
+                statut = play.second.launch(this->_client, lobby.second, setting.second);
                 play.first = true;
             }
             break;
